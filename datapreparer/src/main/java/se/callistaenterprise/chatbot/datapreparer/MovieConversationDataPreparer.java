@@ -119,15 +119,6 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
                 prev.write(question.getBytes());
                 next.write(answer.getBytes());
             }
-//            for (String[] entry : paddedAndFilteredQuestionsAndAnswers) {
-//                String question = entry[0] + System.lineSeparator();
-//                String answer = entry[1] + System.lineSeparator();
-//                // Assert question and answer contains other data than just <SOS> <OUT> <PAD> ... <EOS>
-//                if (validateHasText.apply(question).isPresent() && validateHasText.apply(answer).isPresent()) {
-//                    prev.write(question.getBytes());
-//                    next.write(answer.getBytes());
-//                }
-//            }
         } catch (IOException ioe) {
             log.error("Failed to write to output file.", ioe);
         }
