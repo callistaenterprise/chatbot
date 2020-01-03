@@ -24,11 +24,11 @@ public class ConvaiConversationDataPreparer implements CommandLineRunner {
         final String convaiConversationFilePath = configuration.getConvaiConversationFilePath();
         log.info("Reading conversational data from {}", convaiConversationFilePath);
 
-        try (Stream<String> stream = Files.lines(Paths.get(convaiConversationFilePath))) {
-            stream.forEach(System.out::println);
-        } catch (IOException e) {
-            log.error("Failed to read file {}", convaiConversationFilePath, e);
-        }
+//        try (Stream<String> stream = Files.lines(Paths.get(convaiConversationFilePath))) {
+//            stream.forEach(System.out::println);
+//        } catch (IOException e) {
+//            log.error("Failed to read file {}", convaiConversationFilePath, e);
+//        }
 
     }
 }

@@ -20,6 +20,6 @@ public class DataFilesConfiguration {
     @Value("${data.other:}")
     private String otherConversationFilePath;
 
-    @Value("${vocabularis.lowerLimit:20}")
+    @Value("${vocabularis.lowerLimit:1}")
     private Integer wordCountLimit;
 }

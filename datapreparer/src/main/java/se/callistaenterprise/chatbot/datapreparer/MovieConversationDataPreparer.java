@@ -7,15 +7,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -32,20 +28,21 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
         log.info("Reading conversational data from {}", movieConversationFilePath);
         final Map<String, String> questionsAndAnswers = new HashMap<>();
         final Map<String, String> conversationData = new HashMap<>();
-        try (Stream<String> metadataStream = Files.lines(Paths.get(movieMetadataFilePath));
-             Stream<String> conversationStream = Files.lines(Paths.get(movieConversationFilePath))) {
+        try (BufferedReader metadataReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieMetadataFilePath),"utf-8"));
+             BufferedReader conversationReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieConversationFilePath),"utf-8"))) {
             // A Map as { {"L194" -> "L195"}, {"L195" -> "L196"}, {"L196" -> "L197"}} with conversation exchanges line codes
-            final Map<String, String> conversations = metadataStream
+            final Map<String, String> conversations = metadataReader.lines()
                     .map(toConversationMetadata)
                     .map(Map::entrySet)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
             // A Map as { {"L194" -> "It is a lovely day today!"}, {"L195" -> "Oh, you do not say!"} } with line codes to actual line
-            conversationStream
-                    .map(expand)
+            conversationReader.lines()
                     .map(toConversationLine)
-                    .forEach(simpleEntry -> conversationData.put(simpleEntry.getKey(), simpleEntry.getValue()));
+                    .forEach(simpleEntry -> {
+                        conversationData.put(simpleEntry.getKey(), expand.apply(simpleEntry.getValue()));
+                    });
             // A Map as { {"It is a lovely day today!" -> "Oh, you do not say!"}, ... }
             conversations.entrySet().stream()
                     .map(entry -> new AbstractMap.SimpleEntry<String, String>(conversationData.get(entry.getKey()), conversationData.get(entry.getValue())))
@@ -56,89 +53,96 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
         // Maps of all words (in lowercase) occurring in conversations with the number of occurrences
         final Map<String, Integer> wordCountQuestions = new HashMap<>();
         final Map<String, Integer> wordCountAnswers = new HashMap<>();
-        // Tokenize "Questions" part
+        // Count number of occurrences for each word used as question.
         questionsAndAnswers.keySet().stream()
                 .map(String::toLowerCase)
                 .map(str -> str.split(" "))
                 .forEach(arr -> {
-                    for (String s : arr) {
-                        Integer wordCount = wordCountQuestions.containsKey(s) ? wordCountQuestions.get(s)+1 : 1;
-                        wordCountQuestions.put(s, wordCount);
+                    if (arr.length > 0) {
+                        for (String s : arr) {
+                            Integer wordCount = wordCountQuestions.containsKey(s) ? wordCountQuestions.get(s) + 1 : 1;
+                            wordCountQuestions.put(s, wordCount);
+                        }
                     }
                 });
-        // Tokenize "Answers" part
+        // Count number of occurrences for each word used as answer.
         questionsAndAnswers.values().stream()
                 .map(String::toLowerCase)
                 .map(str -> str.split(" "))
                 .forEach(arr -> {
-                    for (String s : arr) {
-                        Integer wordCount = wordCountAnswers.containsKey(s) ? wordCountAnswers.get(s)+1 : 1;
-                        wordCountAnswers.put(s, wordCount);
+                    if (arr.length > 0) {
+                        for (String s : arr) {
+                            Integer wordCount = wordCountAnswers.containsKey(s) ? wordCountAnswers.get(s) + 1 : 1;
+                            wordCountAnswers.put(s, wordCount);
+                        }
                     }
                 });
         final Integer maxNumberOfWordsInUtterance = conversationData.values().stream()
                 .reduce(longestUtterance)
                 .get().split(" ").length;
+        log.info("Longest utterance used in body of text: {}", maxNumberOfWordsInUtterance);
         final Integer lowerWordCountLimit = configuration.getWordCountLimit();
         // Words that should be replaced by filter-token from questions conversation-set
         final Set<String> questionWordsToReplace = wordCountQuestions.entrySet().stream()
-                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() >= lowerWordCountLimit)
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() <= lowerWordCountLimit)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
         final Set<String> answerWordsToReplace = wordCountAnswers.entrySet().stream()
-                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() >= lowerWordCountLimit)
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() <= lowerWordCountLimit)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
-        // Filter and pad
-        final Map<String, String> paddedAndFilteredQuestionsAndAnswers = questionsAndAnswers.entrySet().stream()
-                .map(entry -> {
-                    String q = entry.getKey();
-                    String a = entry.getValue();
-                    String[] qArr = new String[maxNumberOfWordsInUtterance+2];
-                    String[] aArr = new String[maxNumberOfWordsInUtterance+2];
-                    qArr[0] = "<SOS>";
-                    aArr[0] = "<SOS>";
-                    qArr[qArr.length-1] = "<EOS>";
-                    aArr[aArr.length-1] = "<EOS>";
-                    int i = 1;
-                    for (String t : q.split(" ")) {
-                        t = questionWordsToReplace.contains(t.toLowerCase()) ? "<OUT>" : t;
-                        qArr[i++] = t;
+        log.info("Words in 'questions' that will be replaced by <OUT>-token: {}", questionWordsToReplace);
+        log.info("Words in 'answers' that will be replaced by <OUT>-token: {}", answerWordsToReplace);
+        try (FileOutputStream prev = new FileOutputStream("/tmp/prev.txt");
+             FileOutputStream next = new FileOutputStream("/tmp/next.txt")) {
+            for (Map.Entry<String, String> qAndA : questionsAndAnswers.entrySet()) {
+                String[] q = qAndA.getKey().split(" ");
+                String[] a = qAndA.getValue().split(" ");
+                StringBuilder qBuilder = new StringBuilder("<SOS> ");
+                StringBuilder aBuilder = new StringBuilder("<SOS> ");
+                for (int i=0; i<maxNumberOfWordsInUtterance; i++) {
+                    if (i<q.length) {
+                        qBuilder.append(questionWordsToReplace.contains(q[i]) ? "<OUT>" : q[i]);
+                    } else {
+                        qBuilder.append("<PAD>");
                     }
-                    for (; i < qArr.length-1; i++) {
-                        qArr[i] = "<PAD>";
+                    qBuilder.append(" ");
+                    if (i<a.length) {
+                        aBuilder.append(answerWordsToReplace.contains(a[i]) ? "<OUT>" : a[i]);
+                    } else {
+                        aBuilder.append("<PAD>");
                     }
-                    i = 1;
-                    for (String t : a.split(" ")) {
-                        t = answerWordsToReplace.contains(t.toLowerCase()) ? "<OUT>" : t;
-                        aArr[i++] = t;
-                    }
-                    for (; i < aArr.length-1; i++) {
-                        aArr[i] = "<PAD>";
-                    }
-                    return new AbstractMap.SimpleEntry<String, String>(String.join(" ", qArr), String.join(" ", aArr));
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        /*
-        Files.write(
-      Paths.get(fileName),
-      contentToAppend.getBytes(),
-      StandardOpenOption.APPEND);
-        * */
-       // Files.write(Paths.get("/tmp/questions.txt"), , )
+                    aBuilder.append(" ");
+                }
+                String question = qBuilder.toString() + System.lineSeparator();
+                String answer = aBuilder.toString() + System.lineSeparator();
+                prev.write(question.getBytes());
+                next.write(answer.getBytes());
+            }
+//            for (String[] entry : paddedAndFilteredQuestionsAndAnswers) {
+//                String question = entry[0] + System.lineSeparator();
+//                String answer = entry[1] + System.lineSeparator();
+//                // Assert question and answer contains other data than just <SOS> <OUT> <PAD> ... <EOS>
+//                if (validateHasText.apply(question).isPresent() && validateHasText.apply(answer).isPresent()) {
+//                    prev.write(question.getBytes());
+//                    next.write(answer.getBytes());
+//                }
+//            }
+        } catch (IOException ioe) {
+            log.error("Failed to write to output file.", ioe);
+        }
     }
 
     // convert a conversation definition into a map of prev and next utterances
     private Function<String, Map<String, String>> toConversationMetadata = s -> {
         // E.g. u0 +++$+++ u2 +++$+++ m0 +++$+++ ['L194', 'L195', 'L196', 'L197'] => 'L194', 'L195', 'L196', 'L197'
-        final String conversationLines = s.substring(s.indexOf('['), s.indexOf(']'));
+        final String conversationLines = s.substring(s.indexOf('[')+1, s.indexOf(']'));
         // E.g. L194 L195 L196 L197 (as array)
         final String[] individualConversationLines = conversationLines.replace("'", "").split(",");
         Map<String, String> prev2next = new HashMap<>();
-        for (int i=0; i<individualConversationLines.length; i++) {
+        for (int i=0; i<individualConversationLines.length-1; i++) {
             String prevLineId = individualConversationLines[i].trim();
-            if (individualConversationLines.length > i) {
+            if (individualConversationLines.length-1 > i) {
                 prev2next.put(prevLineId, individualConversationLines[i+1].trim());
             }
         }
@@ -149,28 +153,59 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
     // Transform e.g. L194 +++g+++ u12 +++g+++ m1 +++g+++ STEVEN +++g+++ It is a lovely day today! to a Map.Entry of {"L194" -> "It is a lovely day today!"}
     private Function<String, Map.Entry<String, String>> toConversationLine = s -> {
         final String[] segments = s.split(" ");
-        if (segments.length > 9) {
-            segments[8] = String.join("", Arrays.copyOfRange(segments, 8, segments.length));
+        // Cleaning, sometimes the actual "line" doesn't start at index 8, so we go backwards to find from where to pick up the conversational line
+        int start = segments.length-1;
+        for (; start > 0; start--) {
+            if (segments[start].equals("+++$+++")) {
+                start++;
+                break;
+            }
         }
-        return new AbstractMap.SimpleEntry(segments[0], segments[8]);
+        if (segments.length > 8 && start > 0) {
+            segments[8] = String.join(" ", Arrays.copyOfRange(segments, start, segments.length));
+            return new AbstractMap.SimpleEntry(segments[0], segments[8]);
+        }
+        return new AbstractMap.SimpleEntry(segments[0], "");
     };
 
     private Function<String, String> expand = s -> {
         String str = s.replace("'m", " am");
         str = str.replace("e's", "e is");
+        str = str.replace("e´s", "e is");
         str = str.replace("t's", "t is");
+        str = str.replace("t´s", "t is");
         str = str.replace("'ll", " will");
+        str = str.replace("´ll", " will");
         str = str.replace("'ve", " have");
+        str = str.replace("´ve", " have");
         str = str.replace("'re", " are");
+        str = str.replace("´re", " are");
         str = str.replace("'d", " would");
+        str = str.replace("´d", " would");
+        str = str.replace("n't", " not");
         str = str.replace("on't", "ill not");
+        str = str.replace("on´t", "ill not");
         str = str.replace("an't", "annot");
-        str = str.replace("[-()\"#@/;:<>{}+=~|.?,]", "");
+        str = str.replace("an´t", "annot");
+        str = str.replace("*", "");
+        str = str.replace("[", "");
+        str = str.replace("]", "");
+        str = str.replaceAll("\t", "");
+        str = str.replaceAll("%d", "number");
+        str = str.replaceAll("[-()\"#@/;:<>{}+=~|.!?,]", "");
         return str;
     };
 
     private BinaryOperator<String> longestUtterance = (s1, s2) -> s1.split(" ").length > s2.split(" ").length ? s1 : s2;
 
+    private Function<String, Optional<String>> validateHasText = s -> {
+        String str = s.replace(" ", "");
+        str = str.replace("<SOS>", "");
+        str = str.replace("<OUT>", "");
+        str = str.replace("<PAD>", "");
+        str = str.replace("<EOS>", "");
+        return str.length() > 0 ? Optional.of(str) : Optional.empty();
+    };
 
     @Data
     private static class Conversation {
