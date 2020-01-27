@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -28,8 +29,8 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
         log.info("Reading conversational data from {}", movieConversationFilePath);
         final Map<String, String> questionsAndAnswers = new HashMap<>();
         final Map<String, String> conversationData = new HashMap<>();
-        try (BufferedReader metadataReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieMetadataFilePath),"utf-8"));
-             BufferedReader conversationReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieConversationFilePath),"utf-8"))) {
+        try (BufferedReader metadataReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieMetadataFilePath), StandardCharsets.UTF_8));
+             BufferedReader conversationReader = new BufferedReader(new InputStreamReader(new FileInputStream(movieConversationFilePath), StandardCharsets.UTF_8))) {
             // A Map as { {"L194" -> "L195"}, {"L195" -> "L196"}, {"L196" -> "L197"}} with conversation exchanges line codes
             final Map<String, String> conversations = metadataReader.lines()
                     .map(toConversationMetadata)
@@ -77,18 +78,20 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
                         }
                     }
                 });
-        final Integer maxNumberOfWordsInUtterance = conversationData.values().stream()
+        final String[] longestSentence = conversationData.values().stream()
                 .reduce(longestUtterance)
-                .get().split(" ").length;
+                .get().split(" ");
+        log.info("LONGEST SENTENCE: {}", String.join(" ", longestSentence));
+        final int maxNumberOfWordsInUtterance = longestSentence.length;
         log.info("Longest utterance used in body of text: {}", maxNumberOfWordsInUtterance);
         final Integer lowerWordCountLimit = configuration.getWordCountLimit();
         // Words that should be replaced by filter-token from questions conversation-set
         final Set<String> questionWordsToReplace = wordCountQuestions.entrySet().stream()
-                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() <= lowerWordCountLimit)
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() < lowerWordCountLimit)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
         final Set<String> answerWordsToReplace = wordCountAnswers.entrySet().stream()
-                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() <= lowerWordCountLimit)
+                .filter(stringIntegerEntry -> stringIntegerEntry.getValue() < lowerWordCountLimit)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
         log.info("Words in 'questions' that will be replaced by <OUT>-token: {}", questionWordsToReplace);
@@ -161,10 +164,7 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
 
     private Function<String, String> expand = s -> {
         String str = s.replace("'m", " am");
-        str = str.replace("e's", "e is");
-        str = str.replace("e´s", "e is");
-        str = str.replace("t's", "t is");
-        str = str.replace("t´s", "t is");
+        str = str.replace("'s", " is");
         str = str.replace("'ll", " will");
         str = str.replace("´ll", " will");
         str = str.replace("'ve", " have");
@@ -173,15 +173,16 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
         str = str.replace("´re", " are");
         str = str.replace("'d", " would");
         str = str.replace("´d", " would");
-        str = str.replace("n't", " not");
-        str = str.replace("on't", "ill not");
-        str = str.replace("on´t", "ill not");
+        str = str.replace("won't", "will not");
+        str = str.replace("won´t", "will not");
+        str = str.replace("don't", "do not");
+        str = str.replace("don´t", "do not");
         str = str.replace("an't", "annot");
         str = str.replace("an´t", "annot");
         str = str.replace("*", "");
         str = str.replace("[", "");
         str = str.replace("]", "");
-        str = str.replaceAll("\t", "");
+        str = str.replaceAll("\t", " ");
         str = str.replaceAll("%d", "number");
         str = str.replaceAll("[-()\"#@/;:<>{}+=~|.!?,]", "");
         return str;
