@@ -6,7 +6,7 @@ plugins {
 group 'se.callistaenterprise.chatbot'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.12
 
 repositories {
     mavenLocal()

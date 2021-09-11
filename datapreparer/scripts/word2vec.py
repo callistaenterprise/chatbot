@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm_notebook
 import re
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -7,7 +6,6 @@ import matplotlib.pyplot as plt
 def data_cleaner(in_file, out_file):
     in_file_read = open(in_file, 'r', encoding='utf-8', errors='ignore')
     out_file_write = open(out_file, 'w')
-    capitalized_words = {}
     for line in in_file_read:
         new_line = re.sub('^L[0-9]+\s[+$]+\s[a-z0-9]+\s[+$]+\s[a-z0-9]+\s[+$]+\s[A-Z]+\s[+$]+\s', '', line)
         new_line = new_line.lower()

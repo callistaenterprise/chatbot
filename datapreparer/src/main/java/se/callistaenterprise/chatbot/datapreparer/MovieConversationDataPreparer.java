@@ -182,9 +182,9 @@ public class MovieConversationDataPreparer  implements CommandLineRunner {
         str = str.replace("*", "");
         str = str.replace("[", "");
         str = str.replace("]", "");
-        str = str.replaceAll("\t", " ");
-        str = str.replaceAll("%d", "number");
-        str = str.replaceAll("[-()\"#@/;:<>{}+=~|.!?,]", "");
+        str = str.replaceAll("\\t", " ");
+        str = str.replaceAll("\\d", "number");
+        str = str.replaceAll("[()\"#@/;:<>{}+=~|.!?,]", "");
         return str;
     };
 

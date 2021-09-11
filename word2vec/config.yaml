@@ -1,0 +1,9 @@
+implementation: none
+window_size: 5
+vector_size: 100
+movie_lines: data/movie_lines.txt
+movie_conversations: data/movie_conversations.txt
+cbow:
+  epochs: 5
+skip_gram:
+  epochs: 5
