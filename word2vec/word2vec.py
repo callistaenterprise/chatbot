@@ -12,10 +12,10 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     implementation = config_dict['implementation']
-    window_size = config_dict['window_size'] # 5
-    vector_size = config_dict['vector_size'] # 100
-    movie_lines = config_dict['movie_lines'] # 'data/movie_lines.txt'
-    movie_conversations = config_dict['movie_conversations'] # 'data/movie_conversations.txt'
+    window_size = config_dict['window_size']
+    vector_size = config_dict['vector_size']
+    movie_lines = config_dict['movie_lines']
+    movie_conversations = config_dict['movie_conversations']
     blog_directory = config_dict['blog_directory']
     stop_words = config_dict['stop_words']
 
