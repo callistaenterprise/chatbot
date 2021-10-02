@@ -11,13 +11,13 @@ class TrainingDataBuilder(object):
 	def __init__(self, cleaned_file, window_size):
 		self.source_file = cleaned_file
 		self.vocabulary = set()
-		self.word2id_file = 'data/word2id.dat'
+		self.word2id_file = 'data/training_data/word2id.dat'
 		self.word2id = self.__load_word_2_id() if path.exists(self.word2id_file) else dict()
-		self.id2word_file = 'data/id2word.dat'
+		self.id2word_file = 'data/training_data/id2word.dat'
 		self.id2word = self.__load_id_2_word() if path.exists(self.id2word_file) else dict()
 		self.window_size = window_size
-		self.cbow_training_data_file = 'data/cbow_training_data.dat'
-		self.sg_training_data_file = 'data/sg_training_data.dat'
+		self.cbow_training_data_file = 'data/training_data/cbow_training_data.dat'
+		self.sg_training_data_file = 'data/training_data/sg_training_data.dat'
 
 	def __update_vocabulary(self, line: str):
 		words = line.split(' ')

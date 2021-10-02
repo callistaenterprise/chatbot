@@ -13,7 +13,7 @@ def main():
     window_size = 3
     vector_size = 64
     word_vectors = None
-    data_builder = TrainingDataBuilder('data/cleaned_data.txt', window_size)
+    data_builder = TrainingDataBuilder('data/training_data/cleaned_data.txt', window_size)
 
     if model.lower() == 'cbow':
         cbow = CBOW(window_size, vector_size, 49405)

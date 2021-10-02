@@ -98,7 +98,7 @@ class DataCleaner(object):
         return ' '.join(cleaned_line)
 
     def clean_lines(self, file_to_clean, append=False):
-        cleaned_file = 'data/cleaned_data.txt'
+        cleaned_file = 'data/training_data/cleaned_data.txt'
         if not path.exists(cleaned_file) or append:
             clean_lines = []
             with open(file_to_clean) as dirty_data:

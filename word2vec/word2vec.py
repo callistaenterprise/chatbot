@@ -16,12 +16,12 @@ def main():
     vector_size = config_dict['vector_size'] # 100
     movie_lines = config_dict['movie_lines'] # 'data/movie_lines.txt'
     movie_conversations = config_dict['movie_conversations'] # 'data/movie_conversations.txt'
+    blog_directory = config_dict['blog_directory']
 
     movie_preparer = MoviePreparer(movie_lines, movie_conversations)
     parsed_movie_data = movie_preparer.parse_movie_files()
     movie_preparer = None
-    blog_file_regex = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}-.*md$'
-    blog_preparer = BlogPreparer(blog_file_regex)
+    blog_preparer = BlogPreparer(blog_directory)
     parsed_blog_data = blog_preparer.parse_blog_files()
     blog_preparer = None
     print("First step of data preparation finished!")

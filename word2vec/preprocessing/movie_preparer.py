@@ -13,7 +13,7 @@ class MoviePreparer(object):
         self.conversation_file = movie_conversations
 
     def parse_movie_files(self):
-        prepared_data_file = 'data/prepared_movie_data.txt'
+        prepared_data_file = 'data/preprocessing/prepared_movie_data.txt'
         if not path.exists(prepared_data_file):
             with open(self.conversation_file) as mc:
                 for line in mc:
