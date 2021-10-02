@@ -4,11 +4,9 @@ from os import path
 
 class DataCleaner(object):
 
-    def __init__(self):
-        self.stop_words = ['a', 'an', 'and', 'ah', 'as', 'ahh', 'eh', 'ehh', 'ha', 'haa', 'haaa', 'haha', 'hahaha',
-                           'hee', 'hehe', 'hehehe', 'heee', 'hoo', 'huh', 'for', 'in', 'of', 'on', 'or', 'oh', 'ohh',
-                           'ooh', 'uh', 'uhh', 'er', 'err', 'mm', 'mmm', 'mmmm', 'mmmmm', 'the', 'to', 'whoo', 'woo',
-                           'xxxxxx', 'ye', 'yea', 'yeah']
+    def __init__(self, stop_words_file):
+        with open(stop_words_file, 'r') as f:
+            self.stop_words = [word for line in f for word in line.split()]
 
     def __data_cleaner(self, line):
         a_line = line.lower()  # We are not interested in lower or upper case

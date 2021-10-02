@@ -10,11 +10,11 @@ class BlogPreparer(object):
     def parse_blog_files(self):
         prepared_data_file = 'data/preprocessing/prepared_blog_data.txt'
         blogs = []
-        blog_files = [file for file in os.listdir(self.blog_directory)]
-        for blog_file in blog_files:
-            # print(f'processing file: {blog_file}')
+        # blog_files = [file for file in os.listdir(self.blog_directory)]
+        for filename in os.listdir(self.blog_directory):
+            # print(f'processing file: {filename}')
             include_line = True
-            with open(blog_file) as blog_data:
+            with open(os.path.join(self.blog_directory, filename), 'r') as blog_data:
                 blog_lines = (line.rstrip() for line in blog_data if line)
                 cleaned_blog_lines = []
                 for blog_line in blog_lines:
@@ -38,7 +38,7 @@ class BlogPreparer(object):
                         # remove quoted words
                         blog_line = re.sub(r'`[^\s]*`', '', blog_line)
                         cleaned_blog_lines.append(blog_line)
-                # print(f'blog lines from {blog_file}: {len(cleaned_blog_lines)}')
+                # print(f'blog lines from {filename}: {len(cleaned_blog_lines)}')
                 blog_as_string = ' '.join(cleaned_blog_lines)
             blogs.append(blog_as_string)
         with open(prepared_data_file, "w") as prepared_data:

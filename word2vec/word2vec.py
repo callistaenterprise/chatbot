@@ -17,6 +17,7 @@ def main():
     movie_lines = config_dict['movie_lines'] # 'data/movie_lines.txt'
     movie_conversations = config_dict['movie_conversations'] # 'data/movie_conversations.txt'
     blog_directory = config_dict['blog_directory']
+    stop_words = config_dict['stop_words']
 
     movie_preparer = MoviePreparer(movie_lines, movie_conversations)
     parsed_movie_data = movie_preparer.parse_movie_files()
@@ -25,7 +26,7 @@ def main():
     parsed_blog_data = blog_preparer.parse_blog_files()
     blog_preparer = None
     print("First step of data preparation finished!")
-    data_cleaner = DataCleaner()
+    data_cleaner = DataCleaner(stop_words)
     cleaned_data = data_cleaner.clean_lines(parsed_movie_data)
     cleaned_data = data_cleaner.clean_lines(parsed_blog_data, append=True)
     data_cleaner = None
