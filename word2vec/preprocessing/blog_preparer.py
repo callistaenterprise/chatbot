@@ -1,5 +1,6 @@
 import re
 import os
+from os import path
 
 
 class BlogPreparer(object):
@@ -10,40 +11,36 @@ class BlogPreparer(object):
     def parse_blog_files(self):
         prepared_data_file = 'data/preprocessing/prepared_blog_data.txt'
         blogs = []
-        blog_files = [file for file in os.listdir(self.blog_directory)]
-        for blog_file in blog_files:
-            # print(f'processing file: {blog_file}')
-            include_line = True
-            with open(blog_file) as blog_data:
-                blog_lines = (line.rstrip() for line in blog_data if line)
-                cleaned_blog_lines = []
-                for blog_line in blog_lines:
-                    is_comment_code_block_sep = re.match('^(`|-|~){3}.*$', blog_line)
-                    if is_comment_code_block_sep and include_line:
-                        include_line = False
-                        # print(f'\"{blog_line}\" turns include_line: {include_line}')
-                    elif is_comment_code_block_sep and not include_line:
-                        include_line = True
-                        # print(f'\"{blog_line}\" turns include_line: {include_line}')
-                        continue
-                    if re.match('^#+.*$', blog_line):
-                        continue
-                    if include_line:
-                        # replace NBSP with normal space
-                        blog_line = ' '.join(blog_line.split())
-                        # remove anything within parenthesis, usually url:s
-                        blog_line = re.sub(r'\(.*\)', '', blog_line)
-                        # remove some markup code
-                        blog_line = re.sub(r'\{.*\}', '', blog_line)
-                        # remove quoted words
-                        blog_line = re.sub(r'`[^\s]*`', '', blog_line)
-                        cleaned_blog_lines.append(blog_line)
-                # print(f'blog lines from {blog_file}: {len(cleaned_blog_lines)}')
-                blog_as_string = ' '.join(cleaned_blog_lines)
-            blogs.append(blog_as_string)
-        with open(prepared_data_file, "w") as prepared_data:
-            for blog in blogs:
-                prepared_data.write(blog)
-                prepared_data.write('\n')
+        if not path.exists(prepared_data_file):
+            for filename in os.listdir(self.blog_directory):
+                include_line = True
+                with open(os.path.join(self.blog_directory, filename), 'r') as blog_data:
+                    blog_lines = (line.rstrip() for line in blog_data if line)
+                    cleaned_blog_lines = []
+                    for blog_line in blog_lines:
+                        is_comment_code_block_sep = re.match('^(`|-|~){3}.*$', blog_line)
+                        if is_comment_code_block_sep and include_line:
+                            include_line = False
+                        elif is_comment_code_block_sep and not include_line:
+                            include_line = True
+                            continue
+                        if re.match('^#+.*$', blog_line):
+                            continue
+                        if include_line:
+                            # replace NBSP with normal space
+                            blog_line = ' '.join(blog_line.split())
+                            # remove anything within parenthesis, usually url:s
+                            blog_line = re.sub(r'\(.*\)', '', blog_line)
+                            # remove some markup code
+                            blog_line = re.sub(r'\{.*\}', '', blog_line)
+                            # remove quoted words
+                            blog_line = re.sub(r'`[^\s]*`', '', blog_line)
+                            cleaned_blog_lines.append(blog_line)
+                    blog_as_string = ' '.join(cleaned_blog_lines)
+                blogs.append(blog_as_string)
+            with open(prepared_data_file, "w") as prepared_data:
+                for blog in blogs:
+                    prepared_data.write(blog)
+                    prepared_data.write('\n')
 
         return prepared_data_file
