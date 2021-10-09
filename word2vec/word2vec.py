@@ -1,9 +1,5 @@
 import yaml
 from preprocessing import MoviePreparer, DataCleaner, TrainingDataBuilder, BlogPreparer
-from cbow import CBOW
-from skip_gram import Skipgram
-# from d_glove import GloVe
-# from glove import Glove
 
 
 def main():
@@ -32,27 +28,8 @@ def main():
     data_cleaner = None
     print("Second step of data preparation finished!")
     data_builder = TrainingDataBuilder(cleaned_data, window_size)
-    vocab_size = 0
-    X_y = None
-    if implementation.lower() in ['cbow', 'any']:
-        vocab_size, X_y = data_builder.build_cbow_training_data()
-        print("Third step in data preparation finished! Vocabulary size: {}".format(vocab_size))
-        cbow = CBOW(window_size, vector_size, vocab_size)
-        cbow.train_model(X_y=X_y, epochs=10)
-        cbow = None
-    if implementation.lower() in ['skip-gram', 'any']:
-        vocab_size, X_y = data_builder.build_sg_training_data()
-        print("Third step in data preparation finished! Vocabulary size: {}".format(vocab_size))
-        skip_gram = Skipgram(vector_size, vocab_size)
-        skip_gram.train_model(X_y=X_y, epochs=10)
-        skip_gram = None
-    # elif implementation.lower() in ['glove', 'any']:
-        # vocab_size,  = data_builder.build_glove_training_data()
-        # print("Third step in data preparation finished!")
-        # glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
-        # glove_model.train('data/prepared_data.txt')
-    data_builder = None
     print('Finished!')
+    data_builder = None
 
 
 if __name__ == '__main__':

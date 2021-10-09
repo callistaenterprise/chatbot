@@ -1,1 +1,0 @@
-from .skip_gram import Skipgram
