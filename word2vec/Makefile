@@ -7,4 +7,4 @@ install: requirements.txt
 	pip install -r requirements.txt
 
 prepare: data/movies data/blogs data/preprocessing
-	python word2vec.py
+	python app/word2vec.py

@@ -1,10 +1,10 @@
 implementation: none
 window_size: 5
 vector_size: 100
-movie_lines: data/movies/movie_lines.txt
-movie_conversations: data/movies/movie_conversations.txt
+movie_lines: ../../data/movies/movie_lines.txt
+movie_conversations: ../../data/movies/movie_conversations.txt
 blog_directory: data/blogs
-stop_words: preprocessing/stop_words.txt
+stop_words: stop_words.txt
 cbow:
   epochs: 5
 skip_gram:
