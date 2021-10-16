@@ -9,8 +9,8 @@ class MoviePreparer(object):
         self.conversation_lines = []
         self.lines = dict()
         self.conversations = []
-        self.movie_scripts = movie_lines
         dir_name = path.dirname(__file__)
+        self.movie_scripts = path.join(dir_name, movie_lines)
         self.conversation_file = path.join(dir_name, movie_conversations)
 
     def parse_movie_files(self):

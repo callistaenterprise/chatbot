@@ -3,7 +3,7 @@ window_size: 5
 vector_size: 100
 movie_lines: ../../data/movies/movie_lines.txt
 movie_conversations: ../../data/movies/movie_conversations.txt
-blog_directory: data/blogs
+blog_directory: ../../data/blogs
 stop_words: stop_words.txt
 cbow:
   epochs: 5
