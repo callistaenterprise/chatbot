@@ -16,8 +16,6 @@ class TrainingDataBuilder(object):
 		self.id2word_file = path.join(dir_name, '../../data/training_data/id2word.dat')
 		self.id2word = self.__load_id_2_word() if path.exists(self.id2word_file) else dict()
 		self.window_size = window_size
-		self.cbow_training_data_file = path.join(dir_name, '../../data/training_data/cbow_training_data.dat')
-		self.sg_training_data_file = path.join(dir_name, '../../data/training_data/sg_training_data.dat')
 
 	def __update_vocabulary(self, line: str):
 		words = line.split(' ')
