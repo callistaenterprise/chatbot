@@ -2,7 +2,6 @@ import numpy as np
 import pickle
 import operator
 from os import path
-from keras.preprocessing import sequence
 
 
 class TrainingDataBuilder(object):
@@ -69,71 +68,6 @@ class TrainingDataBuilder(object):
 
 			focus_word = word_id
 			yield context_word_ids, focus_word
-
-	def build_cbow_training_data(self):
-		if path.exists(self.cbow_training_data_file) and path.exists(self.word2id_file):
-			X_y = self.__load_training_data(self.cbow_training_data_file)
-			self.word2id = self.__load_word_2_id()
-		else:
-			X_y = dict()
-			X = []
-			y = []
-			self.word2id['PAD'] = 0
-			current_dictionary_index = 1
-			with open(self.source_file) as training_data:
-				for line in training_data:
-					line = line.rstrip(TrainingDataBuilder.new_line)
-					self.__update_vocabulary(line)
-					current_dictionary_index = self.__update_dictionaries(line, current_dictionary_index)
-					word_ids = self.line_to_word_ids(line)
-					for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
-						X.append(context_word_ids)
-						y.append(focus_word_id)
-
-			self.__save_id_2_word()
-			self.__save_word_2_id()
-			self.__save_training_data(self.cbow_training_data_file, X_y)
-			# Transform each focus word ID into a one-hot vector
-			# THIS CANNOT BE DONE, CAUSES OUT-OF-MEMORY!
-			# Y = [np_utils.to_categorical(focus_word, vocabulary_size) for focus_word in y]
-			X_y['X'] = X
-			X_y['y'] = y
-
-		vocabulary_size = len(self.word2id)
-		return vocabulary_size, X_y
-
-	def build_sg_training_data(self):
-		X_y = dict()
-		if path.exists(self.sg_training_data_file) and path.exists(self.word2id_file):
-			X_y = self.__load_training_data(self.sg_training_data_file)
-			self.word2id = self.__load_word_2_id()
-			vocabulary_size = len(self.word2id)
-		else:
-			X = []
-			self.word2id['PAD'] = 0
-			current_dictionary_index = 1
-			with open(self.source_file) as training_data:
-				for line in training_data:
-					line = line.rstrip(TrainingDataBuilder.new_line)
-					self.__update_vocabulary(line)
-					current_dictionary_index = self.__update_dictionaries(line, current_dictionary_index)
-					word_ids = self.line_to_word_ids(line)
-					X.append(word_ids)
-
-			self.__save_word_2_id()
-			self.__save_id_2_word()
-			vocabulary_size = len(self.word2id)
-			sampling_table = sequence.make_sampling_table(vocabulary_size)
-			training_samples_x = []
-			training_samples_y = []
-			for word_ids in X:
-				word_pairs, labels = sequence.skipgrams(word_ids, vocabulary_size, window_size=self.window_size, sampling_table=sampling_table)
-				training_samples_x.extend(word_pairs)
-				training_samples_y.extend(labels)
-			X_y['X'] = training_samples_x
-			X_y['y'] = training_samples_y
-			self.__save_training_data(self.sg_training_data_file, X_y)
-		return vocabulary_size, X_y
 
 	def build_glove_training_data(self):
 		cooccurrance = np.zeros([49396, 49396], dtype="int32")

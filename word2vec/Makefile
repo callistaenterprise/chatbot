@@ -6,5 +6,9 @@ clean:
 install: requirements.txt
 	pip install -r requirements.txt
 
-prepare: data/movies data/blogs data/preprocessing
+prepare:
+	rm -r data/preprocessing/* || mkdir data/preprocessing
+	rm -r data/training_data/* || mkdir data/training_data
+
+train: data/movies data/blogs data/preprocessing
 	python app/word2vec.py
