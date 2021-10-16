@@ -4,11 +4,12 @@ from preprocessing.blog_preparer import BlogPreparer
 from preprocessing.movie_preparer import MoviePreparer
 from preprocessing.data_cleaner import DataCleaner
 from preprocessing.training_data_builder import TrainingDataBuilder
+from test_glove import Glove
 
 
 def main():
-    dirname = os.path.dirname(__file__)
-    config_file = os.path.join(dirname, '../config.yaml')
+    dir_name = os.path.dirname(__file__)
+    config_file = os.path.join(dir_name, '../config.yaml')
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
@@ -33,6 +34,9 @@ def main():
     data_cleaner = None
     print("Second step of data preparation finished!")
     data_builder = TrainingDataBuilder(cleaned_data, window_size)
+    vocab_size, cooccurance = data_builder.build_glove_training_data()
+    glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
+    glove_model.train('data/prepared_data.txt')
     print('Finished!')
     data_builder = None
 
