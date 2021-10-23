@@ -1,5 +1,5 @@
-import os
 import yaml
+from os import path
 from preprocessing.blog_preparer import BlogPreparer
 from preprocessing.movie_preparer import MoviePreparer
 from preprocessing.data_cleaner import DataCleaner
@@ -7,12 +7,11 @@ from preprocessing.training_data_builder import TrainingDataBuilder
 
 
 def main():
-    dirname = os.path.dirname(__file__)
-    config_file = os.path.join(dirname, '../config.yaml')
+    dirname = path.dirname(__file__)
+    config_file = path.join(dirname, '../config.yaml')
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    implementation = config_dict['implementation']
     window_size = config_dict['window_size']
     vector_size = config_dict['vector_size']
     movie_lines = config_dict['movie_lines']

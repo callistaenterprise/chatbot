@@ -1,21 +1,26 @@
 import sys
-import os
+import yaml
+from os import path
 import numpy as np
 from cbow import CBOW
 from skip_gram import Skipgram
-from app.preprocessing import TrainingDataBuilder
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.manifold import TSNE
+from preprocessing.training_data_builder import TrainingDataBuilder
 import matplotlib.pyplot as plt
 
 
 def main():
     model = sys.argv[1]
-    window_size = 3
-    vector_size = 64
+    dir_name = path.dirname(__file__)
+    config_file = path.join(dir_name, '../../config.yaml')
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    window_size = config_dict['window_size']
+    vector_size = config_dict['vector_size']
     word_vectors = None
-    dir_name = os.path.dirname(__file__)
-    data_builder = TrainingDataBuilder(os.path.join(dir_name, '../data/training_data/cleaned_data.txt'), window_size)
+    data_builder = TrainingDataBuilder(path.join(dir_name, '../../data/training_data/cleaned_data.txt'), window_size)
 
     if model.lower() == 'cbow':
         cbow = CBOW(window_size, vector_size, 49405)
@@ -43,6 +48,7 @@ def main():
     for label, x, y in zip(labels, T[:, 0], T[:, 1]):
         plt.annotate(label, xy=(x + 1, y + 1), xytext=(0, 0), textcoords='offset points')
     plt.show()
+
 
 if __name__ == '__main__':
     main()
