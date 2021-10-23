@@ -33,9 +33,10 @@ def main():
     cleaned_data = data_cleaner.clean_lines(parsed_blog_data, append=True)
     data_cleaner = None
     print("Second step of data preparation finished!")
-    # data_builder = TrainingDataBuilder(cleaned_data, window_size)
-    # vocab_size, cooccurance = data_builder.build_glove_training_data()
-    # glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
+    data_builder = TrainingDataBuilder(cleaned_data, window_size)
+    vocab_size, co_occurance = data_builder.build_training_data()
+
+    glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
     # glove_model.train('data/prepared_data.txt')
     print('Finished!')
     data_builder = None

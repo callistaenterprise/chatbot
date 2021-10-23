@@ -16,6 +16,7 @@ class TrainingDataBuilder(object):
 		self.id2word_file = path.join(dir_name, '../../data/training_data/id2word.dat')
 		self.id2word = self.__load_id_2_word() if path.exists(self.id2word_file) else dict()
 		self.window_size = window_size
+		self.training_data_file = path.join(dir_name, '../../data/training_data/glove_training_data.dat')
 
 	def __update_vocabulary(self, line: str):
 		words = line.split(' ')
@@ -57,7 +58,7 @@ class TrainingDataBuilder(object):
 			start = conversation_index - self.window_size
 			# The words (in the window sized window of words) after our focus word
 			end = min(conversation_index + self.window_size + 1, conversation_len)
-			context_word_ids = np.zeros(self.window_size * 2)
+			context_word_ids = np.zeros(self.window_size * 2, dtype="int32")
 			context_word_index = 0
 			for i in range(start, end):
 				if 0 <= i < conversation_len and i != conversation_index:
@@ -67,27 +68,41 @@ class TrainingDataBuilder(object):
 			focus_word = word_id
 			yield context_word_ids, focus_word
 
-	def build_glove_training_data(self):
-		cooccurrance = np.zeros([49396, 49396], dtype="int32")
-		word_count = dict()
-		current_dictionary_index = 0
-		with open(self.source_file) as training_data:
-			for line in training_data:
-				line = line.rstrip(TrainingDataBuilder.new_line)
-				word_count = self.__update_vocabulary_with_count(line, word_count)
-				current_dictionary_index = self.__update_dictionaries(line, current_dictionary_index)
-				word_ids = self.line_to_word_ids(line)
-				for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
-					for context_word_id in context_word_ids:
-						cooccurrance[focus_word_id][int(context_word_id)] += 1
+	def build_training_data(self):
+		if path.exists(self.training_data_file):
+			co_occurrence = self.__load_training_data(self.training_data_file)
+		else:
+			word_count = dict()
+			current_dictionary_index = 0
+			with open(self.source_file) as training_data:
+				if path.exists(self.id2word_file) and path.exists(self.word2id_file):
+					self.word2id = self.__load_word_2_id()
+					self.id2word = self.__load_id_2_word()
+				else:
+					for line in training_data:
+						line = line.rstrip(TrainingDataBuilder.new_line)
+						word_count = self.__update_vocabulary_with_count(line, word_count)
+						current_dictionary_index = self.__update_dictionaries(line, current_dictionary_index)
+						self.__save_id_2_word()
+						self.__save_word_2_id()
 
-		self.__save_word_2_id()
-		sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1),reverse=True))
+					training_data.seek(0)  # start reading training data file again, from scratch
+
+				for line in training_data:
+					# co-occurrance matrix for ~54000 words: 54000 * 54000 * 4 bytes = 5.832 GB, big, but ok
+					co_occurrence = np.zeros([len(self.word2id), len(self.word2id)], dtype="int32")
+					word_ids = self.line_to_word_ids(line)
+					for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
+						for context_word_id in context_word_ids:
+							co_occurrence[focus_word_id][context_word_id] += 1
+
+			self.__save_training_data(self.training_data_file, co_occurrence)
+		sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1), reverse=True))
 		print("Most common words: {}".format(list(sorted_word_count)[:150]))
 		sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1)))
 		print("Most rare words: {}".format(list(sorted_word_count)[:100]))
 		vocabulary_size = len(self.word2id)
-		return vocabulary_size, cooccurrance
+		return vocabulary_size, co_occurrence
 
 	def __save_id_2_word(self):
 		with open(self.id2word_file, 'wb') as f:
@@ -106,9 +121,9 @@ class TrainingDataBuilder(object):
 		with open(self.word2id_file, 'rb') as f:
 			return pickle.load(f)
 
-	def __save_training_data(self, training_data_file, X_y):
+	def __save_training_data(self, training_data_file, co_ocurrence):
 		with open(training_data_file, 'wb') as f:
-			pickle.dump(X_y, f)
+			pickle.dump(co_ocurrence, f)
 
 	def __load_training_data(self, training_data_file):
 		with open(training_data_file, 'rb') as f:
