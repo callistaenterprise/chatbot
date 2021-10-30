@@ -8,16 +8,16 @@ from preprocessing.training_data_builder import TrainingDataBuilder
 
 def main():
     dirname = path.dirname(__file__)
-    config_file = path.join(dirname, '../config.yaml')
+    config_file = path.join(dirname, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    window_size = config_dict['window_size']
-    vector_size = config_dict['vector_size']
-    movie_lines = config_dict['movie_lines']
-    movie_conversations = config_dict['movie_conversations']
-    blog_directory = config_dict['blog_directory']
-    stop_words = config_dict['stop_words']
+    window_size = config_dict["window_size"]
+    vector_size = config_dict["vector_size"]
+    movie_lines = config_dict["movie_lines"]
+    movie_conversations = config_dict["movie_conversations"]
+    blog_directory = config_dict["blog_directory"]
+    stop_words = config_dict["stop_words"]
 
     movie_preparer = MoviePreparer(movie_lines, movie_conversations)
     parsed_movie_data = movie_preparer.parse_movie_files()
@@ -32,9 +32,9 @@ def main():
     data_cleaner = None
     print("Second step of data preparation finished!")
     data_builder = TrainingDataBuilder(cleaned_data, window_size)
-    print('Finished!')
+    print("Finished!")
     data_builder = None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

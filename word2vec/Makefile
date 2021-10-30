@@ -8,3 +8,10 @@ install: requirements.txt
 
 prepare: data/movies data/blogs data/preprocessing
 	python app/word2vec.py
+
+test: tests
+	python -m unittest discover -s tests -p '*_test.py'
+
+black:
+	black app
+	black tests
