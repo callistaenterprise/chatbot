@@ -4,6 +4,7 @@ vector_size: 100
 movie_lines: ../../data/movies/movie_lines.txt
 movie_conversations: ../../data/movies/movie_conversations.txt
 blog_directory: ../../data/blogs
+encoded_blogs_directory: ../../data/encoded_blogs
 stop_words: stop_words.txt
 glove_vectors: ../../glove.6B/glove.6B.100d.txt
 cbow:

@@ -10,5 +10,5 @@ prepare:
 	rm -r data/preprocessing/* || mkdir data/preprocessing
 	rm -r data/training_data/* || mkdir data/training_data
 
-train: data/movies data/blogs data/preprocessing
+train: data/movies data/blogs data/preprocessing data/encoded_blogs
 	python app/word2vec.py

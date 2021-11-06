@@ -15,12 +15,12 @@ class BlogPreparer(object):
         )
         blogs = []
         if not path.exists(prepared_data_file):
-            _, blog_as_string = self.parse_blog_files()
-            blogs.append(blog_as_string)
-        with open(prepared_data_file, "w") as prepared_data:
-            for blog in blogs:
-                prepared_data.write(blog)
-                prepared_data.write("\n")
+            for _, blog_as_string in self.parse_blog_files():
+                blogs.append(blog_as_string)
+            with open(prepared_data_file, "w") as prepared_data:
+                for blog in blogs:
+                    prepared_data.write(blog)
+                    prepared_data.write("\n")
         return prepared_data_file
 
     def parse_blog_files(self):

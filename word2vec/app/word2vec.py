@@ -18,6 +18,7 @@ def main():
     movie_lines = config_dict['movie_lines']
     movie_conversations = config_dict['movie_conversations']
     blog_directory = config_dict['blog_directory']
+    encoded_blogs_directory = config_dict['encoded_blogs_directory']
     stop_words = config_dict['stop_words']
     glove_file = config_dict['glove_vectors']
 
@@ -38,7 +39,9 @@ def main():
 
     glove_model = Glove(vocab_size=vocab_size, window=window_size, epoch=3)
     glove_model.load_pretrained_vectors(glove_file)
-    glove_model.encode_blogs(blog_dir=blog_directory)
+    for f, matrix in glove_model.encode_blogs(encoded_blog_dir=encoded_blogs_directory, blog_preparer=blog_preparer, data_cleaner=data_cleaner):
+        print("blog: {} matrix dimensions: {}", f, matrix.shape)
+
     # glove_model.train('data/prepared_data.txt')
     print('Finished!')
     data_builder = None

@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+from os import path
 from scipy.linalg import svd
 from datetime import datetime
 from preprocessing.blog_preparer import BlogPreparer
@@ -36,10 +37,14 @@ class Glove(object):
             cleaned_blog = data_cleaner.clean_line(blog_as_string)
             words_in_blog = cleaned_blog.split()
             encoded_blog = np.array([self.glove[blog_word] for blog_word in words_in_blog])
-            self.save_encoded_blog(encoded_blog_dir, filename[:filename.index(".md")], encoded_blog)
+            encoded_blog_filename = filename[:filename.index(".md")].join(".dat")
+            self.save_encoded_blog(encoded_blog_dir, encoded_blog_filename, encoded_blog)
+            yield encoded_blog_filename, encoded_blog
 
     def save_encoded_blog(self, dir, filename, data):
-
+        encoded_blog_file = path.join(dir, filename)
+        with open(encoded_blog_file, "wb") as f:
+            pickle.dump(data, f)
 
 
 
