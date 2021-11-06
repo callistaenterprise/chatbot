@@ -25,20 +25,20 @@ def main():
     parsed_movie_data = movie_preparer.parse_movie_files()
     movie_preparer = None
     blog_preparer = BlogPreparer(blog_directory)
-    parsed_blog_data = blog_preparer.parse_blog_files()
-    blog_preparer = None
+    parsed_blog_data = blog_preparer.prepare_blog_training_data()
+    # blog_preparer = None
     print("First step of data preparation finished!")
     data_cleaner = DataCleaner(stop_words)
     cleaned_data = data_cleaner.clean_lines(parsed_movie_data)
     cleaned_data = data_cleaner.clean_lines(parsed_blog_data, append=True)
-    data_cleaner = None
+    # data_cleaner = None
     print("Second step of data preparation finished!")
     data_builder = TrainingDataBuilder(cleaned_data, window_size)
     vocab_size, co_occurance = data_builder.build_training_data()
 
-    glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
-    pretrained_glove = glove_model.load_pretrained_vectors(glove_file)
-
+    glove_model = Glove(vocab_size=vocab_size, window=window_size, epoch=3)
+    glove_model.load_pretrained_vectors(glove_file)
+    glove_model.encode_blogs(blog_dir=blog_directory)
     # glove_model.train('data/prepared_data.txt')
     print('Finished!')
     data_builder = None

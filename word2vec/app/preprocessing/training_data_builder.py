@@ -58,29 +58,6 @@ class TrainingDataBuilder(object):
             print("X: {} y: {}".format(context_word_ids, focus_word_id))
             yield context_word_ids, focus_word_id
 
-    def build_cbow_training_data(self):
-        self.tokenizer.fit_on_texts(self.__test_generator())
-        if path.exists(self.cbow_training_data_file) and self.dry_run is False:
-            X_y = self.__load_training_data(self.cbow_training_data_file)
-        else:
-            X_y = dict()
-            X = []
-            y = []
-            with open(self.source_file) as training_data:
-                for line in training_data:
-                    word_ids = self.tokenizer.texts_to_sequences([line])[0]
-                    print("Word ids: {}".format(word_ids))
-                    for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
-                        X.append(context_word_ids)
-                        y.append(focus_word_id)
-
-            X_y["X"] = X
-            X_y["y"] = y
-            if not self.dry_run:
-                self.__save_training_data(self.cbow_training_data_file, X_y)
-
-        return len(self.tokenizer.word_index) + 1, X_y
-
     def build_glove_training_data(self):
         cooccurrance = np.zeros([49396, 49396], dtype="int32")
         word_count = dict()
@@ -99,7 +76,6 @@ class TrainingDataBuilder(object):
                     for context_word_id in context_word_ids:
                         cooccurrance[focus_word_id][int(context_word_id)] += 1
 
-        self.__save_word_2_id()
         sorted_word_count = dict(
             sorted(word_count.items(), key=operator.itemgetter(1), reverse=True)
         )
