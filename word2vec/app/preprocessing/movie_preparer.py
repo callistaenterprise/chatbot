@@ -2,8 +2,8 @@ from os import path
 
 
 class MoviePreparer(object):
-    delimiter = ' +++$+++ '
-    new_line = '\r\n'
+    delimiter = " +++$+++ "
+    new_line = "\r\n"
 
     def __init__(self, movie_lines, movie_conversations):
         self.conversation_lines = []
@@ -15,7 +15,9 @@ class MoviePreparer(object):
 
     def parse_movie_files(self):
         dir_name = path.dirname(__file__)
-        prepared_data_file = path.join(dir_name, '../../data/preprocessing/prepared_movie_data.txt')
+        prepared_data_file = path.join(
+            dir_name, "../../data/preprocessing/prepared_movie_data.txt"
+        )
         if not path.exists(prepared_data_file):
             with open(self.conversation_file) as mc:
                 for line in mc:
@@ -23,7 +25,7 @@ class MoviePreparer(object):
                     line = line.split(MoviePreparer.delimiter)[3]
                     self.conversation_lines.append(line)
 
-            with open(self.movie_scripts, encoding='utf-8', errors='ignore') as ml:
+            with open(self.movie_scripts, encoding="utf-8", errors="ignore") as ml:
                 for line in ml:
                     line = line.rstrip(MoviePreparer.new_line)
                     line = line.split(MoviePreparer.delimiter)
@@ -43,6 +45,6 @@ class MoviePreparer(object):
             with open(prepared_data_file, "w") as prepared_data:
                 for line in self.conversations:
                     prepared_data.write(line)
-                    prepared_data.write('\n')
+                    prepared_data.write("\n")
 
         return prepared_data_file

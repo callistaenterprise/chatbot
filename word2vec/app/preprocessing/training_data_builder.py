@@ -2,129 +2,117 @@ import numpy as np
 import pickle
 import operator
 from os import path
+from itertools import *
+from keras.preprocessing import sequence
+from keras.preprocessing.text import Tokenizer
 
 
 class TrainingDataBuilder(object):
-	new_line = '\r\n'
+    new_line = "\r\n"
 
-	def __init__(self, cleaned_file, window_size):
-		dir_name = path.dirname(__file__)
-		self.source_file = cleaned_file
-		self.vocabulary = set()
-		self.word2id_file = path.join(dir_name, '../../data/training_data/word2id.dat')
-		self.word2id = self.__load_word_2_id() if path.exists(self.word2id_file) else dict()
-		self.id2word_file = path.join(dir_name, '../../data/training_data/id2word.dat')
-		self.id2word = self.__load_id_2_word() if path.exists(self.id2word_file) else dict()
-		self.window_size = window_size
-		self.training_data_file = path.join(dir_name, '../../data/training_data/glove_training_data.dat')
+    def __init__(self, cleaned_file, window_size, dry_run=False):
+        dir_name = path.dirname(__file__)
+        self.source_file = cleaned_file
+        self.vocabulary = set()
+        self.dry_run = dry_run
+        self.window_size = window_size
+        self.glove_training_data_file = path.join(
+            dir_name, "../../data/training_data/glove_training_data.dat"
+        )
+        self.tokenizer = Tokenizer(oov_token='UNK')
 
-	def __update_vocabulary(self, line: str):
-		words = line.split(' ')
-		self.vocabulary.update(words)
+    def __test_generator(self):
+        with open(self.source_file) as training_data:
+            for line in training_data:
+                yield line
 
-	def __update_vocabulary_with_count(self, line: str, word_counter: dict):
-		words = line.split(' ')
-		self.vocabulary.update(words)
-		for word in words:
-			if word in word_counter.keys():
-				word_counter[word] = word_counter[word] + 1
-			else:
-				word_counter[word] = 1
-		return word_counter
+    def line_to_word_ids(self, line):
+        return self.tokenizer.texts_to_sequences(line)
 
-	def __update_dictionaries(self, line, index):
-		# When we cannot create a full sample from our training sentences
-		# we will pad them so all train samples have same size
-		for word in line.split(' '):
-			if word not in self.word2id:
-				self.word2id[word] = index
-				self.id2word[index] = word
-				index += 1
-		return index
+    # Let's define a function for generating training samples from our training sentences
+    # This will return a list of training samples based on a particular conversation from our training data
+    # Yields a tuple with an array of length window_size*2 of word ids for context words and the id of the focus word
+    def __generate_training_samples(self, sample_text):
+        buffer = np.zeros(self.window_size, dtype=int).tolist()
+        buffered_sampled_text = list(chain(buffer, sample_text, buffer))
+        print("buffered_sampled_text: {}".format(buffered_sampled_text))
+        # We yield one training sample for each word in sample_text
+        for sample_text_pos, focus_word_id in enumerate(sample_text):
+            # We zero-initialize context word-ID array
+            context_word_ids = np.zeros(self.window_size * 2, dtype=int).tolist()
+            # The words (in the "window sized"-list of words) *before* our focus word
+            start = sample_text_pos - self.window_size
+            # The words (in the "window sized"-list of words) *after* our focus word
+            end = sample_text_pos + self.window_size + 1
+            context_word_index = 0
+            buffered_sampled_text_index = sample_text_pos
+            for i in range(start, end):
+                if i == sample_text_pos:
+                    buffered_sampled_text_index += 1
+                    continue
+                context_word_ids[context_word_index] = buffered_sampled_text[
+                    buffered_sampled_text_index
+                ]
+                context_word_index += 1
+                buffered_sampled_text_index += 1
+            print("X: {} y: {}".format(context_word_ids, focus_word_id))
+            yield context_word_ids, focus_word_id
 
-	def line_to_word_ids(self, line):
-		word_ids = []
-		for word in line.split(' '):
-			word_ids.append(self.word2id[word])
-		return word_ids
+    def build_cbow_training_data(self):
+        self.tokenizer.fit_on_texts(self.__test_generator())
+        if path.exists(self.cbow_training_data_file) and self.dry_run is False:
+            X_y = self.__load_training_data(self.cbow_training_data_file)
+        else:
+            X_y = dict()
+            X = []
+            y = []
+            with open(self.source_file) as training_data:
+                for line in training_data:
+                    word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                    print("Word ids: {}".format(word_ids))
+                    for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
+                        X.append(context_word_ids)
+                        y.append(focus_word_id)
 
-	# Let's define a function for generating training samples from our training sentences
-	# This will return a list of training samples based on a particular conversation from our training data
-	# Yields a tuple with an array of length window_size*2 of word ids for context words and the id of the focus word
-	def __generate_training_samples(self, conversation):
-		conversation_len = len(conversation)
-		for conversation_index, word_id in enumerate(conversation):
-			# The words (in the window sized window of words) before our focus word
-			start = conversation_index - self.window_size
-			# The words (in the window sized window of words) after our focus word
-			end = min(conversation_index + self.window_size + 1, conversation_len)
-			context_word_ids = np.zeros(self.window_size * 2, dtype="int32")
-			context_word_index = 0
-			for i in range(start, end):
-				if 0 <= i < conversation_len and i != conversation_index:
-					context_word_ids[context_word_index] = conversation[i]
-					context_word_index += 1
+            X_y["X"] = X
+            X_y["y"] = y
+            if not self.dry_run:
+                self.__save_training_data(self.cbow_training_data_file, X_y)
 
-			focus_word = word_id
-			yield context_word_ids, focus_word
+        return len(self.tokenizer.word_index) + 1, X_y
 
-	def build_training_data(self):
-		if path.exists(self.training_data_file):
-			co_occurrence = self.__load_training_data(self.training_data_file)
-		else:
-			word_count = dict()
-			current_dictionary_index = 0
-			with open(self.source_file) as training_data:
-				if path.exists(self.id2word_file) and path.exists(self.word2id_file):
-					self.word2id = self.__load_word_2_id()
-					self.id2word = self.__load_id_2_word()
-				else:
-					for line in training_data:
-						line = line.rstrip(TrainingDataBuilder.new_line)
-						word_count = self.__update_vocabulary_with_count(line, word_count)
-						current_dictionary_index = self.__update_dictionaries(line, current_dictionary_index)
-						self.__save_id_2_word()
-						self.__save_word_2_id()
+    def build_glove_training_data(self):
+        cooccurrance = np.zeros([49396, 49396], dtype="int32")
+        word_count = dict()
+        current_dictionary_index = 0
+        with open(self.source_file) as training_data:
+            for line in training_data:
+                line = line.rstrip(TrainingDataBuilder.new_line)
+                word_count = self.__update_vocabulary_with_count(line, word_count)
+                current_dictionary_index = self.__update_dictionaries(
+                    line, current_dictionary_index
+                )
+                word_ids = self.line_to_word_ids(line)
+                for context_word_ids, focus_word_id in self.__generate_training_samples(
+                    word_ids
+                ):
+                    for context_word_id in context_word_ids:
+                        cooccurrance[focus_word_id][int(context_word_id)] += 1
 
-					training_data.seek(0)  # start reading training data file again, from scratch
+        self.__save_word_2_id()
+        sorted_word_count = dict(
+            sorted(word_count.items(), key=operator.itemgetter(1), reverse=True)
+        )
+        print("Most common words: {}".format(list(sorted_word_count)[:150]))
+        sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1)))
+        print("Most rare words: {}".format(list(sorted_word_count)[:100]))
+        vocabulary_size = len(self.word2id)
+        return vocabulary_size, cooccurrance
 
-				for line in training_data:
-					# co-occurrance matrix for ~54000 words: 54000 * 54000 * 4 bytes = 5.832 GB, big, but ok
-					co_occurrence = np.zeros([len(self.word2id), len(self.word2id)], dtype="int32")
-					word_ids = self.line_to_word_ids(line)
-					for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
-						for context_word_id in context_word_ids:
-							co_occurrence[focus_word_id][context_word_id] += 1
+    def __save_training_data(self, training_data_file, X_y):
+        with open(training_data_file, "wb") as f:
+            pickle.dump(X_y, f)
 
-			self.__save_training_data(self.training_data_file, co_occurrence)
-		sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1), reverse=True))
-		print("Most common words: {}".format(list(sorted_word_count)[:150]))
-		sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1)))
-		print("Most rare words: {}".format(list(sorted_word_count)[:100]))
-		vocabulary_size = len(self.word2id)
-		return vocabulary_size, co_occurrence
-
-	def __save_id_2_word(self):
-		with open(self.id2word_file, 'wb') as f:
-			pickle.dump(self.id2word, f)
-		return self.id2word_file
-
-	def __load_id_2_word(self):
-		with open(self.id2word_file, 'rb') as f:
-			return pickle.load(f)
-
-	def __save_word_2_id(self):
-		with open(self.word2id_file, 'wb') as f:
-			pickle.dump(self.word2id, f)
-
-	def __load_word_2_id(self):
-		with open(self.word2id_file, 'rb') as f:
-			return pickle.load(f)
-
-	def __save_training_data(self, training_data_file, co_ocurrence):
-		with open(training_data_file, 'wb') as f:
-			pickle.dump(co_ocurrence, f)
-
-	def __load_training_data(self, training_data_file):
-		with open(training_data_file, 'rb') as f:
-			return pickle.load(f)
+    def __load_training_data(self, training_data_file):
+        with open(training_data_file, "rb") as f:
+            return pickle.load(f)

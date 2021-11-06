@@ -13,13 +13,13 @@ def main():
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    implementation = config_dict['implementation']
     window_size = config_dict['window_size']
     vector_size = config_dict['vector_size']
     movie_lines = config_dict['movie_lines']
     movie_conversations = config_dict['movie_conversations']
     blog_directory = config_dict['blog_directory']
     stop_words = config_dict['stop_words']
+    glove_file = config_dict['glove_vectors']
 
     movie_preparer = MoviePreparer(movie_lines, movie_conversations)
     parsed_movie_data = movie_preparer.parse_movie_files()
@@ -37,6 +37,8 @@ def main():
     vocab_size, co_occurance = data_builder.build_training_data()
 
     glove_model = Glove(input_file='data/prepared_data.txt', vocab_size=vocab_size, window=window_size, epoch=3)
+    pretrained_glove = glove_model.load_pretrained_vectors(glove_file)
+
     # glove_model.train('data/prepared_data.txt')
     print('Finished!')
     data_builder = None
