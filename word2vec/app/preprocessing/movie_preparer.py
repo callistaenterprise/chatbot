@@ -6,12 +6,29 @@ class MoviePreparer(object):
     new_line = "\r\n"
 
     def __init__(self, movie_lines, movie_conversations):
+        # List of strings. Each string is in turn a list of utterance-IDs that make up a conversation
         self.conversation_lines = []
+        # Dictionary: key is an ID of the utterance, value is a string with the utterance
         self.lines = dict()
+        # List of strings. Each string is a conversation in a movie
         self.conversations = []
         dir_name = path.dirname(__file__)
         self.movie_scripts = path.join(dir_name, movie_lines)
         self.conversation_file = path.join(dir_name, movie_conversations)
+
+    def parse_movie_lines(self):
+        dir_name = path.dirname(__file__)
+        prepared_data_file = path.join(
+            dir_name, "../../data/preprocessing/prepared_movie_lines.txt"
+        )
+        if not path.exists(prepared_data_file):
+            with open(self.movie_scripts, "r", encoding="utf-8", errors="ignore") as ml, open(prepared_data_file, "w") as fw:
+                for line in ml:
+                    line = line.rstrip(MoviePreparer.new_line)
+                    line = line.split(MoviePreparer.delimiter)
+                    if len(line) == 5:
+                        fw.write(line[4])
+                        fw.write("\n")
 
     def parse_movie_files(self):
         dir_name = path.dirname(__file__)
