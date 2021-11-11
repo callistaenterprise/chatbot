@@ -4,6 +4,7 @@ from preprocessing.blog_preparer import BlogPreparer
 from preprocessing.movie_preparer import MoviePreparer
 from preprocessing.data_cleaner import DataCleaner
 from preprocessing.training_data_builder import TrainingDataBuilder
+import logging
 
 
 def main():
@@ -26,15 +27,15 @@ def main():
     blog_preparer = BlogPreparer(blog_directory)
     parsed_blog_data = blog_preparer.parse_blog_files()
     blog_preparer = None
-    print("First step of data preparation finished!")
+    logging.info("First step of data preparation finished!")
     data_cleaner = DataCleaner(stop_words)
     # cleaned_data = data_cleaner.clean_lines(parsed_movie_data)
     cleaned_data = data_cleaner.clean_lines(parsed_movie_lines)
     cleaned_data = data_cleaner.clean_lines(parsed_blog_data, append=True)
     data_cleaner = None
-    print("Second step of data preparation finished!")
+    logging.info("Second step of data preparation finished!")
     data_builder = TrainingDataBuilder(cleaned_data, window_size)
-    print("Finished!")
+    logging.info("Finished!")
     data_builder = None
 
 

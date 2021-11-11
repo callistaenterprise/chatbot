@@ -5,6 +5,17 @@ from os import path
 from itertools import *
 from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
+import logging
+
+
+def save_training_data(training_data_file, X_y):
+    with open(training_data_file, "wb") as f:
+        pickle.dump(X_y, f)
+
+
+def load_training_data(training_data_file):
+    with open(training_data_file, "rb") as f:
+        return pickle.load(f)
 
 
 class TrainingDataBuilder(object):
@@ -41,7 +52,7 @@ class TrainingDataBuilder(object):
     def __generate_training_samples(self, sample_text):
         buffer = np.zeros(self.window_size, dtype=int).tolist()
         buffered_sampled_text = list(chain(buffer, sample_text, buffer))
-        print("buffered_sampled_text: {}".format(buffered_sampled_text))
+        logging.debug("buffered_sampled_text: {}", buffered_sampled_text)
         # We yield one training sample for each word in sample_text
         for sample_text_pos, focus_word_id in enumerate(sample_text):
             # We zero-initialize context word-ID array
@@ -61,13 +72,13 @@ class TrainingDataBuilder(object):
                 ]
                 context_word_index += 1
                 buffered_sampled_text_index += 1
-            print("X: {} y: {}".format(context_word_ids, focus_word_id))
+            logging.debug("X: {} y: {}",context_word_ids, focus_word_id)
             yield context_word_ids, focus_word_id
 
     def build_cbow_training_data(self):
         self.tokenizer.fit_on_texts(self.__test_generator())
         if path.exists(self.cbow_training_data_file) and self.dry_run is False:
-            X_y = self.__load_training_data(self.cbow_training_data_file)
+            X_y = load_training_data(self.cbow_training_data_file)
         else:
             X_y = dict()
             X = []
@@ -82,7 +93,7 @@ class TrainingDataBuilder(object):
             X_y["X"] = X
             X_y["y"] = y
             if not self.dry_run:
-                self.__save_training_data(self.cbow_training_data_file, X_y)
+                save_training_data(self.cbow_training_data_file, X_y)
 
         return len(self.tokenizer.word_index) + 1, X_y
 
@@ -90,7 +101,7 @@ class TrainingDataBuilder(object):
         self.tokenizer.fit_on_texts(self.__test_generator())
         vocabulary_size = len(self.tokenizer.word_index) + 1
         if path.exists(self.sg_training_data_file) and self.dry_run is False:
-            X_y = self.__load_training_data(self.sg_training_data_file)
+            X_y = load_training_data(self.sg_training_data_file)
         else:
             X_y = dict()
             training_samples_x = []
@@ -111,7 +122,7 @@ class TrainingDataBuilder(object):
             X_y["X"] = training_samples_x
             X_y["y"] = training_samples_y
             if not self.dry_run:
-                self.__save_training_data(self.sg_training_data_file, X_y)
+                save_training_data(self.sg_training_data_file, X_y)
         return vocabulary_size, X_y
 
     def build_glove_training_data(self):
@@ -136,16 +147,8 @@ class TrainingDataBuilder(object):
         sorted_word_count = dict(
             sorted(word_count.items(), key=operator.itemgetter(1), reverse=True)
         )
-        print("Most common words: {}".format(list(sorted_word_count)[:150]))
+        logging.debug("Most common words: {}", list(sorted_word_count)[:150])
         sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1)))
-        print("Most rare words: {}".format(list(sorted_word_count)[:100]))
+        logging.debug("Most rare words: {}", list(sorted_word_count)[:100])
         vocabulary_size = len(self.word2id)
         return vocabulary_size, cooccurrance
-
-    def __save_training_data(self, training_data_file, X_y):
-        with open(training_data_file, "wb") as f:
-            pickle.dump(X_y, f)
-
-    def __load_training_data(self, training_data_file):
-        with open(training_data_file, "rb") as f:
-            return pickle.load(f)
