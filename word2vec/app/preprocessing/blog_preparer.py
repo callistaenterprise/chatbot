@@ -17,9 +17,8 @@ class BlogPreparer(object):
         if not path.exists(prepared_data_file):
             for filename in os.listdir(self.blog_directory):
                 include_line = True
-                with open(
-                    os.path.join(self.blog_directory, filename), "r"
-                ) as blog_data:
+                blog_file = os.path.join(self.blog_directory, filename)
+                with open(blog_file, "r", encoding="utf-8", errors="ignore") as blog_data:
                     blog_lines = (line.rstrip() for line in blog_data if line)
                     cleaned_blog_lines = []
                     for blog_line in blog_lines:
@@ -47,7 +46,9 @@ class BlogPreparer(object):
                 blogs.append(blog_as_string)
             with open(prepared_data_file, "w") as prepared_data:
                 for blog in blogs:
-                    prepared_data.write(blog)
-                    prepared_data.write("\n")
+                    blog_sentences = blog.split(".")
+                    for blog_sentence in blog_sentences:
+                        prepared_data.write(blog_sentence)
+                        prepared_data.write("\n")
 
         return prepared_data_file

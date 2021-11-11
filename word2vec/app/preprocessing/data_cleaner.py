@@ -113,6 +113,8 @@ class DataCleaner(object):
 
             with open(cleaned_file, "a") as clean_data:
                 for clean_line in clean_lines:
-                    clean_data.write(clean_line)
+                    # If line is shorter than 3 words we ignore it as it doesn't give much to train on
+                    if len(clean_line.split(" ")) > 2:
+                        clean_data.write(clean_line)
 
         return cleaned_file

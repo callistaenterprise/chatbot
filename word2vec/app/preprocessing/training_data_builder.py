@@ -75,7 +75,6 @@ class TrainingDataBuilder(object):
             with open(self.source_file) as training_data:
                 for line in training_data:
                     word_ids = self.tokenizer.texts_to_sequences([line])[0]
-                    print("Word ids: {}".format(word_ids))
                     for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
                         X.append(context_word_ids)
                         y.append(focus_word_id)
