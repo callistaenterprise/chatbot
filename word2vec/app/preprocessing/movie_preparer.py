@@ -22,7 +22,9 @@ class MoviePreparer(object):
             dir_name, "../../data/preprocessing/prepared_movie_lines.txt"
         )
         if not path.exists(prepared_data_file):
-            with open(self.movie_scripts, "r", encoding="utf-8", errors="ignore") as ml, open(prepared_data_file, "w") as fw:
+            with open(
+                self.movie_scripts, "r", encoding="utf-8", errors="ignore"
+            ) as ml, open(prepared_data_file, "w") as fw:
                 for line in ml:
                     line = line.rstrip(MoviePreparer.new_line)
                     line = line.split(MoviePreparer.delimiter)

@@ -18,7 +18,9 @@ class BlogPreparer(object):
             for filename in os.listdir(self.blog_directory):
                 include_line = True
                 blog_file = os.path.join(self.blog_directory, filename)
-                with open(blog_file, "r", encoding="utf-8", errors="ignore") as blog_data:
+                with open(
+                    blog_file, "r", encoding="utf-8", errors="ignore"
+                ) as blog_data:
                     blog_lines = (line.rstrip() for line in blog_data if line)
                     cleaned_blog_lines = []
                     for blog_line in blog_lines:

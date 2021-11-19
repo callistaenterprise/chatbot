@@ -36,7 +36,7 @@ class TrainingDataBuilder(object):
         self.glove_training_data_file = path.join(
             dir_name, "../../data/training_data/glove_training_data.dat"
         )
-        self.tokenizer = Tokenizer(oov_token='UNK')
+        self.tokenizer = Tokenizer(oov_token="UNK")
 
     def __test_generator(self):
         with open(self.source_file) as training_data:
@@ -72,7 +72,7 @@ class TrainingDataBuilder(object):
                 ]
                 context_word_index += 1
                 buffered_sampled_text_index += 1
-            logging.debug("X: {} y: {}",context_word_ids, focus_word_id)
+            logging.debug("X: {} y: {}", context_word_ids, focus_word_id)
             yield context_word_ids, focus_word_id
 
     def build_cbow_training_data(self):
@@ -86,7 +86,10 @@ class TrainingDataBuilder(object):
             with open(self.source_file) as training_data:
                 for line in training_data:
                     word_ids = self.tokenizer.texts_to_sequences([line])[0]
-                    for context_word_ids, focus_word_id in self.__generate_training_samples(word_ids):
+                    for (
+                        context_word_ids,
+                        focus_word_id,
+                    ) in self.__generate_training_samples(word_ids):
                         X.append(context_word_ids)
                         y.append(focus_word_id)
 
