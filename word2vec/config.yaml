@@ -4,6 +4,8 @@ vector_size: 100
 movie_lines: ../../data/movies/movie_lines.txt
 movie_conversations: ../../data/movies/movie_conversations.txt
 blog_directory: ../../data/blogs
+encoded_blog_directory: ../../data/encoded_blogs
+pretrained_embeddings: ../../../glove.6B/glove.6B.100d.txt
 stop_words: stop_words.txt
 cbow:
   epochs: 5

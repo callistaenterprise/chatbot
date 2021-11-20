@@ -9,8 +9,8 @@ class DataCleaner(object):
         with open(stop_words_file, "r") as f:
             self.stop_words = [word for line in f for word in line.split()]
 
-    def __data_cleaner(self, line):
-        a_line = line.lower()  # We are not interested in lower or upper case
+    def clean_line(self, dirty_line):
+        a_line = dirty_line.lower()  # We are not interested in lower or upper case
         a_line = re.sub("\t", " ", a_line)  # tabs to single space
         a_line = re.sub(" +", " ", a_line)  # remove superfluous whitespaces
         a_line = re.sub(r"-\[readmore\]-", " ", a_line)
@@ -106,15 +106,15 @@ class DataCleaner(object):
         dir_name = path.dirname(__file__)
         cleaned_file = path.join(dir_name, "../../data/training_data/cleaned_data.txt")
         if not path.exists(cleaned_file) or append:
-            clean_lines = []
+            cleaned_lines = []
             with open(file_to_clean) as dirty_data:
                 for dirty_line in dirty_data:
-                    clean_lines.append(self.__data_cleaner(dirty_line))
+                    cleaned_lines.append(self.clean_line(dirty_line))
 
             with open(cleaned_file, "a") as clean_data:
-                for clean_line in clean_lines:
+                for cleaned_line in cleaned_lines:
                     # If line is shorter than 3 words we ignore it as it doesn't give much to train on
-                    if len(clean_line.split(" ")) > 2:
-                        clean_data.write(clean_line)
+                    if len(cleaned_line.split(" ")) > 2:
+                        clean_data.write(cleaned_line)
 
         return cleaned_file
