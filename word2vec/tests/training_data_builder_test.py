@@ -8,7 +8,7 @@ class TrainingDataBuilderTest(unittest.TestCase):
     def test_generate_cbow_training_samples(self):
         dir_name = path.dirname(__file__)
         self.training_data_builder = TrainingDataBuilder(
-            cleaned_file=path.join(dir_name, "test_cleaned_train_data.txt"),
+            source_dir=path.join(dir_name, "test_cleaned_train_data.txt"),
             window_size=2,
             dry_run=True,
         )
@@ -19,7 +19,7 @@ class TrainingDataBuilderTest(unittest.TestCase):
     def test_generate_sg_training_samples(self):
         dir_name = path.dirname(__file__)
         self.training_data_builder = TrainingDataBuilder(
-            cleaned_file=path.join(dir_name, "test_cleaned_train_data.txt"),
+            source_dir=path.join(dir_name, "test_cleaned_train_data.txt"),
             window_size=2,
             dry_run=True,
         )

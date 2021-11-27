@@ -20,8 +20,14 @@ clean_blogs: data/2_parsed/blogs
 clean_movies: data/2_parsed/blogs
 	python app/preprocessing/cleaning/data_cleaner.py data/2_parsed/movies
 
-prepare: data/movies data/blogs data/preprocessing
-	python app/word2vec.py
+prepare_cbow: data/3_cleaned
+	python app/preprocessing/training_data/cbow_training_builder.py data/3_cleaned
+
+prepare_skip_gram: data/3_cleaned
+	python app/preprocessing/training_data/skip_gram_training_builder.py data/3_cleaned
+
+prepare_glove: data/3_cleaned
+	python app/preprocessing/training_data/glove_training_builder.py data/3_cleaned
 
 test: tests
 	python -m unittest discover -s tests -p '*_test.py'

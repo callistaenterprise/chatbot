@@ -1,25 +1,24 @@
-from training_data_builder import TrainingDataBuilder
+from training_data_builder import TrainingDataBuilder, save_training_data
+import sys
 import numpy as np
 from itertools import *
+from keras.preprocessing.text import Tokenizer
 from os import path
+import yaml
 
 
 class CbowTrainingBuilder(TrainingDataBuilder):
     NEW_LINE = "\r\n"
 
-    def __init__(self, cleaned_file, window_size, dry_run=False):
-        super().__init__(cleaned_file, window_size)
+    def __init__(self, source_dir, window_size, dry_run=False):
+        super().__init__(source_dir, window_size, dry_run)
         dir_name = path.dirname(__file__)
         self.vocabulary = set()
         self.dry_run = dry_run
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/cbow/training_data.dat"
         )
-
-    def __test_generator(self):
-        with open(self.source_file) as training_data:
-            for line in training_data:
-                yield line
+        self.tokenizer = Tokenizer(oov_token="UNK")
 
     def line_to_word_ids(self, line):
         return self.tokenizer.texts_to_sequences(line)
@@ -54,26 +53,43 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             yield context_word_ids, focus_word_id
 
     def build_cbow_training_data(self):
-        self.tokenizer.fit_on_texts(self.__test_generator())
-        if path.exists(self.training_data_file) and self.dry_run is False:
-            X_y = super().load_training_data(self.training_data_file)
-        else:
+        if not path.exists(self.training_data_file):
+            # creates word-2-id and id-2-word, basically
+            self.tokenizer.fit_on_texts(super().training_line_generator())
             X_y = dict()
             X = []
             y = []
-            with open(self.source_file) as training_data:
-                for line in training_data:
-                    word_ids = self.tokenizer.texts_to_sequences([line])[0]
-                    for (
-                            context_word_ids,
-                            focus_word_id,
-                    ) in self.__generate_training_samples(word_ids):
-                        X.append(context_word_ids)
-                        y.append(focus_word_id)
+
+            for line in super().training_line_generator():
+                word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                for (
+                        context_word_ids,
+                        focus_word_id,
+                ) in self.__generate_training_samples(word_ids):
+                    X.append(context_word_ids)
+                    y.append(focus_word_id)
 
             X_y["X"] = X
             X_y["y"] = y
-            if not self.dry_run:
-                super().save_training_data(self.training_data_file, X_y)
+            vocabulary_size = len(self.tokenizer.word_index) + 1
+            if self.dry_run:
+                print("Training data: {}, vocabulary size: {}".format(X_y, vocabulary_size))
+            else:
+                save_training_data(self.training_data_file, X_y)
+                print("Vocabulary size: {}".format(vocabulary_size))
 
-        return len(self.tokenizer.word_index) + 1, X_y
+
+def main():
+    dir_name = path.dirname(__file__)
+    source_dir = sys.argv[1]
+    config_file = path.join(dir_name, "../../../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    window_size = config_dict["window_size"]
+    cbow_training_builder = CbowTrainingBuilder(source_dir, window_size)
+    cbow_training_builder.build_cbow_training_data()
+
+
+if __name__ == "__main__":
+    main()
