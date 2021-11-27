@@ -1,5 +1,5 @@
 import unittest
-from app.preprocessing.training_data_builder import TrainingDataBuilder
+from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder
 from os import path
 import logging
 

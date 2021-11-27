@@ -6,7 +6,7 @@ from cbow import CBOW
 from skip_gram import Skipgram
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.manifold import TSNE
-from preprocessing.training_data_builder import TrainingDataBuilder
+from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder
 import matplotlib.pyplot as plt
 
 
@@ -21,7 +21,7 @@ def main():
     vector_size = config_dict["vector_size"]
     word_vectors = None
     data_builder = TrainingDataBuilder(
-        path.join(dir_name, "../../data/training_data/cleaned_data.txt"), window_size
+        path.join(dir_name, "../../data/4_training_data/cleaned_data.txt"), window_size
     )
 
     if model.lower() == "cbow":

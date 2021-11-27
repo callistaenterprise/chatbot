@@ -1,10 +1,10 @@
 import yaml
 from os import path
-from preprocessing.blog_preparer import BlogPreparer
-from preprocessing.movie_preparer import MoviePreparer
-from preprocessing.data_cleaner import DataCleaner
+from app.preprocessing.parsing.blog_parser import BlogParser
+from app.preprocessing.parsing.movie_parser import MovieParser
+from app.preprocessing.cleaning.data_cleaner import DataCleaner
 from preprocessing.blog_encoder import BlogEncoder
-from preprocessing.training_data_builder import TrainingDataBuilder
+from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder
 import logging
 
 
@@ -23,18 +23,17 @@ def main():
     stop_words = config_dict["stop_words"]
     pretrained_embeddings = config_dict["pretrained_embeddings"]
 
-    movie_preparer = MoviePreparer(movie_lines, movie_conversations)
+    movie_preparer = MovieParser(movie_lines, movie_conversations)
     parsed_movie_data = movie_preparer.parse_movie_files()
     parsed_movie_lines = movie_preparer.parse_movie_lines()
     movie_preparer = None
-    blog_preparer = BlogPreparer(blog_directory)
+    blog_preparer = BlogParser(blog_directory)
     parsed_blog_data = blog_preparer.parse_blog_files()
     blog_preparer = None
     logging.info("First step of data preparation finished!")
     data_cleaner = DataCleaner(stop_words)
-    # cleaned_data = data_cleaner.clean_lines(parsed_movie_data)
-    cleaned_data = data_cleaner.clean_lines(parsed_movie_lines)
-    cleaned_data = data_cleaner.clean_lines(parsed_blog_data, append=True)
+    cleaned_data = data_cleaner.clean_file(parsed_movie_lines)
+    cleaned_data = data_cleaner.clean_file(parsed_blog_data, append=True)
     blog_encoder = BlogEncoder(blog_dir=blog_directory, target_dir=encoded_blogs,
                                word_embeddings_file=pretrained_embeddings, stop_words=stop_words)
     blog_encoder.encode_blogs()
