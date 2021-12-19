@@ -1,6 +1,9 @@
-from training_data_builder import TrainingDataBuilder
+from training_data_builder import TrainingDataBuilder, save_training_data
 from os import path
-import operator
+import sys
+import math
+import yaml
+from keras.preprocessing.text import Tokenizer
 import numpy as np
 import logging
 
@@ -11,39 +14,82 @@ class GloveTrainingBuilder(TrainingDataBuilder):
     def __init__(self, source_dir, window_size, dry_run=False):
         super().__init__(source_dir, window_size, dry_run)
         dir_name = path.dirname(__file__)
-        self.vocabulary = set()
         self.dry_run = dry_run
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/glove/training_data.dat"
         )
+        self.tokenizer = Tokenizer(oov_token="UNK")
 
-    def build_glove_training_data(self):
-        cooccurrance = np.zeros([49396, 49396], dtype="int32")
-        word_count = dict()
-        current_dictionary_index = 0
-        with open(self.source_file) as training_data:
-            for line in training_data:
-                line = line.rstrip(TrainingDataBuilder.NEW_LINE)
-                word_count = self.__update_vocabulary_with_count(line, word_count)
-                current_dictionary_index = self.__update_dictionaries(
-                    line, current_dictionary_index
-                )
-                word_ids = self.line_to_word_ids(line)
-                for context_word_ids, focus_word_id in self.__generate_training_samples(
-                    word_ids
-                ):
-                    for context_word_id in context_word_ids:
-                        cooccurrance[focus_word_id][int(context_word_id)] += 1
+    def _generate_word_pairs(self, word_ids, min, max):
+        for posI, wordI in enumerate(word_ids):
+            # We check word i against the min-max boundary (we are building a _partial_ co-occurrence matrix)
+            if wordI < min or wordI >= max:
+                continue
+            for posJ, wordJ in enumerate(word_ids):
+                # We check if word j is within context window of word i
+                if posI == posJ or posI - self.window_size > posJ or posI + self.window_size < posJ:
+                    continue
+                yield wordI, wordI
 
-        super().__save_word_2_id()
-        sorted_word_count = dict(
-            sorted(word_count.items(), key=operator.itemgetter(1), reverse=True)
-        )
-        logging.debug("Most common words: {}", list(sorted_word_count)[:150])
-        sorted_word_count = dict(sorted(word_count.items(), key=operator.itemgetter(1)))
-        logging.debug("Most rare words: {}", list(sorted_word_count)[:100])
-        vocabulary_size = len(self.word2id)
-        return vocabulary_size, cooccurrance
+    def build_glove_training_data(self, batch_size=1000):
+        if not path.exists(self.training_data_file):
+            # Step 1: Co-occurrence matrix
+            # creates word-to-id, id-to-word mappings, as well as some other nice stuff
+            self.tokenizer.fit_on_texts(super().training_line_generator())
+            vocabulary_size = len(self.tokenizer.word_index) + 1
+            X_y = dict()
+            X_y["X"] = np.empty((0, 2), dtype=int)
+            X_y["y"] = np.empty((0, 1))
+            start = 0
+            end = start + batch_size
+            batch_counter = 1
+            while end < vocabulary_size or start == 0:
+                logging.debug(f"Batch#: {batch_counter}, start word id: {start}, end word id: {end}")
+                partial_co_occurrence_matrix = np.zeros(shape=(batch_size, vocabulary_size), dtype=int)
+                for line in super().training_line_generator():
+                    word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                    for word_i, word_j in self._generate_word_pairs(word_ids, start, end):
+                        word_i_index = word_i % batch_size
+                        partial_co_occurrence_matrix[word_i_index][word_j] += 1
 
-    def line_to_word_ids(self, line):
-        return self.tokenizer.texts_to_sequences(line)
+                training_indices = np.nonzero(partial_co_occurrence_matrix)
+                training_data = np.zeros((len(training_indices[0]), 2), dtype=int)
+                expected_values = np.zeros((len(training_indices[0]), 1))
+
+                for sample in range(len(training_indices[0])):
+                    word_i_index = training_indices[0][sample]
+                    word_j = training_indices[1][sample]
+                    training_data[sample][0] = word_i_index * batch_counter
+                    training_data[sample][1] = word_j
+                    expected_values[sample] = math.log(partial_co_occurrence_matrix[word_i_index][word_j])
+                logging.debug(f"X shape: {X_y['X'].shape}, training_data shape: {training_data.shape}")
+                logging.debug(f"Y shape: {X_y['y'].shape}, expected_values shape: {expected_values.shape}")
+                logging.debug(f"Did we get some word IDs? {training_data[:1]}: {expected_values[0]}")
+                X_y["X"] = np.append(X_y["X"], training_data, axis=0)
+                X_y["y"] = np.append(X_y["y"], expected_values, axis=0)
+                batch_counter += 1
+                start = end
+                end = min(len(self.tokenizer.word_index), end + batch_size)
+
+            if self.dry_run:
+                return vocabulary_size, X_y
+            else:
+                save_training_data(self.training_data_file, X_y)
+                logging.info(f"Vocabulary size: {vocabulary_size}")
+
+
+def main():
+    dir_name = path.dirname(__file__)
+    source_dir = sys.argv[1]
+    logging.basicConfig(level=logging.DEBUG)
+    config_file = path.join(dir_name, "../../../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    window_size = config_dict["window_size"]
+    glove_training_builder = GloveTrainingBuilder(source_dir, window_size)
+    glove_training_builder.build_glove_training_data()
+
+
+if __name__ == "__main__":
+    main()

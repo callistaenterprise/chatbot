@@ -4,16 +4,17 @@ from os import path
 from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 import yaml
+import logging
 
 
-class SkipGram(TrainingDataBuilder):
+class SkipGramTrainingBuilder(TrainingDataBuilder):
     NEW_LINE = "\r\n"
 
     def __init__(self, source_dir, window_size, dry_run=False):
-        super().__init__(source_dir, window_size, dry_run)
+        super().__init__(source_dir)
         dir_name = path.dirname(__file__)
-        self.vocabulary = set()
         self.dry_run = dry_run
+        self.window_size = window_size
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/skip_gram/training_data.dat"
         )
@@ -41,10 +42,10 @@ class SkipGram(TrainingDataBuilder):
             X_y["X"] = training_samples_x
             X_y["y"] = training_samples_y
             if self.dry_run:
-                print("Training data: {}, vocabulary size: {}".format(X_y, vocabulary_size))
+                return vocabulary_size, X_y
             else:
                 save_training_data(self.training_data_file, X_y)
-                print("Vocabulary size: {}".format(vocabulary_size))
+                logging.info(f"Vocabulary size: {vocabulary_size}")
 
 
 def main():
@@ -55,7 +56,7 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    skip_gram_training_builder = SkipGram(source_dir, window_size)
+    skip_gram_training_builder = SkipGramTrainingBuilder(source_dir, window_size)
     skip_gram_training_builder.build_sg_training_data()
 
 

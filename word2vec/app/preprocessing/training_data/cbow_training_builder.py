@@ -5,15 +5,16 @@ from itertools import *
 from keras.preprocessing.text import Tokenizer
 from os import path
 import yaml
+import logging
 
 
 class CbowTrainingBuilder(TrainingDataBuilder):
     NEW_LINE = "\r\n"
 
     def __init__(self, source_dir, window_size, dry_run=False):
-        super().__init__(source_dir, window_size, dry_run)
+        super().__init__(source_dir)
         dir_name = path.dirname(__file__)
-        self.vocabulary = set()
+        self.window_size = window_size
         self.dry_run = dry_run
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/cbow/training_data.dat"
@@ -26,7 +27,7 @@ class CbowTrainingBuilder(TrainingDataBuilder):
     # Let's define a function for generating training samples from our training sentences
     # This will return a list of training samples based on a particular conversation from our training data
     # Yields a tuple with an array of length window_size*2 of word ids for context words and the id of the focus word
-    def __generate_training_samples(self, sample_text):
+    def _generate_training_samples(self, sample_text):
         buffer = np.zeros(self.window_size, dtype=int).tolist()
         buffered_sampled_text = list(chain(buffer, sample_text, buffer))
         # logging.debug("buffered_sampled_text: {}", buffered_sampled_text)
@@ -65,7 +66,7 @@ class CbowTrainingBuilder(TrainingDataBuilder):
                 for (
                         context_word_ids,
                         focus_word_id,
-                ) in self.__generate_training_samples(word_ids):
+                ) in self._generate_training_samples(word_ids):
                     X.append(context_word_ids)
                     y.append(focus_word_id)
 
@@ -73,14 +74,15 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             X_y["y"] = y
             vocabulary_size = len(self.tokenizer.word_index) + 1
             if self.dry_run:
-                print("Training data: {}, vocabulary size: {}".format(X_y, vocabulary_size))
+                return vocabulary_size, X_y
             else:
                 save_training_data(self.training_data_file, X_y)
-                print("Vocabulary size: {}".format(vocabulary_size))
+                logging.info(f"Vocabulary size: {vocabulary_size}")
 
 
 def main():
     dir_name = path.dirname(__file__)
+    logging.basicConfig(level=logging.INFO)
     source_dir = sys.argv[1]
     config_file = path.join(dir_name, "../../../config.yaml")
     config_dict = None

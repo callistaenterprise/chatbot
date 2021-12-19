@@ -1,5 +1,6 @@
 import pickle
 import os
+import logging
 
 
 def save_training_data(training_data_file, X_y):
@@ -22,12 +23,9 @@ def cleaned_files(source_dir):
 
 class TrainingDataBuilder(object):
 
-    def __init__(self, source_dir, window_size, dry_run=False):
+    def __init__(self, source_dir):
         self.cleaned_files = cleaned_files(source_dir)
-        print("source files for training: {}".format(self.cleaned_files))
-        self.vocabulary = set()
-        self.dry_run = dry_run
-        self.window_size = window_size
+        logging.debug(f"source files for training: {self.cleaned_files}")
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:

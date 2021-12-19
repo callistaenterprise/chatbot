@@ -2,7 +2,6 @@ import numpy as np
 import h5py
 from os import path, listdir
 import logging
-from app.preprocessing.parsing.blog_parser import get_blog_as_string
 from app.preprocessing.cleaning.data_cleaner import DataCleaner
 
 
@@ -38,5 +37,11 @@ class BlogEncoder(object):
                 h5writer.create_dataset("blog", data=encoded_blog)
 
 
+def main():
+    blog_encoder = BlogEncoder
+    blog_encoder.encode_blogs()
 
+
+if __name__ == "__main__":
+    main()
 
