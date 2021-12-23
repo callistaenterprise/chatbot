@@ -6,15 +6,12 @@ import logging
 
 class TrainingDataBuilderTest(unittest.TestCase):
 
-    def test_generate_glove_training_samples(self):
+    def test_generate_training_data(self):
         dir_name = path.dirname(__file__)
-        self.training_data_builder = TrainingDataBuilder(
-            source_dir=path.join(dir_name, "test_cleaned_train_data.txt"),
-            window_size=2,
-            dry_run=True)
-        vocabulary_size, X_y = self.training_data_builder.build_sg_training_data()
-        logging.info("Skip grams: {}", X_y)
-        self.assertEqual(vocabulary_size, 11)
+        self.training_data_builder = TrainingDataBuilder(path.join(dir_name, "test_cleaned_train_data.txt"))
+        training_data = list(self.training_data_builder.training_line_generator())
+        logging.info(f"Training data: {training_data}")
+        self.assertEqual(len(training_data), 2)
 
 
 if __name__ == "__main__":

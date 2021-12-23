@@ -1,4 +1,4 @@
-from training_data_builder import TrainingDataBuilder, save_training_data
+from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder, save_training_data
 from os import path
 import sys
 import math

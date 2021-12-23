@@ -1,4 +1,4 @@
-from training_data_builder import TrainingDataBuilder, save_training_data
+from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 from os import path
 from keras.preprocessing import sequence
