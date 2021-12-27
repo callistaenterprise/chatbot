@@ -32,6 +32,12 @@ prepare_glove: data/3_cleaned
 train_cbow: data/4_training_data/cbow/training_data.dat
     python app/cbow.py
 
+train_skip_gram: data/4_training_data/skip_gram/training_data.dat
+    python app/skip_gram.py
+
+train_glove: data/4_training_data/glove/training_data.dat
+    python app/glove.py
+
 test: tests
 	python -m unittest discover -s tests -p '*_test.py'
 
