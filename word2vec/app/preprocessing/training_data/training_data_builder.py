@@ -24,8 +24,9 @@ def cleaned_files(source_dir):
 class TrainingDataBuilder(object):
 
     def __init__(self, source_dir):
+        self.logger = logging.getLogger(__name__)
         self.cleaned_files = cleaned_files(source_dir)
-        logging.debug(f"source files for training: {self.cleaned_files}")
+        self.logger.debug(f"source files for training: {self.cleaned_files}")
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:

@@ -1,4 +1,4 @@
-from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder, save_training_data
+from training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 import numpy as np
 from itertools import *
@@ -9,7 +9,7 @@ import logging
 
 
 class CbowTrainingBuilder(TrainingDataBuilder):
-    NEW_LINE = "\r\n"
+    logging.basicConfig(level=logging.INFO)
 
     def __init__(self, source_dir, window_size, dry_run=False):
         super().__init__(source_dir)
@@ -20,6 +20,7 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             dir_name, "../../../data/4_training_data/cbow/training_data.dat"
         )
         self.tokenizer = Tokenizer(oov_token="UNK")
+        self.logger = logging.getLogger(__name__)
 
     def line_to_word_ids(self, line):
         return self.tokenizer.texts_to_sequences(line)
@@ -54,7 +55,7 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             yield context_word_ids, focus_word_id
 
     def build_cbow_training_data(self):
-        if not path.exists(self.training_data_file):
+        if self.dry_run or not path.exists(self.training_data_file):
             # creates word-2-id and id-2-word, basically
             self.tokenizer.fit_on_texts(super().training_line_generator())
             X_y = dict()
@@ -72,17 +73,17 @@ class CbowTrainingBuilder(TrainingDataBuilder):
 
             X_y["X"] = X
             X_y["y"] = y
-            vocabulary_size = len(self.tokenizer.word_index) + 1
+            vocabulary_size = len(self.tokenizer.word_index)
             if self.dry_run:
+                self.logger.debug(f"Returning vocab size: {vocabulary_size} and training data: {X_y}")
                 return vocabulary_size, X_y
             else:
                 save_training_data(self.training_data_file, X_y)
-                logging.info(f"Vocabulary size: {vocabulary_size}")
+                self.logger.info(f"Vocabulary size: {vocabulary_size}")
 
 
 def main():
     dir_name = path.dirname(__file__)
-    logging.basicConfig(level=logging.INFO)
     source_dir = sys.argv[1]
     config_file = path.join(dir_name, "../../../config.yaml")
     config_dict = None

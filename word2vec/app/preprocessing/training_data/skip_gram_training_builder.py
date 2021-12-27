@@ -1,4 +1,4 @@
-from app.preprocessing.training_data.training_data_builder import TrainingDataBuilder, save_training_data
+from training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 from os import path
 from keras.preprocessing import sequence
@@ -8,7 +8,7 @@ import logging
 
 
 class SkipGramTrainingBuilder(TrainingDataBuilder):
-    NEW_LINE = "\r\n"
+    logging.basicConfig(level=logging.INFO)
 
     def __init__(self, source_dir, window_size, dry_run=False):
         super().__init__(source_dir)
@@ -19,15 +19,16 @@ class SkipGramTrainingBuilder(TrainingDataBuilder):
             dir_name, "../../../data/4_training_data/skip_gram/training_data.dat"
         )
         self.tokenizer = Tokenizer(oov_token="UNK")
+        self.logger = logging.getLogger(__name__)
 
     def build_sg_training_data(self):
-        if not path.exists(self.training_data_file):
+        if self.dry_run or not path.exists(self.training_data_file):
             self.tokenizer.fit_on_texts(super().training_line_generator())
-            vocabulary_size = len(self.tokenizer.word_index) + 1
+            vocabulary_size = len(self.tokenizer.word_index)
             X_y = dict()
             training_samples_x = []
             training_samples_y = []
-            sampling_table = sequence.make_sampling_table(vocabulary_size)
+            sampling_table = sequence.make_sampling_table(vocabulary_size + 1)
 
             for line in super().training_line_generator():
                 word_ids = self.tokenizer.texts_to_sequences([line])[0]
@@ -45,7 +46,7 @@ class SkipGramTrainingBuilder(TrainingDataBuilder):
                 return vocabulary_size, X_y
             else:
                 save_training_data(self.training_data_file, X_y)
-                logging.info(f"Vocabulary size: {vocabulary_size}")
+                self.logger.info(f"Vocabulary size: {vocabulary_size}")
 
 
 def main():

@@ -1,5 +1,6 @@
+from preprocessing.training_data.training_data_builder import load_training_data
 from os import path
-import keras.backend as be
+import yaml
 from keras import Input, Model
 from keras.layers import Dense, Embedding, Average
 from keras.utils import np_utils
@@ -42,7 +43,8 @@ class CBOW(object):
         if path.exists(self.model_file):
             self.weights = self.model.load_weights(self.model_file)
 
-    def train_model(self, X_y, epochs=3, batch_size=50):
+    def train_model(self, training_data_file, epochs=3, batch_size=100):
+        X_y = load_training_data(training_data_file)
         all_X = X_y['X']
         all_y = X_y['y']
         timer = Timer("CBOW training", text="Epoch training time: {minutes:.2f} minutes", logger=logging.INFO)
@@ -57,3 +59,21 @@ class CBOW(object):
             timer.stop()
             logging.info("Epoch #{}, loss: {}".format(epoch, loss))
         self.model.save_weights(self.model_file)
+
+
+def main():
+    dir_name = path.dirname(__file__)
+    training_data_file = path.join(dir_name, '../data/4_training_data/training_data.dat')
+    config_file = path.join(dir_name, "../../../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    window_size = config_dict["window_size"]
+    vector_size = config_dict['vector_size']
+    epochs = config_dict['epochs']
+    cbow_model = CBOW(window_size, vector_size, 53027)
+    cbow_model.train_model(training_data_file, epochs)
+
+
+if __name__ == "__main__":
+    main()
