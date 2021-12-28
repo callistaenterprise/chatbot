@@ -64,7 +64,7 @@ class CBOW(object):
 def main():
     dir_name = path.dirname(__file__)
     training_data_file = path.join(dir_name, '../data/4_training_data/training_data.dat')
-    config_file = path.join(dir_name, "../../../config.yaml")
+    config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
