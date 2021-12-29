@@ -41,6 +41,9 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 train_glove: data/4_training_data/glove/training_data.dat
 	python app/glove.py
 
+cbow_test: tests
+	python -m unittest tests/cbow_training_builder_test.py
+
 test: tests
 	python -m unittest discover -s tests -p '*_test.py'
 

@@ -13,7 +13,12 @@ class CbowTrainingBuilderTest(unittest.TestCase):
         self.training_data_builder = CbowTrainingBuilder(
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
+            tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
             dry_run=True)
+        super(CbowTrainingBuilder, self.training_data_builder).tokenize()
         vocabulary_size, X_y = self.training_data_builder.build_cbow_training_data()
         self.logger.info(f"CBOW training samples: {X_y}, vocabulary size: {vocabulary_size}")
-        self.assertEqual(vocabulary_size, 10)
+
+
+if __name__ == '__main__':
+    unittest.main()

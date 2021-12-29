@@ -1,4 +1,4 @@
-from training_data_builder import TrainingDataBuilder, save_training_data
+from .training_data_builder import TrainingDataBuilder, save_training_data
 from os import path
 import sys
 import math
@@ -11,7 +11,7 @@ class GloveTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
     def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
-        super().__init__(source_dir, tokenizer_file, dry_run)
+        super().__init__(source_dir, tokenizer_file)
         dir_name = path.dirname(__file__)
         self.dry_run = dry_run
         self.window_size = window_size
@@ -43,10 +43,11 @@ class GloveTrainingBuilder(TrainingDataBuilder):
             batch_size = min(batch_size, vocabulary_size)
             end_word_id = min(vocabulary_size, start_word_id + batch_size)
             batch_counter = 1
+            word_count_cap = max(1, math.floor(super().max_word_count() * 0.7))
+            self.logger.debug(f"Max word count: {super().max_word_count()}, word count cap:{word_count_cap}")
             while end_word_id > start_word_id:
                 self.logger.debug(f"Batch#: {batch_counter}, start word id: {start_word_id}, end word id: {end_word_id}")
                 partial_co_occurrence_matrix = np.zeros(shape=(batch_size, vocabulary_size), dtype=int)
-                self.logger.debug(f"(zero:ed) partial co-occurrence:\n{partial_co_occurrence_matrix}")
                 for line in super().training_line_generator():
                     word_ids = super().line_to_word_ids(line)
                     for word_i_id, word_j_id in self._generate_word_pairs(word_ids, start_word_id, end_word_id):
@@ -63,7 +64,8 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     word_j_index = training_indices[1][sample]
                     training_data[sample][0] = (word_i_index + 1) * batch_counter
                     training_data[sample][1] = word_j_index + 1
-                    expected_values[sample] = math.log(partial_co_occurrence_matrix[word_i_index][word_j_index])
+                    co_occurrence = min(word_count_cap, partial_co_occurrence_matrix[word_i_index][word_j_index])
+                    expected_values[sample] = math.log(co_occurrence)
                     self.logger.debug(f"training data: {training_data[sample]} exp: {expected_values[sample]}")
                 X_y["X"] = np.append(X_y["X"], training_data, axis=0)
                 X_y["y"] = np.append(X_y["y"], expected_values, axis=0)

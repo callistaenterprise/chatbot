@@ -31,7 +31,7 @@ class Glove(object):
     def train_model(self, X_y, epochs=3):
         word_pairs = X_y["X"]
         expected_out = X_y["y"]
-        batch_size = 100
+        batch_size = min(100, len(expected_out))
         timer = Timer("GloVe training", text="Epoch training time: {minutes:.2f} minutes", logger=logging.INFO)
         for epoch in range(epochs):
             loss = 0.
@@ -45,14 +45,21 @@ class Glove(object):
 
 def main():
     dir_name = path.dirname(__file__)
+    # Real data:
     training_data_file = path.join(dir_name, '../data/4_training_data/glove/training_data.dat')
+    # Test data:
+    # training_data_file = path.join(dir_name, '../tests/test_train_data/glove_test.dat')
     config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     vector_size = config_dict['vector_size']
+    # test data:
+    # vector_size = 3
     epochs = config_dict['epochs']
     glove_model = Glove(vector_size, 53028)
+    # test data:
+    # glove_model = Glove(vector_size, 89)
     glove_model.train_model(training_data_file, epochs)
 
 

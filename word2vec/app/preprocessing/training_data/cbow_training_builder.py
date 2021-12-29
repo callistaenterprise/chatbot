@@ -1,4 +1,4 @@
-from training_data_builder import TrainingDataBuilder, save_training_data
+from .training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 import numpy as np
 from itertools import *
@@ -8,10 +8,10 @@ import logging
 
 
 class CbowTrainingBuilder(TrainingDataBuilder):
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
     def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
-        super().__init__(source_dir, tokenizer_file, dry_run)
+        super().__init__(source_dir, tokenizer_file)
         dir_name = path.dirname(__file__)
         self.logger = logging.getLogger(__name__)
         self.window_size = window_size
@@ -56,7 +56,9 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             y = []
 
             for line in super().training_line_generator():
+                self.logger.debug(f"Training data line: {line}")
                 word_ids = super().line_to_word_ids(line)
+                self.logger.debug(f"Training data word ids: {word_ids}")
                 for (
                         context_word_ids,
                         focus_word_id,
@@ -68,7 +70,6 @@ class CbowTrainingBuilder(TrainingDataBuilder):
             X_y["y"] = y
             vocabulary_size = super().vocabulary_size()
             if self.dry_run:
-                self.logger.debug(f"Returning vocab size: {vocabulary_size} and training data: {X_y}")
                 return vocabulary_size, X_y
             else:
                 save_training_data(self.training_data_file, X_y)

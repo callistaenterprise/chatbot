@@ -1,4 +1,4 @@
-from training_data_builder import TrainingDataBuilder, save_training_data
+from .training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 from os import path
 from keras.preprocessing import sequence
@@ -10,7 +10,7 @@ class SkipGramTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
     def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
-        super().__init__(source_dir, tokenizer_file, dry_run)
+        super().__init__(source_dir, tokenizer_file)
         dir_name = path.dirname(__file__)
         self.dry_run = dry_run
         self.window_size = window_size

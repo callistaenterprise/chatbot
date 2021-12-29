@@ -1,6 +1,7 @@
 import unittest
 from os import path
 import logging
+import pickle
 from app.preprocessing.training_data.glove_training_builder import GloveTrainingBuilder
 
 
@@ -13,7 +14,11 @@ class GloveTrainingBuilderTest(unittest.TestCase):
         self.training_data_builder = GloveTrainingBuilder(
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
+            tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
             dry_run=True)
+        super(GloveTrainingBuilder, self.training_data_builder).tokenize()
         vocabulary_size, X_y = self.training_data_builder.build_glove_training_data()
         self.logger.info(f"Word pairs: {X_y}")
-        self.assertEqual(vocabulary_size, 10)
+        with open(path.join(dir_name, "test_train_data/glove_test.dat"), "wb") as f:
+            pickle.dump(X_y, f)
+        self.assertEqual(88, vocabulary_size)

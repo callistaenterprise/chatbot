@@ -31,9 +31,9 @@ def load_tokenizer(tokenizer_file):
 
 
 class TrainingDataBuilder(object):
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
-    def __init__(self, source_dir, tokenizer_file, dry_run=False):
+    def __init__(self, source_dir, tokenizer_file):
         self.logger = logging.getLogger(__name__)
         self.cleaned_files = cleaned_files(source_dir)
         self.logger.debug(f"source files for training: {self.cleaned_files}")
@@ -42,7 +42,6 @@ class TrainingDataBuilder(object):
         else:
             self.tokenizer = Tokenizer(oov_token="UNK")
         self.tokenizer_file = tokenizer_file
-        self.dry_run = dry_run
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:
@@ -51,7 +50,7 @@ class TrainingDataBuilder(object):
                     yield line
 
     def line_to_word_ids(self, line):
-        return self.tokenizer.texts_to_sequences(line)[0]
+        return self.tokenizer.texts_to_sequences([line])[0]
 
     def vocabulary_size(self):
         return len(self.tokenizer.word_index)
@@ -59,16 +58,18 @@ class TrainingDataBuilder(object):
     def vocabulary(self):
         return self.tokenizer.word_index
 
+    def max_word_count(self):
+        return max(self.tokenizer.word_counts.values())
+
     def _save_tokenizer(self):
         with open(self.tokenizer_file, "wb") as f:
             pickle.dump(self.tokenizer, f)
 
     def tokenize(self):
         # creates word-2-id dictionary
-        self.tokenizer.fit_on_texts(self.training_line_generator())
-        if self.dry_run:
-            self.logger.info(f"Dictionary: {self.tokenizer.word_index}")
-        elif not path.exists(self.tokenizer_file):
+        if not path.exists(self.tokenizer_file):
+            self.tokenizer.fit_on_texts(self.training_line_generator())
+            self.logger.debug(f"Dictionary: {self.tokenizer.word_index}")
             self._save_tokenizer()
 
 
