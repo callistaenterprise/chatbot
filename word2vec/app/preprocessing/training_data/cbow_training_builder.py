@@ -2,7 +2,6 @@ from training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 import numpy as np
 from itertools import *
-from keras.preprocessing.text import Tokenizer
 from os import path
 import yaml
 import logging
@@ -11,19 +10,15 @@ import logging
 class CbowTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, window_size, dry_run=False):
-        super().__init__(source_dir)
+    def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
+        super().__init__(source_dir, tokenizer_file, dry_run)
         dir_name = path.dirname(__file__)
+        self.logger = logging.getLogger(__name__)
         self.window_size = window_size
         self.dry_run = dry_run
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/cbow/training_data.dat"
         )
-        self.tokenizer = Tokenizer(oov_token="UNK")
-        self.logger = logging.getLogger(__name__)
-
-    def line_to_word_ids(self, line):
-        return self.tokenizer.texts_to_sequences(line)
 
     # Let's define a function for generating training samples from our training sentences
     # This will return a list of training samples based on a particular conversation from our training data
@@ -56,14 +51,12 @@ class CbowTrainingBuilder(TrainingDataBuilder):
 
     def build_cbow_training_data(self):
         if self.dry_run or not path.exists(self.training_data_file):
-            # creates word-2-id and id-2-word, basically
-            self.tokenizer.fit_on_texts(super().training_line_generator())
             X_y = dict()
             X = []
             y = []
 
             for line in super().training_line_generator():
-                word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                word_ids = super().line_to_word_ids(line)
                 for (
                         context_word_ids,
                         focus_word_id,
@@ -73,7 +66,7 @@ class CbowTrainingBuilder(TrainingDataBuilder):
 
             X_y["X"] = X
             X_y["y"] = y
-            vocabulary_size = len(self.tokenizer.word_index)
+            vocabulary_size = super().vocabulary_size()
             if self.dry_run:
                 self.logger.debug(f"Returning vocab size: {vocabulary_size} and training data: {X_y}")
                 return vocabulary_size, X_y
@@ -90,7 +83,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    cbow_training_builder = CbowTrainingBuilder(source_dir, window_size)
+    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    cbow_training_builder = CbowTrainingBuilder(source_dir, window_size, tokenizer_file)
     cbow_training_builder.build_cbow_training_data()
 
 

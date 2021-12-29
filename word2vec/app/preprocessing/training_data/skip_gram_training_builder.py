@@ -2,7 +2,6 @@ from training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 from os import path
 from keras.preprocessing import sequence
-from keras.preprocessing.text import Tokenizer
 import yaml
 import logging
 
@@ -10,28 +9,26 @@ import logging
 class SkipGramTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, window_size, dry_run=False):
-        super().__init__(source_dir)
+    def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
+        super().__init__(source_dir, tokenizer_file, dry_run)
         dir_name = path.dirname(__file__)
         self.dry_run = dry_run
         self.window_size = window_size
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/skip_gram/training_data.dat"
         )
-        self.tokenizer = Tokenizer(oov_token="UNK")
         self.logger = logging.getLogger(__name__)
 
     def build_sg_training_data(self):
         if self.dry_run or not path.exists(self.training_data_file):
-            self.tokenizer.fit_on_texts(super().training_line_generator())
-            vocabulary_size = len(self.tokenizer.word_index)
+            vocabulary_size = super().vocabulary_size()
             X_y = dict()
             training_samples_x = []
             training_samples_y = []
             sampling_table = sequence.make_sampling_table(vocabulary_size + 1)
 
             for line in super().training_line_generator():
-                word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                word_ids = super().line_to_word_ids(line)
                 word_pairs, labels = sequence.skipgrams(sequence=word_ids,
                                                         vocabulary_size=vocabulary_size,
                                                         window_size=self.window_size,
@@ -57,7 +54,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    skip_gram_training_builder = SkipGramTrainingBuilder(source_dir, window_size)
+    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    skip_gram_training_builder = SkipGramTrainingBuilder(source_dir, window_size, tokenizer_file)
     skip_gram_training_builder.build_sg_training_data()
 
 

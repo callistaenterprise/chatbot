@@ -3,7 +3,6 @@ from os import path
 import sys
 import math
 import yaml
-from keras.preprocessing.text import Tokenizer
 import numpy as np
 import logging
 
@@ -11,15 +10,14 @@ import logging
 class GloveTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, window_size, dry_run=False):
-        super().__init__(source_dir)
+    def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
+        super().__init__(source_dir, tokenizer_file, dry_run)
         dir_name = path.dirname(__file__)
         self.dry_run = dry_run
         self.window_size = window_size
         self.training_data_file = path.join(
             dir_name, "../../../data/4_training_data/glove/training_data.dat"
         )
-        self.tokenizer = Tokenizer(oov_token="UNK")
         self.logger = logging.getLogger(__name__)
 
     def _generate_word_pairs(self, word_ids, min, max):
@@ -36,23 +34,21 @@ class GloveTrainingBuilder(TrainingDataBuilder):
     def build_glove_training_data(self, batch_size=1000):
         if self.dry_run or not path.exists(self.training_data_file):
             # Step 1: Co-occurrence matrix
-            # creates word-to-id, id-to-word mappings, as well as some other nice stuff
-            self.tokenizer.fit_on_texts(super().training_line_generator())
-            self.logger.debug(f"word IDs from tokenizer: \n{self.tokenizer.word_index}")
-            vocabulary_size = len(self.tokenizer.word_index)
+            self.logger.debug(f"word IDs from tokenizer: \n{super().vocabulary()}")
+            vocabulary_size = super().vocabulary_size()
             X_y = dict()
             X_y["X"] = np.empty((0, 2), dtype=int)
             X_y["y"] = np.empty((0, 1))
             start_word_id = 1
-            batch_size = min(batch_size, len(self.tokenizer.word_index))
-            end_word_id = min(len(self.tokenizer.word_index), start_word_id + batch_size)
+            batch_size = min(batch_size, vocabulary_size)
+            end_word_id = min(vocabulary_size, start_word_id + batch_size)
             batch_counter = 1
             while end_word_id > start_word_id:
                 self.logger.debug(f"Batch#: {batch_counter}, start word id: {start_word_id}, end word id: {end_word_id}")
                 partial_co_occurrence_matrix = np.zeros(shape=(batch_size, vocabulary_size), dtype=int)
                 self.logger.debug(f"(zero:ed) partial co-occurrence:\n{partial_co_occurrence_matrix}")
                 for line in super().training_line_generator():
-                    word_ids = self.tokenizer.texts_to_sequences([line])[0]
+                    word_ids = super().line_to_word_ids(line)
                     for word_i_id, word_j_id in self._generate_word_pairs(word_ids, start_word_id, end_word_id):
                         word_i_index = (word_i_id - 1) % batch_size
                         word_j_index = word_j_id - 1
@@ -73,7 +69,7 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                 X_y["y"] = np.append(X_y["y"], expected_values, axis=0)
                 batch_counter += 1
                 start_word_id = end_word_id
-                end_word_id = min(len(self.tokenizer.word_index), end_word_id + batch_size)
+                end_word_id = min(vocabulary_size, end_word_id + batch_size)
 
             if self.dry_run:
                 return vocabulary_size, X_y
@@ -90,7 +86,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    glove_training_builder = GloveTrainingBuilder(source_dir, window_size)
+    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    glove_training_builder = GloveTrainingBuilder(source_dir, window_size, tokenizer_file)
     glove_training_builder.build_glove_training_data()
 
 

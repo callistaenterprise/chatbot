@@ -1,6 +1,10 @@
 import pickle
+import sys
 import os
+from os import path
+import yaml
 import logging
+from keras.preprocessing.text import Tokenizer
 
 
 def save_training_data(training_data_file, X_y):
@@ -21,15 +25,64 @@ def cleaned_files(source_dir):
     return cleaned_data_files
 
 
-class TrainingDataBuilder(object):
+def load_tokenizer(tokenizer_file):
+    with open(tokenizer_file, "rb") as f:
+        return pickle.load(f)
 
-    def __init__(self, source_dir):
+
+class TrainingDataBuilder(object):
+    logging.basicConfig(level=logging.INFO)
+
+    def __init__(self, source_dir, tokenizer_file, dry_run=False):
         self.logger = logging.getLogger(__name__)
         self.cleaned_files = cleaned_files(source_dir)
         self.logger.debug(f"source files for training: {self.cleaned_files}")
+        if path.exists(tokenizer_file):
+            self.tokenizer = load_tokenizer(tokenizer_file)
+        else:
+            self.tokenizer = Tokenizer(oov_token="UNK")
+        self.tokenizer_file = tokenizer_file
+        self.dry_run = dry_run
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:
             with open(clean_file, "r", encoding="utf-8", errors="ignore") as training_data:
                 for line in training_data:
                     yield line
+
+    def line_to_word_ids(self, line):
+        return self.tokenizer.texts_to_sequences(line)[0]
+
+    def vocabulary_size(self):
+        return len(self.tokenizer.word_index)
+
+    def vocabulary(self):
+        return self.tokenizer.word_index
+
+    def _save_tokenizer(self):
+        with open(self.tokenizer_file, "wb") as f:
+            pickle.dump(self.tokenizer, f)
+
+    def tokenize(self):
+        # creates word-2-id dictionary
+        self.tokenizer.fit_on_texts(self.training_line_generator())
+        if self.dry_run:
+            self.logger.info(f"Dictionary: {self.tokenizer.word_index}")
+        elif not path.exists(self.tokenizer_file):
+            self._save_tokenizer()
+
+
+def main():
+    dir_name = path.dirname(__file__)
+    source_dir = sys.argv[1]
+    config_file = path.join(dir_name, "../../../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file)
+    training_data_builder.tokenize()
+
+
+if __name__ == "__main__":
+    main()

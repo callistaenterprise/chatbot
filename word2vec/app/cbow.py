@@ -2,7 +2,8 @@ from preprocessing.training_data.training_data_builder import load_training_data
 from os import path
 import yaml
 from keras import Input, Model
-from keras.layers import Dense, Embedding, Average
+from keras.backend import mean
+from keras.layers import Dense, Embedding, Lambda
 from keras.utils import np_utils
 import numpy as np
 from codetiming import Timer
@@ -27,8 +28,8 @@ class CBOW(object):
         context_words_input = Input((self.window_size * 2,))
         # Embedding layer holds our word vectors while we process them
         context_word_embedding = Embedding(input_dim=vocabulary_size, output_dim=vector_size, embeddings_initializer='glorot_uniform', input_length=window_size * 2)
-        context_word_graph = context_word_embedding(context_words_input)
-        avg = Average()([context_word_graph])
+        context_words = context_word_embedding(context_words_input)
+        avg = Lambda(lambda x: mean(x, axis=1))(context_words)
         output = Dense(vocabulary_size, activation='softmax')(avg)
         # A single lambda node computes the mean of all input vectors
         # self.model.add(Lambda(lambda x: be.mean(x, axis=1), output_shape=(vector_size,)))
@@ -63,7 +64,7 @@ class CBOW(object):
 
 def main():
     dir_name = path.dirname(__file__)
-    training_data_file = path.join(dir_name, '../data/4_training_data/training_data.dat')
+    training_data_file = path.join(dir_name, '../data/4_training_data/cbow/training_data.dat')
     config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
@@ -71,7 +72,7 @@ def main():
     window_size = config_dict["window_size"]
     vector_size = config_dict['vector_size']
     epochs = config_dict['epochs']
-    cbow_model = CBOW(window_size, vector_size, 53027)
+    cbow_model = CBOW(window_size, vector_size, 53028)
     cbow_model.train_model(training_data_file, epochs)
 
 
