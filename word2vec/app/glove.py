@@ -3,6 +3,7 @@ from keras import Input, Model
 from keras.layers import Dot
 from keras.layers.embeddings import Embedding
 import logging
+import yaml
 from codetiming import Timer
 
 
@@ -42,4 +43,18 @@ class Glove(object):
         self.model.save_weights(self.model_file)
 
 
+def main():
+    dir_name = path.dirname(__file__)
+    training_data_file = path.join(dir_name, '../data/4_training_data/glove/training_data.dat')
+    config_file = path.join(dir_name, "../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    vector_size = config_dict['vector_size']
+    epochs = config_dict['epochs']
+    glove_model = Glove(vector_size, 53028)
+    glove_model.train_model(training_data_file, epochs)
 
+
+if __name__ == "__main__":
+    main()

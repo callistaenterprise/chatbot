@@ -5,6 +5,7 @@ from keras.layers.core import Dense, Reshape
 from keras.layers.embeddings import Embedding
 from codetiming import Timer
 import logging
+import yaml
 import numpy as np
 
 
@@ -54,7 +55,7 @@ class Skipgram(object):
         focus_words = np.array(focus_words, dtype="int32")
         context_words = np.array(context_words, dtype="int32")
         labels = X_y['y']
-        batch_size = 32
+        batch_size = 100
         timer = Timer("Skip-gram training", text="Epoch training time: {minutes:.2f} minutes", logger=logging.INFO)
         for epoch in range(epochs):
             loss = 0.
@@ -64,3 +65,20 @@ class Skipgram(object):
             timer.stop()
             logging.info("Epoch #{}, loss: {}".format(epoch, loss))
         self.model.save_weights(self.model_file)
+
+
+def main():
+    dir_name = path.dirname(__file__)
+    training_data_file = path.join(dir_name, '../data/4_training_data/skip_gram/training_data.dat')
+    config_file = path.join(dir_name, "../config.yaml")
+    config_dict = None
+    with open(config_file) as config:
+        config_dict = yaml.load(config, Loader=yaml.Loader)
+    vector_size = config_dict['vector_size']
+    epochs = config_dict['epochs']
+    skip_gram_model = Skipgram(vector_size, 53028)
+    skip_gram_model.train_model(training_data_file, epochs)
+
+
+if __name__ == "__main__":
+    main()
