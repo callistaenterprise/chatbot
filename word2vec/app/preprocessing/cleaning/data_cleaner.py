@@ -7,7 +7,9 @@ class DataCleaner(object):
     def __init__(self, source_dir):
         self.dir_name = path.dirname(__file__)
         self.source_dir = path.join(self.dir_name, "../../..", source_dir)
-        self.target_dir = path.join(self.dir_name, "../../../data/3_cleaned", path.basename(source_dir))
+        self.target_dir = path.join(
+            self.dir_name, "../../../data/3_cleaned", path.basename(source_dir)
+        )
         stop_words_file = path.join(self.dir_name, "stop_words.txt")
         with open(stop_words_file, "r") as f:
             self.stop_words = [word for line in f for word in line.split()]
@@ -112,7 +114,7 @@ class DataCleaner(object):
                 for dirty_line in dirty_data:
                     cleaned_lines.append(self.clean_line(dirty_line))
 
-            with open(cleaned_file, 'w') as clean_data:
+            with open(cleaned_file, "w") as clean_data:
                 for cleaned_line in cleaned_lines:
                     # If line is shorter than 3 words we ignore it as it doesn't give much to train on
                     if len(cleaned_line.split(" ")) > 2:

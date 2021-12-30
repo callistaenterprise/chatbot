@@ -27,7 +27,11 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                 continue
             for posJ, wordJ in enumerate(word_ids):
                 # We check if word j is within context window of word i
-                if posI == posJ or posI - self.window_size > posJ or posI + self.window_size < posJ:
+                if (
+                    posI == posJ
+                    or posI - self.window_size > posJ
+                    or posI + self.window_size < posJ
+                ):
                     continue
                 yield wordI, wordJ
 
@@ -44,17 +48,27 @@ class GloveTrainingBuilder(TrainingDataBuilder):
             end_word_id = min(vocabulary_size, start_word_id + batch_size)
             batch_counter = 1
             word_count_cap = max(1, math.floor(super().max_word_count() * 0.7))
-            self.logger.debug(f"Max word count: {super().max_word_count()}, word count cap:{word_count_cap}")
+            self.logger.debug(
+                f"Max word count: {super().max_word_count()}, word count cap:{word_count_cap}"
+            )
             while end_word_id > start_word_id:
-                self.logger.debug(f"Batch#: {batch_counter}, start word id: {start_word_id}, end word id: {end_word_id}")
-                partial_co_occurrence_matrix = np.zeros(shape=(batch_size, vocabulary_size), dtype=int)
+                self.logger.debug(
+                    f"Batch#: {batch_counter}, start word id: {start_word_id}, end word id: {end_word_id}"
+                )
+                partial_co_occurrence_matrix = np.zeros(
+                    shape=(batch_size, vocabulary_size), dtype=int
+                )
                 for line in super().training_line_generator():
                     word_ids = super().line_to_word_ids(line)
-                    for word_i_id, word_j_id in self._generate_word_pairs(word_ids, start_word_id, end_word_id):
+                    for word_i_id, word_j_id in self._generate_word_pairs(
+                        word_ids, start_word_id, end_word_id
+                    ):
                         word_i_index = (word_i_id - 1) % batch_size
                         word_j_index = word_j_id - 1
                         partial_co_occurrence_matrix[word_i_index][word_j_index] += 1
-                self.logger.debug(f"prepared partial co-occurrence:\n{partial_co_occurrence_matrix}")
+                self.logger.debug(
+                    f"prepared partial co-occurrence:\n{partial_co_occurrence_matrix}"
+                )
                 training_indices = np.nonzero(partial_co_occurrence_matrix)
                 training_data = np.zeros((len(training_indices[0]), 2), dtype=int)
                 expected_values = np.zeros((len(training_indices[0]), 1))
@@ -64,9 +78,14 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     word_j_index = training_indices[1][sample]
                     training_data[sample][0] = (word_i_index + 1) * batch_counter
                     training_data[sample][1] = word_j_index + 1
-                    co_occurrence = min(word_count_cap, partial_co_occurrence_matrix[word_i_index][word_j_index])
+                    co_occurrence = min(
+                        word_count_cap,
+                        partial_co_occurrence_matrix[word_i_index][word_j_index],
+                    )
                     expected_values[sample] = math.log(co_occurrence)
-                    self.logger.debug(f"training data: {training_data[sample]} exp: {expected_values[sample]}")
+                    self.logger.debug(
+                        f"training data: {training_data[sample]} exp: {expected_values[sample]}"
+                    )
                 X_y["X"] = np.append(X_y["X"], training_data, axis=0)
                 X_y["y"] = np.append(X_y["y"], expected_values, axis=0)
                 batch_counter += 1
@@ -88,8 +107,10 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
-    glove_training_builder = GloveTrainingBuilder(source_dir, window_size, tokenizer_file)
+    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
+    glove_training_builder = GloveTrainingBuilder(
+        source_dir, window_size, tokenizer_file
+    )
     glove_training_builder.build_glove_training_data()
 
 

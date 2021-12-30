@@ -29,14 +29,17 @@ class SkipGramTrainingBuilder(TrainingDataBuilder):
 
             for line in super().training_line_generator():
                 word_ids = super().line_to_word_ids(line)
-                word_pairs, labels = sequence.skipgrams(sequence=word_ids,
-                                                        vocabulary_size=vocabulary_size,
-                                                        window_size=self.window_size,
-                                                        sampling_table=sampling_table,
-                                                        )
+                word_pairs, labels = sequence.skipgrams(
+                    sequence=word_ids,
+                    vocabulary_size=vocabulary_size,
+                    window_size=self.window_size,
+                    sampling_table=sampling_table,
+                )
                 training_samples_x.extend(word_pairs)
                 training_samples_y.extend(labels)
-
+            self.logger.debug(
+                f"Skip-gram training samples: {len(training_samples_x)}, labels: {len(training_samples_y)}"
+            )
             X_y["X"] = training_samples_x
             X_y["y"] = training_samples_y
             if self.dry_run:
@@ -54,8 +57,10 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
-    skip_gram_training_builder = SkipGramTrainingBuilder(source_dir, window_size, tokenizer_file)
+    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
+    skip_gram_training_builder = SkipGramTrainingBuilder(
+        source_dir, window_size, tokenizer_file
+    )
     skip_gram_training_builder.build_sg_training_data()
 
 

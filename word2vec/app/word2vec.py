@@ -34,8 +34,12 @@ def main():
     data_cleaner = DataCleaner(stop_words)
     cleaned_data = data_cleaner.clean_file(parsed_movie_lines)
     cleaned_data = data_cleaner.clean_file(parsed_blog_data, append=True)
-    blog_encoder = BlogEncoder(blog_dir=blog_directory, target_dir=encoded_blogs,
-                               word_embeddings_file=pretrained_embeddings, stop_words=stop_words)
+    blog_encoder = BlogEncoder(
+        blog_dir=blog_directory,
+        target_dir=encoded_blogs,
+        word_embeddings_file=pretrained_embeddings,
+        stop_words=stop_words,
+    )
     blog_encoder.encode_blogs()
     data_cleaner = None
     blog_encoder = None

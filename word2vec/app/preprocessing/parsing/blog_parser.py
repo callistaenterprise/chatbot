@@ -4,7 +4,6 @@ from os import path, listdir
 
 
 class BlogParser(object):
-
     def __init__(self, blog_dir):
         dir_name = path.dirname(__file__)
         self.blog_directory = path.join(dir_name, blog_dir)
@@ -12,7 +11,9 @@ class BlogParser(object):
     def parse_blog_files(self):
         dir_name = path.dirname(__file__)
         for filename in listdir(self.blog_directory):
-            parsed_blog_file = path.join(dir_name, "../../../data/2_parsed/blogs", filename)
+            parsed_blog_file = path.join(
+                dir_name, "../../../data/2_parsed/blogs", filename
+            )
             if not path.exists(parsed_blog_file):
                 self.parse_blog_file(filename, parsed_blog_file)
 
@@ -20,15 +21,11 @@ class BlogParser(object):
     def parse_blog_file(self, source_file, target_file):
         include_line = True
         blog_file = path.join(self.blog_directory, source_file)
-        with open(
-                blog_file, "r", encoding="utf-8", errors="ignore"
-        ) as blog_data:
+        with open(blog_file, "r", encoding="utf-8", errors="ignore") as blog_data:
             blog_lines = (line.rstrip() for line in blog_data if line)
             cleaned_blog_lines = []
             for blog_line in blog_lines:
-                is_comment_code_block_sep = re.match(
-                    "^(`|-|~){3}.*$", blog_line
-                )
+                is_comment_code_block_sep = re.match("^(`|-|~){3}.*$", blog_line)
                 if is_comment_code_block_sep and include_line:
                     include_line = False
                 elif is_comment_code_block_sep and not include_line:

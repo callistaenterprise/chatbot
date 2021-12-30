@@ -15,7 +15,8 @@ class GloveTrainingBuilderTest(unittest.TestCase):
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
             tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
-            dry_run=True)
+            dry_run=True,
+        )
         super(GloveTrainingBuilder, self.training_data_builder).tokenize()
         vocabulary_size, X_y = self.training_data_builder.build_glove_training_data()
         self.logger.info(f"Word pairs: {X_y}")

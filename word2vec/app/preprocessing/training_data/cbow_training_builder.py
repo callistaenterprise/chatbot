@@ -60,8 +60,8 @@ class CbowTrainingBuilder(TrainingDataBuilder):
                 word_ids = super().line_to_word_ids(line)
                 self.logger.debug(f"Training data word ids: {word_ids}")
                 for (
-                        context_word_ids,
-                        focus_word_id,
+                    context_word_ids,
+                    focus_word_id,
                 ) in self._generate_training_samples(word_ids):
                     X.append(context_word_ids)
                     y.append(focus_word_id)
@@ -84,7 +84,7 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
     cbow_training_builder = CbowTrainingBuilder(source_dir, window_size, tokenizer_file)
     cbow_training_builder.build_cbow_training_data()
 

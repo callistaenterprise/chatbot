@@ -7,15 +7,16 @@ import matplotlib.pyplot as plt
 
 
 class PretrainedGlove:
-
     def __init__(self, pretrained_vectors_source):
         dir_name = path.dirname(__file__)
-        self.source_file = path.join(dir_name, '../../glove.6B', pretrained_vectors_source)
-        self.model_file = path.join(dir_name, '../data/5_models/glove_pretrained.h5')
+        self.source_file = path.join(
+            dir_name, "../../glove.6B", pretrained_vectors_source
+        )
+        self.model_file = path.join(dir_name, "../data/5_models/glove_pretrained.h5")
         self.glove_model = dict()
 
     def load_pretrained_glove(self):
-        with open(self.source_file, 'r') as glove_file:
+        with open(self.source_file, "r") as glove_file:
             for line in glove_file:
                 split_line = line.split()
                 word = split_line[0]
@@ -32,10 +33,10 @@ class PretrainedGlove:
             similar_words = {
                 search_term: [
                     data_builder.id2word[idx]
-                    for idx in distance_matrix[data_builder.word2id[search_term] - 1].argsort()[
-                               1:6
-                               ]
-                               + 1
+                    for idx in distance_matrix[
+                        data_builder.word2id[search_term] - 1
+                    ].argsort()[1:6]
+                    + 1
                 ]
                 for search_term in words
             }

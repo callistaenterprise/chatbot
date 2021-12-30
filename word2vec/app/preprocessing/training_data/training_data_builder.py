@@ -31,7 +31,7 @@ def load_tokenizer(tokenizer_file):
 
 
 class TrainingDataBuilder(object):
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     def __init__(self, source_dir, tokenizer_file):
         self.logger = logging.getLogger(__name__)
@@ -45,7 +45,9 @@ class TrainingDataBuilder(object):
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:
-            with open(clean_file, "r", encoding="utf-8", errors="ignore") as training_data:
+            with open(
+                clean_file, "r", encoding="utf-8", errors="ignore"
+            ) as training_data:
                 for line in training_data:
                     yield line
 
@@ -80,7 +82,7 @@ def main():
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    tokenizer_file = path.join(dir_name, config_dict['dictionary'])
+    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
     training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file)
     training_data_builder.tokenize()
 
