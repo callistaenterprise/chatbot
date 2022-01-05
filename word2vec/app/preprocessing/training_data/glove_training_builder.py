@@ -20,10 +20,10 @@ class GloveTrainingBuilder(TrainingDataBuilder):
         )
         self.logger = logging.getLogger(__name__)
 
-    def _generate_word_pairs(self, word_ids, min, max):
+    def _generate_word_pairs(self, word_ids, min_i, max_i):
         for posI, wordI in enumerate(word_ids):
             # We check word i against the min-max boundary (we are building a _partial_ co-occurrence matrix)
-            if wordI < min or wordI >= max:
+            if wordI < min_i or wordI >= max_i:
                 continue
             for posJ, wordJ in enumerate(word_ids):
                 # We check if word j is within context window of word i
@@ -41,7 +41,7 @@ class GloveTrainingBuilder(TrainingDataBuilder):
             self.logger.debug(f"word IDs from tokenizer: \n{super().vocabulary()}")
             vocabulary_size = super().vocabulary_size()
             X_y = dict()
-            X_y["X"] = np.empty((0, 2), dtype=int)
+            X_y["X"] = np.empty((0, 2), dtype=np.intc)
             X_y["y"] = np.empty((0, 1))
             start_word_id = 1
             batch_size = min(batch_size, vocabulary_size)
@@ -56,7 +56,7 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     f"Batch#: {batch_counter}, start word id: {start_word_id}, end word id: {end_word_id}"
                 )
                 partial_co_occurrence_matrix = np.zeros(
-                    shape=(batch_size, vocabulary_size), dtype=int
+                    shape=(batch_size, vocabulary_size), dtype=np.intc
                 )
                 for line in super().training_line_generator():
                     word_ids = super().line_to_word_ids(line)
@@ -70,7 +70,7 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     f"prepared partial co-occurrence:\n{partial_co_occurrence_matrix}"
                 )
                 training_indices = np.nonzero(partial_co_occurrence_matrix)
-                training_data = np.zeros((len(training_indices[0]), 2), dtype=int)
+                training_data = np.zeros((len(training_indices[0]), 2), dtype=np.intc)
                 expected_values = np.zeros((len(training_indices[0]), 1))
                 self.logger.debug(f"Not null indices: {training_indices}")
                 for sample in range(len(training_indices[0])):

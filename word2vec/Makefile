@@ -13,12 +13,12 @@ parse_blogs: data/1_raw/blogs
 	python -m app.preprocessing.parsing.blog_parser
 
 parse_movies: data/1_raw/movies
-	python app.preprocessing.parsing.movie_parser
+	python -m app.preprocessing.parsing.movie_parser
 
 clean_blogs: data/2_parsed/blogs
 	python -m app.preprocessing.cleaning.data_cleaner data/2_parsed/blogs
 
-clean_movies: data/2_parsed/blogs
+clean_movies: data/2_parsed/movies
 	python -m app.preprocessing.cleaning.data_cleaner data/2_parsed/movies
 
 tokenize: data/3_cleaned

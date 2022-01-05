@@ -11,6 +11,13 @@ import yaml
 import numpy as np
 
 
+def batch(a_list, b_list, c_list, batch_size):
+    for i in range(0, min(len(a_list), len(b_list), len(c_list)), batch_size):
+        yield a_list[i : i + batch_size], b_list[i : i + batch_size], c_list[
+            i : i + batch_size
+        ]
+
+
 class Skipgram(object):
     logging.basicConfig(level=logging.INFO)
 
@@ -30,10 +37,10 @@ class Skipgram(object):
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
             input_length=1,
-        )
-        focus_word_graph = focus_word_embedding(focus_input)
+        )(focus_input)
+
         # Reshape layer to remove unnecessary output dimension
-        focus_word_graph = Reshape((vector_size, 1))(focus_word_graph)
+        focus_word_graph = Reshape((vector_size, 1))(focus_word_embedding)
 
         # The second input, the selected context word
         context_word_embedding = Embedding(
@@ -41,10 +48,10 @@ class Skipgram(object):
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
             input_length=1,
-        )
-        context_word_graph = context_word_embedding(context_input)
+            trainable=False
+        )(context_input)
         # Reshape layer to remove unnecessary output dimension
-        context_word_graph = Reshape((vector_size, 1))(context_word_graph)
+        context_word_graph = Reshape((vector_size, 1))(context_word_embedding)
 
         # Merge the two input layers by multiplying the vectors
         dot_product = Dot(axes=1)([focus_word_graph, context_word_graph])
@@ -60,19 +67,14 @@ class Skipgram(object):
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
 
-    def _batch(self, a_list, b_list, c_list, batch_size):
-        for i in range(0, min(len(a_list), len(b_list), len(c_list)), batch_size):
-            yield a_list[i : i + batch_size], b_list[i : i + batch_size], c_list[
-                i : i + batch_size
-            ]
-
     def train_model(self, training_data_file, epochs=3, batch_size=100):
         X_y = load_training_data(training_data_file)
         word_pairs = X_y["X"]
         focus_words, context_words = zip(*word_pairs)
-        focus_words = np.array(focus_words, dtype="int32")
-        context_words = np.array(context_words, dtype="int32")
+        focus_words = np.array(focus_words, dtype=np.intc)
+        context_words = np.array(context_words, dtype=np.intc)
         labels = X_y["y"]
+        batch_size = min(100, len(labels))
         timer = Timer(
             name="Skip-gram training timer",
             text="Epoch training time: {minutes:.2f} minutes",
@@ -81,7 +83,7 @@ class Skipgram(object):
         for epoch in range(epochs):
             loss = 0.0
             timer.start()
-            for fw_batch, cw_batch, label_batch in self._batch(
+            for fw_batch, cw_batch, label_batch in batch(
                 focus_words, context_words, labels, batch_size
             ):
                 loss += self.model.train_on_batch(
@@ -103,7 +105,7 @@ def main():
         config_dict = yaml.load(config, Loader=yaml.Loader)
     vector_size = config_dict["vector_size"]
     epochs = config_dict["epochs"]
-    skip_gram_model = Skipgram(vector_size, 53028)
+    skip_gram_model = Skipgram(vector_size, 53210)
     # skip_gram_model.train_model(training_data_file, epochs)
 
 

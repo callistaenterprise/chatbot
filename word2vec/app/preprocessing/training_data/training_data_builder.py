@@ -55,7 +55,7 @@ class TrainingDataBuilder(object):
         return self.tokenizer.texts_to_sequences([line])[0]
 
     def vocabulary_size(self):
-        return len(self.tokenizer.word_index)
+        return len(self.tokenizer.word_index) + 1
 
     def vocabulary(self):
         return self.tokenizer.word_index
@@ -71,7 +71,7 @@ class TrainingDataBuilder(object):
         # creates word-2-id dictionary
         if not path.exists(self.tokenizer_file):
             self.tokenizer.fit_on_texts(self.training_line_generator())
-            self.logger.debug(f"Dictionary: {self.tokenizer.word_index}")
+            self.logger.info(f"Dictionary size: {len(self.tokenizer.word_index) + 1}")
             self._save_tokenizer()
 
 
