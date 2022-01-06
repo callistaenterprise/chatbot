@@ -1,0 +1,338 @@
+hi
+hi how are you
+hi how are things
+hi there
+hi how it is going
+hi you
+hi my friend
+hi what is up
+hi what is going on
+hi what is up my friend
+hello
+hello how are you
+hello how are things
+hello there
+hello how it is going
+hello you
+hello my friend
+hello what is up
+hello what is going on
+hello what is up my friend
+hey
+hey how are you
+hey how are things
+hey there
+hey how it is going
+hey my friend
+hey what is up
+hey what is going on
+hey what is up my friend
+hey you
+hey you how are you
+hey you how are things
+hey you there
+hey you how it is going
+hey you my friend
+hey you what is up
+hey you what is going on
+hey you what is up my friend
+cheers
+cheers how are you
+cheers how are things
+cheers there
+cheers how it is going
+cheers my friend
+cheers what is up
+cheers what is going on
+cheers what is up my friend
+hiya
+hiya how are you
+hiya how are things
+hiya there
+hiya how it is going
+hiya you
+hiya my friend
+hiya what is up
+hiya what is going on
+hiya what is up my friend
+howdy
+howdy how are you
+howdy how are things
+howdy there
+howdy how it is going
+howdy you
+howdy my friend
+howdy what is up
+howdy what is going on
+howdy what is up my friend
+good morning
+good morning how are you
+good morning how are things
+good morning there
+good morning how it is going
+good morning my friend
+good morning what is up
+good morning what is going on
+good morning what is up my friend
+good afternoon
+good afternoon how are you
+good afternoon how are things
+good afternoon there
+good afternoon how it is going
+good afternoon my friend
+good afternoon what is up
+good afternoon what is going on
+good afternoon what is up my friend
+good evening
+good evening how are you
+good evening how are things
+good evening there
+good evening how it is going
+good evening my friend
+good evening what is up
+good evening what is going on
+good evening what is up my friend
+greetings
+greetings how are you
+greetings how are things
+greetings there
+greetings how it is going
+greetings my friend
+greetings what is up
+greetings what is going on
+greetings what is up my friend
+
+
+i have a question
+where can i find
+what do you think of
+what can you tell me about
+do you have anything about
+i am looking for
+do you have something similar
+do you have anything like
+what else do you have about
+
+can you give me
+can you give me something like
+can you give me something about
+can you give me anything about
+can you give me anything like
+can you give me something else like
+can you give me something else about
+can you give me anything else about
+can you give me anything else like
+can you show me
+can you show me something like
+can you show me something about
+can you show me anything about
+can you show me anything like
+can you show me something else like
+can you show me something else about
+can you show me anything else about
+can you show me anything else like
+can you link me to
+can you link me to something like
+can you link me to something about
+can you link me to anything about
+can you link me to anything like
+can you link me to something else like
+can you link me to something else about
+can you link me to anything else about
+can you link me to anything else like
+i am looking for
+i am looking for something like
+i am looking for something about
+i am looking for anything about
+i am looking for anything like
+i am looking for something else like
+i am looking for something else about
+i am looking for anything else about
+i am looking for anything else like
+i am looking for something else like
+i am looking for something else about
+i am looking for anything else about
+i am looking for anything else like
+i am searching for
+i am searching for something like
+i am searching for something about
+i am searching for anything about
+i am searching for anything like
+i am searching for something else like
+i am searching for something else about
+i am searching for anything else about
+i am searching for anything else like
+i am searching for something else like
+i am searching for something else about
+i am searching for anything else about
+i am searching for anything else like
+i am interested in something like
+i am interested in something about
+i am interested in anything about
+i am interested in anything like
+i am interested in something else like
+i am interested in something else about
+i am interested in anything else about
+i am interested in anything else like
+i am interested in something else like
+i am interested in something else about
+i am interested in anything else about
+i am interested in anything else like
+can you tell me
+can you tell me something like
+can you tell me something about
+can you tell me anything about
+can you tell me anything like
+can you tell me something else like
+can you tell me something else about
+can you tell me anything else about
+can you tell me anything else like
+can you tell me something else like
+can you tell me something else about
+can you tell me anything else about
+can you tell me anything else like
+what can you tell me
+what can you tell me something like
+what can you tell me something about
+what can you tell me anything about
+what can you tell me anything like
+what can you tell me something else like
+what can you tell me something else about
+what can you tell me anything else about
+what can you tell me anything else like
+what can you tell me something else like
+what can you tell me something else about
+what can you tell me anything else about
+what can you tell me anything else like
+what else can you tell me
+what else can you tell me about
+what else can you show me
+what else can you show me like this
+what else can you show me about
+what else can you give me
+what else can you give me like this
+what else can you give me about
+what else can you link me
+what else can you link me about
+what else can you link me like this
+what else is there
+what else is there like this
+what else is there like that
+what else is there about
+what else is there that is similar
+what else is there that is similar to this
+what else is there for
+what else can i see
+what else can i read
+what else can i get
+what else can i find
+what can you tell me something like
+what can you tell me something about
+what can you tell me anything about
+what can you tell me anything like
+what can you tell me that is like this
+what can you tell me that is like that
+what can you tell me that is similar to this
+what can you tell me that is similar to that
+what can you tell me something else like
+what can you tell me something else about
+what can you tell me anything else about
+what can you tell me anything else like
+what can you tell me something else like
+what can you tell me something else about
+what can you tell me anything else about
+what can you tell me anything else like
+what can you show me
+what can you show me something like
+what can you show me something about
+what can you show me anything about
+what can you show me anything like
+what can you show me that is like this
+what can you show me that is like that
+what can you show me that is similar to this
+what can you show me that is similar to that
+what can you show me that is like this
+what can you show me something else like
+what can you show me something else about
+what can you show me anything else about
+what can you show me anything else like
+what can you show me something else like
+what can you show me something else about
+what can you show me anything else about
+what can you show me anything else like
+what can you give me
+what can you give me something like
+what can you give me something about
+what can you give me anything about
+what can you give me anything like
+what can you give me something else like
+what can you give me something else about
+what can you give me anything else about
+what can you give me anything else like
+what can you give me something else like
+what can you give me something else about
+what can you give me anything else about
+what can you give me anything else like
+where can i find
+where can i find something like
+where can i find something about
+where can i find anything about
+where can i find anything like
+where can i find something else like
+where can i find something else about
+where can i find anything else about
+where can i find anything else like
+where can i find something else like
+where can i find something else about
+where can i find anything else about
+where can i find anything else like
+where can i see
+where can i see something like
+where can i see something about
+where can i see anything about
+where can i see anything like
+where can i see something else like
+where can i see something else about
+where can i see anything else about
+where can i see anything else like
+where can i see something else like
+where can i see something else about
+where can i see anything else about
+where can i see anything else like
+where can i get
+where can i get something like
+where can i get something about
+where can i get anything about
+where can i get anything like
+where can i get something else like
+where can i get something else about
+where can i get anything else about
+where can i get anything else like
+where can i get something else like
+where can i get something else about
+where can i get anything else about
+where can i get anything else like
+
+
+it is good
+it is great
+it is awesome
+it is super
+it is nice
+it is beautiful
+that is good
+that is great
+that is awesome
+that is super
+that is nice
+that is beautiful
+this is good
+this is great
+this is awesome
+this is super
+this is nice
+this is beautiful
+
+i like
+i like it
+i like this
