@@ -2,7 +2,7 @@ from .preprocessing.training_data.training_data_builder import load_training_dat
 from os import path
 from keras import Input, Model
 from keras.layers import Dot
-from keras.layers.core import Reshape
+from keras.layers.core import Dense, Reshape
 from keras.layers.embeddings import Embedding
 from tensorflow.keras.utils import plot_model
 import logging
@@ -11,9 +11,9 @@ from codetiming import Timer
 import numpy as np
 
 
-def batch(a_list, b_list, batch_size):
-    for i in range(0, min(len(a_list), len(b_list)), batch_size):
-        yield a_list[i : i + batch_size], b_list[i : i + batch_size]
+def batch(i_list, j_list, out_list, batch_size):
+    for i in range(0, min(len(i_list), len(j_list), len(out_list)), batch_size):
+        yield i_list[i: i + batch_size], j_list[i: i + batch_size], out_list[i: i + batch_size]
 
 
 class Glove(object):
@@ -43,20 +43,21 @@ class Glove(object):
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
             input_length=1,
+            trainable=False,
         )(word_j_input)
         # Reshape layer to remove unnecessary output dimension
         word_j_graph = Reshape((vector_size, 1))(word_j_embedding)
 
         # Merge the two input layers by multiplying the vectors
         dot_product = Dot(axes=1)([word_i_graph, word_j_graph])
-        output = Reshape((1,))(dot_product)
-
+        dot_product_reshaped = Reshape((1,))(dot_product)
+        output = Dense(1, activation="sigmoid")(dot_product_reshaped)
         self.model = Model(inputs=[word_i_input, word_j_input], outputs=output)
         # Loss function is mean squared error from a predicted co-occurrence likelihood value
-        self.model.compile(loss="mse", metrics="accuracy")
+        self.model.compile(loss="mse")
 
         self.model.summary(print_fn=self.logger.info)
-        plot_model(model=self.model, to_file="Glove model.png", show_shapes=True)
+        # plot_model(model=self.model, to_file="Glove model.png", show_shapes=True)
         # Preload word vectors if some training has already been done
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
@@ -77,14 +78,16 @@ class Glove(object):
         for epoch in range(epochs):
             loss = 0.0
             timer.start()
-            for fw_batch, cw_batch, expect_out_batch in batch(
+            for iw_batch, jw_batch, expect_out_batch in batch(
                     i_words, j_words, expected_out, batch_size
             ):
                 loss += self.model.train_on_batch(
-                    [np.array(fw_batch), np.array(cw_batch)], np.array(expect_out_batch)
+                    x=[np.array(iw_batch), np.array(jw_batch)], y=np.array(expect_out_batch)
                 )
             timer.stop()
             logging.info("Epoch #{}, loss: {}".format(epoch + 1, loss))
+            trained_embeddings = self.model.layers[2].get_weights()
+            self.model.layers[3].set_weights(trained_embeddings)
         self.model.save_weights(self.model_file)
 
 

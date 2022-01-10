@@ -13,8 +13,8 @@ import numpy as np
 
 def batch(a_list, b_list, c_list, batch_size):
     for i in range(0, min(len(a_list), len(b_list), len(c_list)), batch_size):
-        yield a_list[i : i + batch_size], b_list[i : i + batch_size], c_list[
-            i : i + batch_size
+        yield a_list[i: i + batch_size], b_list[i: i + batch_size], c_list[
+            i: i + batch_size
         ]
 
 
@@ -48,7 +48,7 @@ class Skipgram(object):
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
             input_length=1,
-            trainable=False
+            trainable=False,
         )(context_input)
         # Reshape layer to remove unnecessary output dimension
         context_word_graph = Reshape((vector_size, 1))(context_word_embedding)
@@ -62,7 +62,7 @@ class Skipgram(object):
         # Loss function is binary crossentropy as we only determine if real or fake context word
         self.model.compile(loss="binary_crossentropy")
         self.model.summary(print_fn=self.logger.info)
-        plot_model(model=self.model, to_file="Skip-gram model.png", show_shapes=True)
+        # plot_model(model=self.model, to_file="Skip-gram model.png", show_shapes=True)
         # Preload word vectors if some training has already been done
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
@@ -87,10 +87,12 @@ class Skipgram(object):
                 focus_words, context_words, labels, batch_size
             ):
                 loss += self.model.train_on_batch(
-                    [np.array(fw_batch), np.array(cw_batch)], np.array(label_batch)
+                    x=[np.array(fw_batch), np.array(cw_batch)], y=np.array(label_batch)
                 )
             timer.stop()
             logging.info("Epoch #{}, loss: {}".format(epoch + 1, loss))
+            trained_embeddings = self.model.layers[2].get_weights()
+            self.model.layers[3].set_weights(trained_embeddings)
         self.model.save_weights(self.model_file)
 
 
@@ -106,7 +108,7 @@ def main():
     vector_size = config_dict["vector_size"]
     epochs = config_dict["epochs"]
     skip_gram_model = Skipgram(vector_size, 53210)
-    # skip_gram_model.train_model(training_data_file, epochs)
+    skip_gram_model.train_model(training_data_file, epochs)
 
 
 if __name__ == "__main__":

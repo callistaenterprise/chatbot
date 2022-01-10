@@ -38,11 +38,10 @@ class GloveTrainingBuilder(TrainingDataBuilder):
     def build_glove_training_data(self, batch_size=1000):
         if self.dry_run or not path.exists(self.training_data_file):
             # Step 1: Co-occurrence matrix
-            self.logger.debug(f"word IDs from tokenizer: \n{super().vocabulary()}")
             vocabulary_size = super().vocabulary_size()
             X_y = dict()
-            X_y["X"] = np.empty((0, 2), dtype=np.intc)
-            X_y["y"] = np.empty((0, 1))
+            training_samples_x = []
+            training_samples_y = []
             start_word_id = 1
             batch_size = min(batch_size, vocabulary_size)
             end_word_id = min(vocabulary_size, start_word_id + batch_size)
@@ -70,14 +69,13 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     f"prepared partial co-occurrence:\n{partial_co_occurrence_matrix}"
                 )
                 training_indices = np.nonzero(partial_co_occurrence_matrix)
-                training_data = np.zeros((len(training_indices[0]), 2), dtype=np.intc)
-                expected_values = np.zeros((len(training_indices[0]), 1))
+                training_data = [None] * len(training_indices[0])
+                expected_values = [None] * len(training_indices[0])
                 self.logger.debug(f"Not null indices: {training_indices}")
                 for sample in range(len(training_indices[0])):
                     word_i_index = training_indices[0][sample]
                     word_j_index = training_indices[1][sample]
-                    training_data[sample][0] = (word_i_index + 1) * batch_counter
-                    training_data[sample][1] = word_j_index + 1
+                    training_data[sample] = [(word_i_index + 1) * batch_counter, word_j_index + 1]
                     co_occurrence = min(
                         word_count_cap,
                         partial_co_occurrence_matrix[word_i_index][word_j_index],
@@ -86,12 +84,14 @@ class GloveTrainingBuilder(TrainingDataBuilder):
                     self.logger.debug(
                         f"training data: {training_data[sample]} exp: {expected_values[sample]}"
                     )
-                X_y["X"] = np.append(X_y["X"], training_data, axis=0)
-                X_y["y"] = np.append(X_y["y"], expected_values, axis=0)
+                training_samples_x.extend(training_data)
+                training_samples_y.extend(expected_values)
                 batch_counter += 1
                 start_word_id = end_word_id
                 end_word_id = min(vocabulary_size, end_word_id + batch_size)
 
+            X_y["X"] = training_samples_x
+            X_y["y"] = training_samples_y
             if self.dry_run:
                 return vocabulary_size, X_y
             else:
