@@ -45,6 +45,9 @@ train_glove: data/4_training_data/glove/training_data.dat
 cbow_test: tests
 	python -m unittest tests/cbow_training_builder_test.py
 
+sentence_class_test: tests
+	python -m unittest tests/sentence_classifier_train_test.py
+
 test: tests
 	python -m unittest discover -s tests -p '*_test.py'
 

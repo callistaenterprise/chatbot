@@ -83,6 +83,15 @@ good morning my friend,0
 good morning what is up,0
 good morning what is going on,0
 good morning what is up my friend,0
+good day,0
+good day how are you,0
+good day how are things,0
+good day there,0
+good day how it is going,0
+good day my friend,0
+good day what is up,0
+good day what is going on,0
+good day what is up my friend,0
 good afternoon,0
 good afternoon how are you,0
 good afternoon how are things,0
@@ -147,6 +156,18 @@ can you show me something like,1
 can you show me something about,1
 can you show me anything about,1
 can you show me anything like,1
+can you show me any blog,1
+can you show me any blogs,1
+can you show me any blog about,1
+can you show me any blog like,1
+can you show me any blogs like,1
+can you show me any blogs about,1
+can you show me any other blog,1
+can you show me any other text,1
+can you show me any other blog about,1
+can you show me any other blog like,1
+can you show me any other text about,1
+can you show me any other text like,1
 can you show me something else like,1
 can you show me something else about,1
 can you show me anything else about,1
@@ -156,10 +177,29 @@ can you link me to something like,1
 can you link me to something about,1
 can you link me to anything about,1
 can you link me to anything like,1
+can you link me to any blog,1
+can you link me to any blogs,1
+can you link me to any blogs like,1
+can you link me to any blogs about,1
+can you link me to any other blog,1
+can you link me to any other blogs,1
+can you link me to any other blog about,1
+can you link me to any other blog regarding,1
+can you link me to any other blog related to,1
 can you link me to something else like,1
 can you link me to something else about,1
 can you link me to anything else about,1
 can you link me to anything else like,1
+can i see what you have,1
+can i see what you have regarding,1
+can i see what you have about,1
+can i see what you have related to,1
+can i see what blogs you have,1
+can i see what blogs you have about,1
+can i see what blogs you have regarding,1
+can i see what texts you have,1
+can i see what texts you have about,1
+can i see what texts you have regarding,1
 i am looking for,1
 i am looking for something like,1
 i am looking for something about,1
@@ -173,7 +213,13 @@ i am looking for something else like,1
 i am looking for something else about,1
 i am looking for anything else about,1
 i am looking for anything else like,1
+i am looking for blogs,1
 i am searching for,1
+i am searching for blogs,1
+i am searching for blogs like,1
+i am searching for blogs about,1
+i am searching for blogs similar to,1
+i am searching for blogs regarding,1
 i am searching for something like,1
 i am searching for something about,1
 i am searching for anything about,1
@@ -329,6 +375,18 @@ where can i see something else like,1
 where can i see something else about,1
 where can i see anything else about,1
 where can i see anything else like,1
+where can i read something like,1
+where can i read something about,1
+where can i read anything about,1
+where can i read anything like,1
+where can i read something else like,1
+where can i read something else about,1
+where can i read anything else about,1
+where can i read anything else like,1
+where can i read something else like,1
+where can i read something else about,1
+where can i read anything else about,1
+where can i read anything else like,1
 where can i get,1
 where can i get something like,1
 where can i get something about,1
@@ -343,21 +401,43 @@ where can i get something else about,1
 where can i get anything else about,1
 where can i get anything else like,1
 bye,2
+ok bye,2
 goodbye,2
+ok goodbye,2
 bye bye,2
 bye now,2
+ok bye now,2
+ok goodbye now,2
 go away,2
 go away now,2
+ok go away now,2
 no thank you,2
+ok no thank you,2
 please go away,2
+ok please go away,2
 please go away now,2
+ok please go away now,2
 goodnight,2
+ok goodnight,2
 thanks bye,2
+ok thanks bye,2
 thanks bye now,2
+ok thanks goodbye,2
+thanks goodbye now,2
 no thanks,2
 no thank you,2
 no thanks bye,2
+no thanks goodbye,2
 cheerio,2
+ok cheerio,2
+see you,2
+talk to you later,2
+ok talk to you later,2
+ok see you,2
+ok see you later,2
+see you bye,2
+see you goodbye,2
+see ya,2
 thank you,3
 thank you very much,3
 thanks,3
@@ -391,6 +471,167 @@ that is awesome,3
 that is really awesome,3
 that is super awesome,3
 that is really very good,3
+this was helpful,3
+this was super helpful,3
+this was very helpful,3
+this was really helpful,3
+this was really super helpful,3
+this was great,3
+this was really great,3
+this was super great,3
+this was good,3
+this was very good,3
+this was super good,3
+this was really very good,3
+this was awesome,3
+this was really awesome,3
+this was super awesome,3
+this is helpful,3
+this is super helpful,3
+this is very helpful,3
+this is really helpful,3
+this is really super helpful,3
+this is great,3
+this is really great,3
+this is super great,3
+this is good,3
+this is very good,3
+this is super good,3
+this is really very good,3
+this is awesome,3
+this is really awesome,3
+this is super awesome,3
+that is helpful,3
+that is very helpful,3
+that is super helpful,3
+that is really helpful,3
+that is really super helpful,3
+that is great,3
+that is really great,3
+that is super great,3
+that is good,3
+that is very good,3
+that is awesome,3
+that is really awesome,3
+that is super awesome,3
+that is really very good,3
+this was helpful,3
+this was super helpful,3
+this was very helpful,3
+this was really helpful,3
+this was really super helpful,3
+this was great,3
+this was really great,3
+this was super great,3
+this was good,3
+this was very good,3
+this was super good,3
+this was really very good,3
+this was awesome,3
+this was really awesome,3
+this was super awesome,3
+thanks this is helpful,3
+thanks this is super helpful,3
+thanks this is very helpful,3
+thanks this is really helpful,3
+thanks this is really super helpful,3
+thanks this is great,3
+thanks this is really great,3
+thanks this is super great,3
+thanks this is good,3
+thanks this is very good,3
+thanks this is super good,3
+thanks this is really very good,3
+thanks this is awesome,3
+thanks this is really awesome,3
+thanks this is super awesome,3
+thanks that is helpful,3
+thanks that is very helpful,3
+thanks that is super helpful,3
+thanks that is really helpful,3
+thanks that is really super helpful,3
+thanks that is great,3
+thanks that is really great,3
+thanks that is super great,3
+thanks that is good,3
+thanks that is very good,3
+thanks that is awesome,3
+thanks that is really awesome,3
+thanks that is super awesome,3
+thanks that is really very good,3
+thanks this was helpful,3
+thanks this was super helpful,3
+thanks this was very helpful,3
+thanks this was really helpful,3
+thanks this was really super helpful,3
+thanks this was great,3
+thanks this was really great,3
+thanks this was super great,3
+thanks this was good,3
+thanks this was very good,3
+thanks this was super good,3
+thanks this was really very good,3
+thanks this was awesome,3
+thanks this was really awesome,3
+thanks this was super awesome,3
+thank you this is helpful,3
+thank you this is super helpful,3
+thank you this is very helpful,3
+thank you this is really helpful,3
+thank you this is really super helpful,3
+thank you this is great,3
+thank you this is really great,3
+thank you this is super great,3
+thank you this is good,3
+thank you this is very good,3
+thank you this is super good,3
+thank you this is really very good,3
+thank you this is awesome,3
+thank you this is really awesome,3
+thank you this is super awesome,3
+thank you that is helpful,3
+thank you that is very helpful,3
+thank you that is super helpful,3
+thank you that is really helpful,3
+thank you that is really super helpful,3
+thank you that is great,3
+thank you that is really great,3
+thank you that is super great,3
+thank you that is good,3
+thank you that is very good,3
+thank you that is awesome,3
+thank you that is really awesome,3
+thank you that is super awesome,3
+thank you that is really very good,3
+thank you this was helpful,3
+thank you this was super helpful,3
+thank you this was very helpful,3
+thank you this was really helpful,3
+thank you this was really super helpful,3
+thank you this was great,3
+thank you this was really great,3
+thank you this was super great,3
+thank you this was good,3
+thank you this was very good,3
+thank you this was super good,3
+thank you this was really very good,3
+thank you this was awesome,3
+thank you this was really awesome,3
+thank you this was super awesome,3
+that was helpful,3
+that was very helpful,3
+that was super helpful,3
+that was really helpful,3
+that was really super helpful,3
+that was great,3
+that was really great,3
+that was super great,3
+that was good,3
+that was very good,3
+that was awesome,3
+that was really awesome,3
+that was super awesome,3
+that was really very good,3
 it is helpful,3
 it is very helpful,3
 it is really helpful,3
@@ -405,9 +646,121 @@ it is really very good,3
 it is beautiful,3
 it is very beautiful,3
 it is really beautiful,3
+it was helpful,3
+it was very helpful,3
+it was really helpful,3
+it was super helpful,3
+it was great,3
+it was super,3
+it was really great,3
+it was good,3
+it was super good,3
+it was very good,3
+it was really very good,3
+it was beautiful,3
+it was very beautiful,3
+it was really beautiful,3
+thank you it is helpful,3
+thank you it is very helpful,3
+thank you it is really helpful,3
+thank you it is super helpful,3
+thank you it is great,3
+thank you it is super,3
+thank you it is really great,3
+thank you it is good,3
+thank you it is super good,3
+thank you it is very good,3
+thank you it is really very good,3
+thank you it is beautiful,3
+thank you it is very beautiful,3
+thank you it is really beautiful,3
+thank you it was helpful,3
+thank you it was very helpful,3
+thank you it was really helpful,3
+thank you it was super helpful,3
+thank you it was great,3
+thank you it was super,3
+thank you it was really great,3
+thank you it was good,3
+thank you it was super good,3
+thank you it was very good,3
+thank you it was really very good,3
+thank you it was beautiful,3
+thank you it was very beautiful,3
+thank you it was really beautiful,3
+thanks it is helpful,3
+thanks it is very helpful,3
+thanks it is really helpful,3
+thanks it is super helpful,3
+thanks it is great,3
+thanks it is super,3
+thanks it is really great,3
+thanks it is good,3
+thanks it is super good,3
+thanks it is very good,3
+thanks it is really very good,3
+thanks it is beautiful,3
+thanks it is very beautiful,3
+thanks it is really beautiful,3
+thanks it was helpful,3
+thanks it was very helpful,3
+thanks it was really helpful,3
+thanks it was super helpful,3
+thanks it was great,3
+thanks it was super,3
+thanks it was really great,3
+thanks it was good,3
+thanks it was super good,3
+thanks it was very good,3
+thanks it was really very good,3
+thanks it was beautiful,3
+thanks it was very beautiful,3
+thanks it was really beautiful,3
 i like it,3
 i really like it,3
 i like this,3
 i really like this,3
 i like that,3
 i really like that,3
+i liked it,3
+i really liked it,3
+i liked this,3
+i really liked this,3
+i liked that,3
+i really liked that,3
+hey i like it,3
+hey i really like it,3
+hey i like this,3
+hey i really like this,3
+hey i like that,3
+hey i really like that,3
+hey i liked it,3
+hey i really liked it,3
+hey i liked this,3
+hey i really liked this,3
+hey i liked that,3
+hey i really liked that,3
+thanks i like it,3
+thanks i really like it,3
+thanks i like this,3
+thanks i really like this,3
+thanks i like that,3
+thanks i really like that,3
+thanks i liked it,3
+thanks i really liked it,3
+thanks i liked this,3
+thanks i really liked this,3
+thanks i liked that,3
+thanks i really liked that,3
+thank you i like it,3
+thank you i really like it,3
+thank you i like this,3
+thank you i really like this,3
+thank you i like that,3
+thank you i really like that,3
+thank you i liked it,3
+thank you i really liked it,3
+thank you i liked this,3
+thank you i really liked this,3
+thank you i liked that,3
+thank you i really liked that,3

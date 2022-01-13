@@ -1,0 +1,8 @@
+tell,1
+tell me,2
+tell me o,3
+tell me o muse,4
+tell me o muse of,5
+tell me o muse of that,6
+tell me o muse of that ingenious,6
+tell me o muse of that ingenious hero,7
