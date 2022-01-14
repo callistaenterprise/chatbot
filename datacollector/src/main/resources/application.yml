@@ -1,5 +1,0 @@
-spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost/sampledb
-    username: user
-    password: secret
