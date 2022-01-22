@@ -1,4 +1,4 @@
-from .preprocessing.training_data.training_data_builder import load_training_data
+from .preprocessing.training_data.training_data_builder import load_training_data, load_tokenizer
 from os import path
 from keras import Input, Model
 from keras.layers import Dot
@@ -101,13 +101,15 @@ def main():
     training_data_file = path.join(
         dir_name, "../data/4_training_data/skip_gram/training_data.dat"
     )
+    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
+    vocabulary_size = len(tokenizer.word_index) + 1
     config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     vector_size = config_dict["vector_size"]
     epochs = config_dict["epochs"]
-    skip_gram_model = Skipgram(vector_size, 53210)
+    skip_gram_model = Skipgram(vector_size, vocabulary_size)
     skip_gram_model.train_model(training_data_file, epochs)
 
 

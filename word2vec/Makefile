@@ -42,6 +42,9 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 train_glove: data/4_training_data/glove/training_data.dat
 	python -m app.glove
 
+prepare_chatbot: data/4_training_data/dictionary.dat
+	python -m app.prepare_vocabulary_chatbot
+
 cbow_test: tests
 	python -m unittest tests/cbow_training_builder_test.py
 

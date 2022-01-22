@@ -1,4 +1,4 @@
-from .preprocessing.training_data.training_data_builder import load_training_data
+from .preprocessing.training_data.training_data_builder import load_training_data, load_tokenizer
 from os import path
 from keras import Input, Model
 from keras.layers import Dot
@@ -42,8 +42,7 @@ class Glove(object):
             input_dim=vocabulary_size,
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
-            input_length=1,
-            trainable=False,
+            input_length=1
         )(word_j_input)
         # Reshape layer to remove unnecessary output dimension
         word_j_graph = Reshape((vector_size, 1))(word_j_embedding)
@@ -97,6 +96,8 @@ def main():
     training_data_file = path.join(
         dir_name, "../data/4_training_data/glove/training_data.dat"
     )
+    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
+    vocabulary_size = len(tokenizer.word_index) + 1
     # Test data:
     # training_data_file = path.join(dir_name, '../tests/test_train_data/glove_test.dat')
     config_file = path.join(dir_name, "../config.yaml")
@@ -107,7 +108,7 @@ def main():
     # test data:
     # vector_size = 3
     epochs = config_dict["epochs"]
-    glove_model = Glove(vector_size, 53210)
+    glove_model = Glove(vector_size, vocabulary_size)
     # test data:
     # glove_model = Glove(vector_size, 89)
     glove_model.train_model(training_data_file, epochs)

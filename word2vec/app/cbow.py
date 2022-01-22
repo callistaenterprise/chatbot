@@ -1,4 +1,4 @@
-from .preprocessing.training_data.training_data_builder import load_training_data
+from .preprocessing.training_data.training_data_builder import load_training_data, load_tokenizer
 from os import path
 import yaml
 from keras import Input, Model
@@ -91,6 +91,8 @@ def main():
     training_data_file = path.join(
         dir_name, "../data/4_training_data/cbow/training_data.dat"
     )
+    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
+    vocabulary_size = len(tokenizer.word_index) + 1
     config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
@@ -98,7 +100,7 @@ def main():
     window_size = config_dict["window_size"]
     vector_size = config_dict["vector_size"]
     epochs = config_dict["epochs"]
-    cbow_model = CBOW(window_size, vector_size, 53210)
+    cbow_model = CBOW(window_size, vector_size, vocabulary_size)
     cbow_model.train_model(training_data_file, epochs)
 
 
