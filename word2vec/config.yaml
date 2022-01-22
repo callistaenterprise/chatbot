@@ -2,9 +2,12 @@ window_size: 5
 vector_size: 50
 movie_lines: ../../../data/1_raw/movies/movie_lines.txt
 movie_conversations: ../../../data/1_raw/movies/movie_conversations.txt
+use_conversations: False
 blog_directory: ../../../data/1_raw/blogs
 dictionary: ../../../data/4_training_data/dictionary.dat
+dictionary_json: ../../../data/4_training_data/dictionary.json
 encoded_blog_directory: ../../data/encoded_blogs
 pretrained_embeddings: ../../../glove.6B/glove.6B.100d.txt
 stop_words: stop_words.txt
 epochs: 10
+sentence_classes: 6

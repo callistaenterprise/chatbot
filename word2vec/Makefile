@@ -4,10 +4,12 @@ clean:
 	rm -r data/2_parsed/movies/* || true
 	rm -r data/3_cleaned/blogs/* || true
 	rm -r data/3_cleaned/movies/* || true
-	rm data/4_training_data/dictionary.dat || true
+	rm data/4_training_data/dictionary* || true
 	rm -r data/4_training_data/cbow/* || true
 	rm -r data/4_training_data/glove/* || true
 	rm -r data/4_training_data/skip_gram/* || true
+	rm -r data/5_models/* || true
+	rm data/dictionary* || true
 
 parse_blogs: data/1_raw/blogs
 	python -m app.preprocessing.parsing.blog_parser

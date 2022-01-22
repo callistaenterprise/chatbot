@@ -96,8 +96,6 @@ def main():
     training_data_file = path.join(
         dir_name, "../data/4_training_data/glove/training_data.dat"
     )
-    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
-    vocabulary_size = len(tokenizer.word_index) + 1
     # Test data:
     # training_data_file = path.join(dir_name, '../tests/test_train_data/glove_test.dat')
     config_file = path.join(dir_name, "../config.yaml")
@@ -105,6 +103,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     vector_size = config_dict["vector_size"]
+    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
+    vocabulary_size = len(tokenizer.word_index) + 1
     # test data:
     # vector_size = 3
     epochs = config_dict["epochs"]

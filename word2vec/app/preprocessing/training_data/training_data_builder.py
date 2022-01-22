@@ -3,6 +3,7 @@ import sys
 import os
 from os import path
 import yaml
+import json
 import logging
 from keras.preprocessing.text import Tokenizer
 
@@ -33,7 +34,7 @@ def load_tokenizer(tokenizer_file):
 class TrainingDataBuilder(object):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, tokenizer_file):
+    def __init__(self, source_dir, tokenizer_file, tokenizer_json_file):
         self.logger = logging.getLogger(__name__)
         self.cleaned_files = cleaned_files(source_dir)
         self.logger.debug(f"source files for training: {self.cleaned_files}")
@@ -42,6 +43,7 @@ class TrainingDataBuilder(object):
         else:
             self.tokenizer = Tokenizer(oov_token="UNK")
         self.tokenizer_file = tokenizer_file
+        self.tokenizer_json_file = tokenizer_json_file
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:
@@ -66,6 +68,8 @@ class TrainingDataBuilder(object):
     def _save_tokenizer(self):
         with open(self.tokenizer_file, "wb") as f:
             pickle.dump(self.tokenizer, f)
+        with open(self.tokenizer_json_file, "w", encoding="utf-8") as f2:
+            f2.write(json.dumps(self.tokenizer.to_json(), ensure_ascii=False))
 
     def tokenize(self):
         # creates word-2-id dictionary
@@ -83,7 +87,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     tokenizer_file = path.join(dir_name, config_dict["dictionary"])
-    training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file)
+    tokenizer_json_file = path.join(dir_name, config_dict["dictionary_json"])
+    training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file, tokenizer_json_file)
     training_data_builder.tokenize()
 
 

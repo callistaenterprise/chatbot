@@ -55,7 +55,7 @@ class SentenceClassifierTrainingBuilder(object):
                 self.logger.debug(f"Training data word ids: {word_ids}")
                 bigrams, trigrams = self._generate_training_samples(word_ids)
                 X.append([bigrams, trigrams])
-                y.append([label.rstrip()] * len(bigrams))
+                y.append([int(label.rstrip())] * len(bigrams))
             X_y["X"] = X
             X_y["y"] = y
             if self.dry_run:

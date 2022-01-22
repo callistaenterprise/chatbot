@@ -18,7 +18,7 @@ class DataCleaner(object):
         a_line = dirty_line.lower()  # We are not interested in lower or upper case
         a_line = re.sub("\t", " ", a_line)  # tabs to single space
         a_line = re.sub(" +", " ", a_line)  # remove superfluous whitespaces
-        a_line = re.sub(r"-\[readmore\]-", " ", a_line)
+        a_line = re.sub(r"-\[readmore\]-", "", a_line)
         a_line = re.sub(" ' ", "'", a_line)
         a_line = re.sub("'m", " am", a_line)
         a_line = re.sub("`m", " am", a_line)
@@ -85,17 +85,12 @@ class DataCleaner(object):
         # we are not interested in hyphens, unless they are binding together words
         a_line = re.sub(r"[\s][-]+[\s]+", " ", a_line)  # space, hyphen(s), space
         a_line = re.sub(
-            r"[\s][-]+[\S]+", " ", a_line
-        )  # space followed by (one or more) hyphen then word
-        a_line = re.sub(
-            r"[\S]+[-]+[\s]", " ", a_line
-        )  # word ending with hyphen and then space
-        # we are not interested in http urls
-        a_line = re.sub(r"http(\S)+", "", a_line)  # "@”
-        a_line = re.sub(r"www(\S)+", "", a_line)
+            r"[\s]+[-]+", " ", a_line
+        )  # space(s) followed by (one or more) hyphen then word
+        a_line = re.sub(r"[-]+[\s]+", " ", a_line)  # hyphen followed by space(s)
         # remove special characters, punctuation etc.
         a_line = re.sub(
-            r'[()‘"”…#@/&%;:`\*\'<>{}+_\u200B\u2013=~§\$|.!?,\[\]\\]', "", a_line
+            r'[()‘"”…#@/&%;:`\*\'{}+_\u200B\u2013=~§\$|.!?,\[\]\\]', "", a_line
         )
         # let's remove superfluous whitespaces, again (cleaning can have resulted in additional spaces between words)
         a_line = re.sub(" +", " ", a_line)

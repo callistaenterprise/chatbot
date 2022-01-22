@@ -34,10 +34,10 @@ class MovieParser(object):
                         fw.write("\n")
         return prepared_data_file
 
-    def parse_movie_files(self):
+    def parse_movie_conversations(self):
         dir_name = path.dirname(__file__)
         prepared_data_file = path.join(
-            dir_name, "../../../data/2_parsed/movies/parsed_movie_data.txt"
+            dir_name, "../../../data/2_parsed/movies/parsed_movie_conversations.txt"
         )
         if not path.exists(prepared_data_file):
             with open(self.conversation_file) as mc:
@@ -79,9 +79,12 @@ def main():
         config_dict = yaml.load(config, Loader=yaml.Loader)
     movie_lines = config_dict["movie_lines"]
     movie_conversations = config_dict["movie_conversations"]
+    use_conversations = bool(config_dict["use_conversations"])
     movie_preparer = MovieParser(movie_lines, movie_conversations)
-    movie_preparer.parse_movie_files()
-    movie_preparer.parse_movie_lines()
+    if use_conversations:
+        movie_preparer.parse_movie_conversations()
+    else:
+        movie_preparer.parse_movie_lines()
 
 
 if __name__ == "__main__":
