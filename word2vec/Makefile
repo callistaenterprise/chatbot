@@ -18,10 +18,10 @@ parse_movies: data/1_raw/movies
 	python -m app.preprocessing.parsing.movie_parser
 
 clean_blogs: data/2_parsed/blogs
-	python -m app.preprocessing.cleaning.data_cleaner data/2_parsed/blogs
+	python -m app.preprocessing.cleaning.data_cleaner ../../../data/2_parsed/blogs
 
 clean_movies: data/2_parsed/movies
-	python -m app.preprocessing.cleaning.data_cleaner data/2_parsed/movies
+	python -m app.preprocessing.cleaning.data_cleaner ../../../data/2_parsed/movies
 
 tokenize: data/3_cleaned
 	python -m app.preprocessing.training_data.training_data_builder data/3_cleaned
@@ -35,6 +35,9 @@ prepare_skip_gram: data/3_cleaned
 prepare_glove: data/3_cleaned
 	python -m app.preprocessing.training_data.glove_training_builder data/3_cleaned
 
+prepare_sentence_class: data/3_cleaned
+	python -m app.preprocessing.training_data.sentence_classifier_builder data/6_chats/chatmessages.txt
+
 train_cbow: data/4_training_data/cbow/training_data.dat
 	python -m app.cbow
 
@@ -44,8 +47,11 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 train_glove: data/4_training_data/glove/training_data.dat
 	python -m app.glove
 
-prepare_chatbot: data/4_training_data/dictionary.dat
-	python -m app.prepare_vocabulary_chatbot
+parser_test: tests/test_data/raw/unparsed.txt
+	python -m unittest tests/blog_parser_test.py
+
+cleaner_test: tests/test_data/parsed/uncleaned.txt
+	python -m unittest tests/data_cleaner_test.py
 
 cbow_test: tests
 	python -m unittest tests/cbow_training_builder_test.py

@@ -10,8 +10,8 @@ import logging
 class CbowTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
-        super().__init__(source_dir, tokenizer_file)
+    def __init__(self, source_dir, window_size, tokenizer_file, tokenizer_json, dry_run=False):
+        super().__init__(source_dir, tokenizer_file, tokenizer_json)
         dir_name = path.dirname(__file__)
         self.logger = logging.getLogger(__name__)
         self.window_size = window_size
@@ -85,7 +85,8 @@ def main():
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
     tokenizer_file = path.join(dir_name, config_dict["dictionary"])
-    cbow_training_builder = CbowTrainingBuilder(source_dir, window_size, tokenizer_file)
+    tokenizer_json_file = path.join(dir_name, config_dict["dictionary_json"])
+    cbow_training_builder = CbowTrainingBuilder(source_dir, window_size, tokenizer_file, tokenizer_json_file)
     cbow_training_builder.build_cbow_training_data()
 
 

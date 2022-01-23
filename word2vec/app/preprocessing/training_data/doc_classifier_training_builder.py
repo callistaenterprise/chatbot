@@ -28,7 +28,7 @@ class DocClassifierTrainingBuilder(object):
         else:
             raise RuntimeError("There must be a dictionary file created before we can categorize the docs")
         self.training_data_file = path.join(
-            dir_name, "../../../data/4_training_data/classifier/training_data.dat"
+            dir_name, "../../../data/4_training_data/doc_classifier/training_data.dat"
         )
 
     def _generate_training_samples(self, sample_text):

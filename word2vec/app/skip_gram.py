@@ -67,7 +67,7 @@ class Skipgram(object):
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
 
-    def train_model(self, training_data_file, epochs=3, batch_size=100):
+    def train_model(self, training_data_file, epochs=3):
         X_y = load_training_data(training_data_file)
         word_pairs = X_y["X"]
         focus_words, context_words = zip(*word_pairs)

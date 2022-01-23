@@ -11,8 +11,8 @@ class SentenceClassifierTrainingBuilderTest(unittest.TestCase):
     def test_build_sentence_classifier_train_builder(self):
         dir_name = path.dirname(__file__)
         self.training_data_builder = SentenceClassifierTrainingBuilder(
-            source_file=path.join(dir_name, "test_chats/sentence_classifier_msgs.txt"),
-            tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
+            source_file=path.join(dir_name, "test_data/chats/sentence_classifier_msgs.txt"),
+            tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
             dry_run=True,
         )
         X_y = self.training_data_builder.build_sentence_training_data()

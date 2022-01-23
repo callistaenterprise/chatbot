@@ -42,7 +42,8 @@ class Glove(object):
             input_dim=vocabulary_size,
             output_dim=vector_size,
             embeddings_initializer="glorot_uniform",
-            input_length=1
+            input_length=1,
+            trainable=False
         )(word_j_input)
         # Reshape layer to remove unnecessary output dimension
         word_j_graph = Reshape((vector_size, 1))(word_j_embedding)
@@ -76,6 +77,8 @@ class Glove(object):
         )
         for epoch in range(epochs):
             loss = 0.0
+            training_file = path.join(path.dirname(__file__), f"../data/5_models/glove_{epoch}.h5")
+            self.model.save_weights(training_file)
             timer.start()
             for iw_batch, jw_batch, expect_out_batch in batch(
                     i_words, j_words, expected_out, batch_size

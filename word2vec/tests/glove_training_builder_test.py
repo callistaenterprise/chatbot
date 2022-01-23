@@ -14,7 +14,7 @@ class GloveTrainingBuilderTest(unittest.TestCase):
         self.training_data_builder = GloveTrainingBuilder(
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
-            tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
+            tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
             dry_run=True,
         )
         super(GloveTrainingBuilder, self.training_data_builder).tokenize()

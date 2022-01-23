@@ -12,7 +12,7 @@ class TrainingDataBuilderTest(unittest.TestCase):
         dir_name = path.dirname(__file__)
         self.training_data_builder = TrainingDataBuilder(
             source_dir=path.join(dir_name, "test_data"),
-            tokenizer_file=path.join(dir_name, "test_dictionary/dictionary.dat"),
+            tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
         )
         self.training_data_builder.tokenize()
         self.logger.info(f"Training data: {self.training_data_builder.vocabulary()}")
