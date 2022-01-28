@@ -35,8 +35,8 @@ prepare_skip_gram: data/3_cleaned
 prepare_glove: data/3_cleaned
 	python -m app.preprocessing.training_data.glove_training_builder data/3_cleaned
 
-prepare_sentence_class: data/3_cleaned
-	python -m app.preprocessing.training_data.sentence_classifier_builder data/6_chats/chatmessages.txt
+prepare_sentence_class: data/6_chats/chatmessages.txt
+	python -m app.preprocessing.training_data.sentence_classifier_training_builder data/6_chats/chatmessages.txt
 
 train_cbow: data/4_training_data/cbow/training_data.dat
 	python -m app.cbow
@@ -46,6 +46,15 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 
 train_glove: data/4_training_data/glove/training_data.dat
 	python -m app.glove
+
+train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat
+	python -m app.sentence_classifier
+
+visualize:
+	python -m app.visualizer glove_embeddings_29.npy
+
+build_blog_classifier: data/3_cleaned/blogs
+	python -m app.blog_classifier data/3_cleaned/blogs
 
 parser_test: tests/test_data/raw/unparsed.txt
 	python -m unittest tests/blog_parser_test.py

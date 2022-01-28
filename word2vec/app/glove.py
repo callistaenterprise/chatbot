@@ -19,7 +19,7 @@ def batch(i_list, j_list, out_list, batch_size):
 class Glove(object):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, vector_size, vocabulary_size):
+    def __init__(self, vector_size, vocabulary_size, word_vector_file):
         dir_name = path.dirname(__file__)
         self.logger = logging.getLogger(__name__)
         self.model_file = path.join(dir_name, "../data/5_models/glove.h5")
@@ -59,6 +59,10 @@ class Glove(object):
         self.model.summary(print_fn=self.logger.info)
         # plot_model(model=self.model, to_file="Glove model.png", show_shapes=True)
         # Preload word vectors if some training has already been done
+        if word_vector_file and path.exists(path.join(dir_name, f"../data/5_models/{word_vector_file}")):
+            word_vectors = np.load(path.join(dir_name, f"../data/5_models/{word_vector_file}"))
+            self.model.layers[2].set_weights(word_vectors)
+            self.model.layers[3].set_weights(word_vectors)
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
 
@@ -77,8 +81,8 @@ class Glove(object):
         )
         for epoch in range(epochs):
             loss = 0.0
-            training_file = path.join(path.dirname(__file__), f"../data/5_models/glove_{epoch}.h5")
-            self.model.save_weights(training_file)
+            training_file = path.join(path.dirname(__file__), f"../data/5_models/glove_embeddings_{epoch+20}")
+            np.save(training_file, self.model.layers[2].get_weights())
             timer.start()
             for iw_batch, jw_batch, expect_out_batch in batch(
                     i_words, j_words, expected_out, batch_size
@@ -111,7 +115,8 @@ def main():
     # test data:
     # vector_size = 3
     epochs = config_dict["epochs"]
-    glove_model = Glove(vector_size, vocabulary_size)
+    # glove_model = Glove(vector_size, vocabulary_size, "glove_embeddings_5.npy")
+    glove_model = Glove(vector_size, vocabulary_size, None)
     # test data:
     # glove_model = Glove(vector_size, 89)
     glove_model.train_model(training_data_file, epochs)

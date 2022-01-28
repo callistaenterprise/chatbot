@@ -66,10 +66,10 @@ class SentenceClassifier(object):
         trainable_trigram_flat = Flatten()(trainable_trigram_embedding)
         untrainable_trigram_flat = Flatten()(untrainable_trigram_embedding)
 
-        bigram_conv = Conv1D(kernel_size=25,  activation="relu")([trainable_bigram_flat, untrainable_bigram_flat])
+        bigram_conv = Conv1D(filters=25,  kernel_size=5, activation="relu")([trainable_bigram_flat, untrainable_bigram_flat])
         bigram_maxpool = MaxPool1D()(bigram_conv)
 
-        trigram_conv = Conv1D(kernel_size=25, activation="relu")([trainable_trigram_flat, untrainable_trigram_flat])
+        trigram_conv = Conv1D(filters=25, kernel_size=5, activation="relu")([trainable_trigram_flat, untrainable_trigram_flat])
         trigram_maxpool = MaxPool1D()(trigram_conv)
 
         output = Dense(num_classes, activation="softmax")(bigram_maxpool, trigram_maxpool)
@@ -129,7 +129,7 @@ def main():
     vector_size = config_dict["vector_size"]
     epochs = config_dict["epochs"]
     num_classes = config_dict["sentence_classes"]
-    sentence_class_model = SentenceClassifier(vector_size, vocabulary_size)
+    sentence_class_model = SentenceClassifier(vector_size, vocabulary_size, num_classes)
     sentence_class_model.train_model(training_data_file, epochs)
 
 

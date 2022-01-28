@@ -7,6 +7,21 @@ from itertools import chain
 from nltk import ngrams
 
 
+def _generate_training_samples(word_ids):
+    bigrams = []
+    trigrams = []
+    if len(word_ids) == 1:
+        bigrams = [list(chain(word_ids, [0]))]
+        trigrams = [list(chain([0], word_ids, [0]))]
+    else:
+        for bigram in ngrams(word_ids, 2):
+            bigrams.append(list(bigram))
+        for trigram in ngrams(word_ids, 3):
+            trigrams.append(list(trigram))
+        trigrams.append(list(chain(word_ids[len(word_ids)-2:], [0])))
+    return bigrams, trigrams
+
+
 class SentenceClassifierTrainingBuilder(object):
     logging.basicConfig(level=logging.INFO)
 
@@ -30,20 +45,6 @@ class SentenceClassifierTrainingBuilder(object):
     def _line_to_word_ids(self, line):
         return self.tokenizer.texts_to_sequences([line])[0]
 
-    def _generate_training_samples(self, word_ids):
-        bigrams = []
-        trigrams = []
-        if len(word_ids) == 1:
-            bigrams = [list(chain(word_ids, [0]))]
-            trigrams = [list(chain([0], word_ids, [0]))]
-        else:
-            for bigram in ngrams(word_ids, 2):
-                bigrams.append(list(bigram))
-            for trigram in ngrams(word_ids, 3):
-                trigrams.append(list(trigram))
-            trigrams.append(list(chain(word_ids[len(word_ids)-2:], [0])))
-        return bigrams, trigrams
-
     def build_sentence_training_data(self):
         if self.dry_run or not path.exists(self.training_data_file):
             X_y = dict()
@@ -53,7 +54,7 @@ class SentenceClassifierTrainingBuilder(object):
                 self.logger.debug(f"Training data line: {line}")
                 word_ids = self._line_to_word_ids(line)
                 self.logger.debug(f"Training data word ids: {word_ids}")
-                bigrams, trigrams = self._generate_training_samples(word_ids)
+                bigrams, trigrams = _generate_training_samples(word_ids)
                 X.append([bigrams, trigrams])
                 y.append([int(label.rstrip())] * len(bigrams))
             X_y["X"] = X

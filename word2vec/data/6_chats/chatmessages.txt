@@ -1,766 +1,937 @@
-Legend
-==========
-greeting:0
-request:1
-goodbye:2
-thanks:3
-dislike:4
-suggestion:5
------------- Data -------------
-hi,0
-hi how are you,0
-hi how are things,0
-hi there,0
-hi how it is going,0
-hi you,0
-hi my friend,0
-hi what is up,0
-hi what is going on,0
-hi what is up my friend,0
-hello,0
-hello how are you,0
-hello how are things,0
-hello there,0
-hello how it is going,0
-hello you,0
-hello my friend,0
-hello what is up,0
-hello what is going on,0
-hello what is up my friend,0
-hey,0
-hey how are you,0
-hey how are things,0
-hey there,0
-hey how it is going,0
-hey my friend,0
-hey what is up,0
-hey what is going on,0
-hey what is up my friend,0
-hey you,0
-hey you how are you,0
-hey you how are things,0
-hey you there,0
-hey you how it is going,0
-hey you my friend,0
-hey you what is up,0
-hey you what is going on,0
-hey you what is up my friend,0
-cheers,0
-cheers how are you,0
-cheers how are things,0
-cheers there,0
-cheers how it is going,0
-cheers my friend,0
-cheers what is up,0
-cheers what is going on,0
-cheers what is up my friend,0
-hiya,0
-hiya how are you,0
-hiya how are things,0
-hiya there,0
-hiya how it is going,0
-hiya you,0
-hiya my friend,0
-hiya what is up,0
-hiya what is going on,0
-hiya what is up my friend,0
-howdy,0
-howdy how are you,0
-howdy how are things,0
-howdy there,0
-howdy how it is going,0
-howdy you,0
-howdy my friend,0
-howdy what is up,0
-howdy what is going on,0
-howdy what is up my friend,0
-good morning,0
-good morning how are you,0
-good morning how are things,0
-good morning there,0
-good morning how it is going,0
-good morning my friend,0
-good morning what is up,0
-good morning what is going on,0
-good morning what is up my friend,0
-good day,0
-good day how are you,0
-good day how are things,0
-good day there,0
-good day how it is going,0
-good day my friend,0
-good day what is up,0
-good day what is going on,0
-good day what is up my friend,0
-good afternoon,0
-good afternoon how are you,0
-good afternoon how are things,0
-good afternoon there,0
-good afternoon how it is going,0
-good afternoon my friend,0
-good afternoon what is up,0
-good afternoon what is going on,0
-good afternoon what is up my friend,0
-good evening,0
-good evening how are you,0
-good evening how are things,0
-good evening there,0
-good evening how it is going,0
-good evening my friend,0
-good evening what is up,0
-good evening what is going on,0
-good evening what is up my friend,0
-greetings,0
-greetings how are you,0
-greetings how are things,0
-greetings there,0
-greetings how it is going,0
-greetings my friend,0
-greetings what is up,0
-greetings what is going on,0
-greetings what is up my friend,0
-do you have something similar,1
-do you have something similar to this,1
-do you have something similar to that,1
-do you have something like,1
-do you have something like this,1
-do you have something like that,1
-do you have anything similar,1
-do you have anything similar to this,1
-do you have anything similar to that,1
-do you have anything like,1
-do you have anything like this,1
-do you have anything like that,1
-i have a question,1
-i have a question about this,1
-i have a question for you,1
-i have a question regarding,1
-i have a question regarding this,1
-i have a question regarding that,1
-i have a question regarding something,1
-i have a question regarding something else,1
-i have a question regarding something like,1
-i have a question regarding something like this,1
-i have a question regarding something like that,1
-can you give me,1
-can you give me something like,1
-can you give me something about,1
-can you give me anything about,1
-can you give me anything like,1
-can you give me something else like,1
-can you give me something else about,1
-can you give me anything else about,1
-can you give me anything else like,1
-can you show me,1
-can you show me something like,1
-can you show me something about,1
-can you show me anything about,1
-can you show me anything like,1
-can you show me any blog,1
-can you show me any blogs,1
-can you show me any blog about,1
-can you show me any blog like,1
-can you show me any blogs like,1
-can you show me any blogs about,1
-can you show me any other blog,1
-can you show me any other text,1
-can you show me any other blog about,1
-can you show me any other blog like,1
-can you show me any other text about,1
-can you show me any other text like,1
-can you show me something else like,1
-can you show me something else about,1
-can you show me anything else about,1
-can you show me anything else like,1
-can you link me to,1
-can you link me to something like,1
-can you link me to something about,1
-can you link me to anything about,1
-can you link me to anything like,1
-can you link me to any blog,1
-can you link me to any blogs,1
-can you link me to any blogs like,1
-can you link me to any blogs about,1
-can you link me to any other blog,1
-can you link me to any other blogs,1
-can you link me to any other blog about,1
-can you link me to any other blog regarding,1
-can you link me to any other blog related to,1
-can you link me to something else like,1
-can you link me to something else about,1
-can you link me to anything else about,1
-can you link me to anything else like,1
-can i see what you have,1
-can i see what you have regarding,1
-can i see what you have about,1
-can i see what you have related to,1
-can i see what blogs you have,1
-can i see what blogs you have about,1
-can i see what blogs you have regarding,1
-can i see what texts you have,1
-can i see what texts you have about,1
-can i see what texts you have regarding,1
-i am looking for,1
-i am looking for something like,1
-i am looking for something about,1
-i am looking for anything about,1
-i am looking for anything like,1
-i am looking for something else like,1
-i am looking for something else about,1
-i am looking for anything else about,1
-i am looking for anything else like,1
-i am looking for something else like,1
-i am looking for something else about,1
-i am looking for anything else about,1
-i am looking for anything else like,1
-i am looking for blogs,1
-i am searching for,1
-i am searching for blogs,1
-i am searching for blogs like,1
-i am searching for blogs about,1
-i am searching for blogs similar to,1
-i am searching for blogs regarding,1
-i am searching for something like,1
-i am searching for something about,1
-i am searching for anything about,1
-i am searching for anything like,1
-i am searching for something else like,1
-i am searching for something else about,1
-i am searching for anything else about,1
-i am searching for anything else like,1
-i am searching for something else like,1
-i am searching for something else about,1
-i am searching for anything else about,1
-i am searching for anything else like,1
-i am interested in something like,1
-i am interested in something about,1
-i am interested in anything about,1
-i am interested in anything like,1
-i am interested in something else like,1
-i am interested in something else about,1
-i am interested in anything else about,1
-i am interested in anything else like,1
-i am interested in something else like,1
-i am interested in something else about,1
-i am interested in anything else about,1
-i am interested in anything else like,1
-can you tell me,1
-can you tell me something like,1
-can you tell me something about,1
-can you tell me anything about,1
-can you tell me anything like,1
-can you tell me something else like,1
-can you tell me something else about,1
-can you tell me anything else about,1
-can you tell me anything else like,1
-can you tell me something else like,1
-can you tell me something else about,1
-can you tell me anything else about,1
-can you tell me anything else like,1
-what can you tell me,1
-what can you tell me something like,1
-what can you tell me something about,1
-what can you tell me anything about,1
-what can you tell me anything like,1
-what can you tell me something else like,1
-what can you tell me something else about,1
-what can you tell me anything else about,1
-what can you tell me anything else like,1
-what can you tell me something else like,1
-what can you tell me something else about,1
-what can you tell me anything else about,1
-what can you tell me anything else like,1
-what else do you have,1
-what else do you have about,1
-what else do you have about this,1
 what else do you have about that,1
-what else do you have similar,1
-what else do you have similar to this,1
-what else do you have similar to that,1
-what else do you have like,1
-what else do you have like this,1
-what else do you have like that,1
-what else can you tell me,1
-what else can you tell me about,1
-what else can you show me,1
-what else can you show me like this,1
-what else can you show me about,1
-what else can you give me,1
-what else can you give me like this,1
-what else can you give me about,1
-what else can you link me,1
-what else can you link me about,1
-what else can you link me like this,1
-what else is there,1
-what else is there like this,1
-what else is there like that,1
-what else is there about,1
-what else is there that is similar,1
-what else is there that is similar to this,1
-what else is there for,1
-what else can i see,1
-what else can i read,1
-what else can i get,1
-what else can i find,1
-what can you tell me something like,1
-what can you tell me something about,1
-what can you tell me anything about,1
-what can you tell me anything like,1
-what can you tell me that is like this,1
-what can you tell me that is like that,1
-what can you tell me that is similar to this,1
-what can you tell me that is similar to that,1
-what can you tell me something else like,1
-what can you tell me something else about,1
-what can you tell me anything else about,1
-what can you tell me anything else like,1
-what can you tell me something else like,1
-what can you tell me something else about,1
-what can you tell me anything else about,1
-what can you tell me anything else like,1
-what can you show me,1
-what can you show me something like,1
-what can you show me something about,1
-what can you show me anything about,1
-what can you show me anything like,1
-what can you show me that is like this,1
-what can you show me that is like that,1
-what can you show me that is similar to this,1
-what can you show me that is similar to that,1
-what can you show me that is like this,1
-what can you show me something else like,1
-what can you show me something else about,1
-what can you show me anything else about,1
-what can you show me anything else like,1
-what can you show me something else like,1
-what can you show me something else about,1
-what can you show me anything else about,1
-what can you show me anything else like,1
-what can you give me,1
-what can you give me something like,1
-what can you give me something about,1
-what can you give me anything about,1
-what can you give me anything like,1
-what can you give me something else like,1
-what can you give me something else about,1
-what can you give me anything else about,1
-what can you give me anything else like,1
-what can you give me something else like,1
-what can you give me something else about,1
-what can you give me anything else about,1
-what can you give me anything else like,1
-where can i find,1
-where can i find something like,1
-where can i find something about,1
-where can i find anything about,1
-where can i find anything like,1
-where can i find something else like,1
-where can i find something else about,1
-where can i find anything else about,1
-where can i find anything else like,1
-where can i find something else like,1
-where can i find something else about,1
-where can i find anything else about,1
-where can i find anything else like,1
-where can i see,1
-where can i see something like,1
-where can i see something about,1
-where can i see anything about,1
-where can i see anything like,1
-where can i see something else like,1
-where can i see something else about,1
-where can i see anything else about,1
-where can i see anything else like,1
-where can i see something else like,1
-where can i see something else about,1
-where can i see anything else about,1
-where can i see anything else like,1
-where can i read something like,1
-where can i read something about,1
-where can i read anything about,1
-where can i read anything like,1
-where can i read something else like,1
-where can i read something else about,1
-where can i read anything else about,1
-where can i read anything else like,1
-where can i read something else like,1
-where can i read something else about,1
-where can i read anything else about,1
-where can i read anything else like,1
-where can i get,1
-where can i get something like,1
-where can i get something about,1
-where can i get anything about,1
-where can i get anything like,1
-where can i get something else like,1
-where can i get something else about,1
-where can i get anything else about,1
-where can i get anything else like,1
-where can i get something else like,1
-where can i get something else about,1
-where can i get anything else about,1
-where can i get anything else like,1
-bye,2
-ok bye,2
-goodbye,2
-ok goodbye,2
-bye bye,2
-bye now,2
-ok bye now,2
-ok goodbye now,2
-go away,2
-go away now,2
-ok go away now,2
-no thank you,2
-ok no thank you,2
-please go away,2
-ok please go away,2
-please go away now,2
-ok please go away now,2
-goodnight,2
-ok goodnight,2
-thanks bye,2
-ok thanks bye,2
-thanks bye now,2
-ok thanks goodbye,2
-thanks goodbye now,2
-no thanks,2
-no thank you,2
-no thanks bye,2
-no thanks goodbye,2
-cheerio,2
-ok cheerio,2
-see you,2
-talk to you later,2
-ok talk to you later,2
-ok see you,2
-ok see you later,2
-see you bye,2
-see you goodbye,2
-see ya,2
-thank you,3
-thank you very much,3
-thanks,3
-thanks a lot,3
-this is helpful,3
-this is super helpful,3
-this is very helpful,3
 this is really helpful,3
-this is really super helpful,3
-this is great,3
-this is really great,3
-this is super great,3
-this is good,3
-this is very good,3
-this is super good,3
-this is really very good,3
-this is awesome,3
-this is really awesome,3
-this is super awesome,3
-that is helpful,3
-that is very helpful,3
-that is super helpful,3
-that is really helpful,3
-that is really super helpful,3
-that is great,3
+can you show me,1
+can you give me something about,1
+can you show me any other blog,1
+hey my friend,0
+i have a proposal,5
 that is really great,3
-that is super great,3
-that is good,3
-that is very good,3
-that is awesome,3
-that is really awesome,3
-that is super awesome,3
-that is really very good,3
-this was helpful,3
-this was super helpful,3
-this was very helpful,3
-this was really helpful,3
-this was really super helpful,3
-this was great,3
-this was really great,3
-this was super great,3
-this was good,3
-this was very good,3
-this was super good,3
-this was really very good,3
-this was awesome,3
-this was really awesome,3
-this was super awesome,3
-this is helpful,3
-this is super helpful,3
-this is very helpful,3
-this is really helpful,3
-this is really super helpful,3
-this is great,3
-this is really great,3
-this is super great,3
-this is good,3
-this is very good,3
-this is super good,3
-this is really very good,3
-this is awesome,3
-this is really awesome,3
-this is super awesome,3
-that is helpful,3
-that is very helpful,3
-that is super helpful,3
-that is really helpful,3
-that is really super helpful,3
-that is great,3
-that is really great,3
-that is super great,3
-that is good,3
-that is very good,3
-that is awesome,3
-that is really awesome,3
-that is super awesome,3
-that is really very good,3
-this was helpful,3
-this was super helpful,3
-this was very helpful,3
-this was really helpful,3
-this was really super helpful,3
-this was great,3
-this was really great,3
-this was super great,3
-this was good,3
-this was very good,3
-this was super good,3
-this was really very good,3
-this was awesome,3
-this was really awesome,3
-this was super awesome,3
-thanks this is helpful,3
-thanks this is super helpful,3
-thanks this is very helpful,3
-thanks this is really helpful,3
-thanks this is really super helpful,3
-thanks this is great,3
-thanks this is really great,3
-thanks this is super great,3
-thanks this is good,3
-thanks this is very good,3
-thanks this is super good,3
-thanks this is really very good,3
-thanks this is awesome,3
-thanks this is really awesome,3
-thanks this is super awesome,3
-thanks that is helpful,3
-thanks that is very helpful,3
-thanks that is super helpful,3
-thanks that is really helpful,3
-thanks that is really super helpful,3
-thanks that is great,3
-thanks that is really great,3
-thanks that is super great,3
-thanks that is good,3
-thanks that is very good,3
-thanks that is awesome,3
-thanks that is really awesome,3
-thanks that is super awesome,3
-thanks that is really very good,3
-thanks this was helpful,3
-thanks this was super helpful,3
-thanks this was very helpful,3
-thanks this was really helpful,3
-thanks this was really super helpful,3
-thanks this was great,3
-thanks this was really great,3
-thanks this was super great,3
-thanks this was good,3
-thanks this was very good,3
-thanks this was super good,3
-thanks this was really very good,3
-thanks this was awesome,3
-thanks this was really awesome,3
-thanks this was super awesome,3
-thank you this is helpful,3
-thank you this is super helpful,3
-thank you this is very helpful,3
-thank you this is really helpful,3
-thank you this is really super helpful,3
-thank you this is great,3
-thank you this is really great,3
-thank you this is super great,3
-thank you this is good,3
-thank you this is very good,3
-thank you this is super good,3
 thank you this is really very good,3
-thank you this is awesome,3
-thank you this is really awesome,3
-thank you this is super awesome,3
-thank you that is helpful,3
-thank you that is very helpful,3
-thank you that is super helpful,3
-thank you that is really helpful,3
-thank you that is really super helpful,3
-thank you that is great,3
-thank you that is really great,3
-thank you that is super great,3
-thank you that is good,3
-thank you that is very good,3
-thank you that is awesome,3
-thank you that is really awesome,3
-thank you that is super awesome,3
-thank you that is really very good,3
-thank you this was helpful,3
-thank you this was super helpful,3
-thank you this was very helpful,3
-thank you this was really helpful,3
-thank you this was really super helpful,3
-thank you this was great,3
-thank you this was really great,3
-thank you this was super great,3
-thank you this was good,3
-thank you this was very good,3
-thank you this was super good,3
-thank you this was really very good,3
-thank you this was awesome,3
-thank you this was really awesome,3
-thank you this was super awesome,3
-that was helpful,3
-that was very helpful,3
-that was super helpful,3
-that was really helpful,3
-that was really super helpful,3
-that was great,3
-that was really great,3
-that was super great,3
-that was good,3
-that was very good,3
-that was awesome,3
-that was really awesome,3
-that was super awesome,3
-that was really very good,3
-it is helpful,3
-it is very helpful,3
-it is really helpful,3
-it is super helpful,3
-it is great,3
-it is super,3
-it is really great,3
-it is good,3
-it is super good,3
-it is very good,3
-it is really very good,3
-it is beautiful,3
-it is very beautiful,3
-it is really beautiful,3
-it was helpful,3
-it was very helpful,3
-it was really helpful,3
-it was super helpful,3
-it was great,3
-it was super,3
-it was really great,3
-it was good,3
-it was super good,3
-it was very good,3
-it was really very good,3
-it was beautiful,3
-it was very beautiful,3
-it was really beautiful,3
-thank you it is helpful,3
-thank you it is very helpful,3
-thank you it is really helpful,3
-thank you it is super helpful,3
-thank you it is great,3
-thank you it is super,3
-thank you it is really great,3
-thank you it is good,3
-thank you it is super good,3
-thank you it is very good,3
-thank you it is really very good,3
-thank you it is beautiful,3
-thank you it is very beautiful,3
-thank you it is really beautiful,3
-thank you it was helpful,3
+what can you give me anything like,1
 thank you it was very helpful,3
-thank you it was really helpful,3
-thank you it was super helpful,3
-thank you it was great,3
-thank you it was super,3
-thank you it was really great,3
-thank you it was good,3
-thank you it was super good,3
-thank you it was very good,3
-thank you it was really very good,3
-thank you it was beautiful,3
-thank you it was very beautiful,3
-thank you it was really beautiful,3
-thanks it is helpful,3
-thanks it is very helpful,3
-thanks it is really helpful,3
-thanks it is super helpful,3
-thanks it is great,3
-thanks it is super,3
-thanks it is really great,3
-thanks it is good,3
-thanks it is super good,3
-thanks it is very good,3
-thanks it is really very good,3
-thanks it is beautiful,3
-thanks it is very beautiful,3
-thanks it is really beautiful,3
-thanks it was helpful,3
-thanks it was very helpful,3
-thanks it was really helpful,3
-thanks it was super helpful,3
-thanks it was great,3
-thanks it was super,3
-thanks it was really great,3
-thanks it was good,3
-thanks it was super good,3
-thanks it was very good,3
-thanks it was really very good,3
-thanks it was beautiful,3
-thanks it was very beautiful,3
-thanks it was really beautiful,3
-i like it,3
-i really like it,3
-i like this,3
-i really like this,3
-i like that,3
-i really like that,3
-i liked it,3
-i really liked it,3
-i liked this,3
-i really liked this,3
-i liked that,3
-i really liked that,3
-hey i like it,3
-hey i really like it,3
-hey i like this,3
-hey i really like this,3
-hey i like that,3
-hey i really like that,3
-hey i liked it,3
-hey i really liked it,3
-hey i liked this,3
-hey i really liked this,3
-hey i liked that,3
-hey i really liked that,3
-thanks i like it,3
-thanks i really like it,3
-thanks i like this,3
-thanks i really like this,3
-thanks i like that,3
-thanks i really like that,3
-thanks i liked it,3
-thanks i really liked it,3
-thanks i liked this,3
-thanks i really liked this,3
-thanks i liked that,3
-thanks i really liked that,3
+good morning,0
+cheers my friend,0
+no this is a big mistake,4
+greetings,0
+can you show me something like,1
+i have a question regarding,1
+can i see what you have about,1
+that is super great,3
+good afternoon what is going on,0
+where can i see anything else about,1
+good morning my friend,0
+what else do you have similar to that,1
+i have a great suggestion,5
+good evening how it is going,0
+where can i see something else like,1
 thank you i like it,3
-thank you i really like it,3
-thank you i like this,3
-thank you i really like this,3
-thank you i like that,3
-thank you i really like that,3
-thank you i liked it,3
-thank you i really liked it,3
-thank you i liked this,3
+this was super great,3
+good evening my friend,0
+thank you this was really very good,3
+thanks it was beautiful,3
+can you show me something else like,1
+thank you that is super great,3
+thanks this was helpful,3
+i am interested in something else like,1
+it is beautiful,3
+where can i get anything about,1
+take care bye,2
+this was really awesome,3
+thank you it is really beautiful,3
+that is super helpful,3
+i may have a suggestion that might interest you,5
+this was great,3
+that was very good,3
+i am sure you would be interested in,5
+i have an awesome idea,5
+this is really very good,3
+good evening how are you,0
+this is super awesome,3
+that is really awesome,3
+thanks it is super helpful,3
+take care goodbye,2
+thanks i liked that,3
+what can you show me something else about,1
+hey,0
+ok goodnight,2
+where can i get anything like,1
+thank you,3
+thanks this was great,3
+i am searching for something else like,1
+no thanks bye,2
+you are wrong,4
+this is really great,3
+ok see ya,2
+i liked this,3
+thanks it was very good,3
+thanks i liked this,3
+thank you that is good,3
+that is very good,3
+i am interested in something like,1
+it is very beautiful,3
+what else can you show me about,1
+what else can you link me,1
+can you tell me something like,1
+i think i may have an idea,5
+cheers what is up my friend,0
+thanks it is helpful,3
+thank you this was super helpful,3
+this is stupid,4
+thank you this was super great,3
+thanks this is really helpful,3
+i would say that was not very smart,4
+i am looking for anything else about,1
+i may have a suggestion for you,5
+that is misleading,4
+that is really helpful,3
+what can you tell me,1
+this is wrong,4
+that is a mistake,4
+no that is bad,4
+that is really super helpful,3
+what can you tell me anything else like,1
+i am searching for blogs,1
+what can you show me something like,1
+that was bad,4
+this was not what i asked for,4
+can i see what texts you have regarding,1
+where can i see anything like,1
+bye now,2
+good day my friend,0
+thank you this was really helpful,3
+what can you give me something else like,1
+this was good,3
+where can i read anything else like,1
+bye cheers,2
+good day what is up my friend,0
+do you have something like this,1
+thanks it is super good,3
+can i see what texts you have about,1
+may i say something,5
+this is awesome,3
+good morning how it is going,0
+hey you there,0
+good day how are things,0
+what can you tell me that is like this,1
+would you be interested in listening a suggestion,5
+this is not very smart,4
+this is awesome,3
+where can i see anything else like,1
+it is super good,3
+do you have something similar to that,1
+that was great,3
+it is super,3
+this was really helpful,3
+thanks this was very good,3
+thank you this is super awesome,3
+i think you might like,5
+can you show me any other text,1
+what can you tell me anything about,1
+greetings what is up my friend,0
+what can you tell me something about,1
+what else can you give me like this,1
+what can you show me something about,1
+what can you tell me something like,1
+thanks that is good,3
+ok thanks bye,2
+i am looking for something else like,1
+i really liked that,3
+what can you give me something like,1
+i think i may have a suggestion,5
+hello there,0
+what can you tell me that is similar to this,1
+thank you this was very helpful,3
+it was really very good,3
+thanks it is really beautiful,3
+where can i find something else about,1
+thanks i like that,3
+ok bye,2
+what else do you have about,1
+ok see you,2
+where can i read something else about,1
+it is good,3
+what can you tell me anything like,1
+hello how are things,0
+i am looking for blogs,1
+where can i get something else about,1
+it was super good,3
+no this is misleading,4
+hi how are you,0
+can you link me to something like,1
+hey i really like that,3
+no this is not what i wanted,4
+no this is not what i want,4
+can you show me any other blog like,1
+this was a mistake,4
+what can you show me something else like,1
+i really like it,3
+it is super helpful,3
+this is very good,3
+hey you what is up my friend,0
+where can i find anything else about,1
+hey i like it,3
+go away now,2
+what else do you have like,1
+can you link me to any blogs like,1
+that is really very good,3
+howdy you,0
+can you link me to something about,1
+this is good,3
+i may have an idea that might interest you,5
+that was really super helpful,3
+thank you it is super,3
+i am looking for something else like,1
+thanks it was really helpful,3
+no this was not very smart,4
+no thank you,2
+hiya how are things,0
+what else do you have about this,1
+no this is bad,4
+can i interest you in anything,5
+hiya my friend,0
+i am searching for anything else like,1
+thank you it is helpful,3
+good afternoon my friend,0
+that was stupid,4
+no that was wrong,4
+that was really helpful,3
+hey i like this,3
+good afternoon how it is going,0
+this was great,3
+i have a question,1
+hiya how are you,0
+no that is stupid,4
+this is a mistake,4
+thank you it is very beautiful,3
+this was very helpful,3
+do you have anything like this,1
+thanks i like it,3
+good evening there,0
+what can you give me something else about,1
+thanks i like this,3
+thank you that is super helpful,3
+howdy my friend,0
+this is super great,3
+i have a question regarding something else,1
 thank you i really liked this,3
+thanks it was really beautiful,3
+thanks this is super helpful,3
+it is great,3
+good morning what is up,0
+thank you this is great,3
+that was not very smart,4
+that was a big mistake,4
+hi my friend,0
+can i propose something,5
+i am interested in something else about,1
+hello how are you,0
+i am interested in anything else about,1
+howdy how are you,0
+that was really awesome,3
+no this is awful,4
+hey i like that,3
+thank you it was helpful,3
+ok bye now,2
+hiya you,0
+thank you it was really very good,3
+i am searching for anything else about,1
+thank you it was good,3
+hey how are things,0
+hi what is up my friend,0
+thanks i really like it,3
+thank you that is very helpful,3
+it was very helpful,3
+thanks this was really helpful,3
+thanks this is super great,3
+thank you this was super good,3
+i may have an idea for you,5
+ok take care bye,2
+hey you how are you,0
+where can i get,1
+thanks it is very helpful,3
+thank you that is super awesome,3
+bye,2
+what can you tell me anything like,1
+would you be interested in listening a proposal,5
+this is super good,3
+thanks this is very helpful,3
+i think it would be great if,5
+i would say that was a mistake,4
+thank you i liked this,3
+do you have anything similar,1
+i like that,3
+can you show me anything about,1
+ok go away now,2
+thank you this is helpful,3
+that was awesome,3
+are you seriously that stupid,4
+i am looking for something about,1
+i am searching for anything about,1
+what can you show me anything else about,1
+hey i really like this,3
+i really did not like that,4
+thanks it was really very good,3
+what can you tell me anything else about,1
+no that is misleading,4
+that was really great,3
+thanks this was really awesome,3
+may i share a thought,5
+thank you it is super helpful,3
+what else can you tell me about,1
+do you have anything similar to this,1
+where can i read anything else about,1
+thank you that is really helpful,3
+can you tell me anything else like,1
+this was super helpful,3
+that is good,3
+thank you that is really super helpful,3
+where can i see anything else about,1
+thanks bye now,2
+where can i see something else about,1
+where can i see something about,1
+this is bad,4
+can i see what blogs you have regarding,1
+thank you it was great,3
+do you have anything like,1
+hiya what is up,0
+this is helpful,3
+that is bad,4
+this is really great,3
+this was super good,3
+no that is not what i asked for,4
+i am interested in something else like,1
+good evening what is going on,0
+what can you give me something else like,1
+i liked that,3
+what else do you have like that,1
+thank you that is helpful,3
+no that was stupid,4
+that is helpful,3
+thanks bye,2
+i disagree,4
+do you have something similar,1
+this is misleading,4
+thank you that is very good,3
+thanks that is super great,3
+can you tell me anything about,1
+where can i find anything else like,1
+thank you this is super helpful,3
+howdy how are things,0
+thanks it is very good,3
+no this was wrong,4
+talk to you later,2
+can you tell me something else like,1
+can i see what you have regarding,1
+what can you give me something else about,1
+take care,2
+what can you give me anything about,1
+good day what is up,0
+thanks this was super helpful,3
+thank you it was super,3
+thanks this is helpful,3
+cheers,2
+what else do you have similar to this,1
+this is really awesome,3
+this is great,3
+it was very good,3
+i totally disagree,4
+where can i find anything like,1
+cheers how are things,0
+greetings how it is going,0
+ok no thank you,2
+see you,2
+thanks i really liked this,3
+thank you that is awesome,3
+no that is wrong,4
+this is very helpful,3
+ok thank you goodbye,2
+can you show me any blogs like,1
+what else do you have like this,1
+i have a great idea,5
+hey i really like it,3
+this is really very good,3
+see you bye,2
+i have to disagree with you,4
+howdy what is up,0
+would you be open for a proposal,5
+good morning what is going on,0
+thank you it was beautiful,3
+i am looking for,1
+can you link me to any blog,1
+thanks this is really awesome,3
+thanks that is helpful,3
+it is very good,3
+what can you tell me something else about,1
+hey i really liked it,3
+ok thanks goodbye,2
+thank you it is very helpful,3
+this was awesome,3
+what can you give me anything else like,1
+ok goodbye now,2
+thanks this is really super helpful,3
+you cannot be serious,4
+can you link me to anything about,1
+thanks it is beautiful,3
+thanks this was super awesome,3
+thank you this is really helpful,3
+that is really helpful,3
+that is really super helpful,3
+thanks this is great,3
+i have a question regarding something,1
+this was not very smart,4
+what can you tell me anything else like,1
+thank you this was great,3
+hey what is up my friend,0
+you cannot believe that,4
+thank you it is very good,3
+thank you this was really great,3
+what can you give me something about,1
+would you be open for a suggestion,5
+i have a question regarding that,1
+i am looking for anything else like,1
+i am interested in anything about,1
+i am searching for anything else about,1
+can i interest you in something,5
+i think it would be good if,5
+that is not what i asked for,4
+can you link me to something else like,1
+can you show me any blog about,1
+thanks that is super helpful,3
+where can i get anything else about,1
+i am looking for anything like,1
+hello my friend,0
+this was good,3
+hiya what is going on,0
+thanks that is super awesome,3
+go away,2
+i would say that was awful,4
+i think it would be amazing if,5
+that is very helpful,3
+this is really helpful,3
+please go away,2
+i am interested in something else about,1
+this was stupid,4
+it is helpful,3
+it is really great,3
+can you show me any blog,1
+can you link me to any other blogs,1
+can you tell me something else about,1
+see ya,2
+goodnight,2
+thank you this was awesome,3
+where can i get something about,1
+what can you tell me something else like,1
+thanks it was great,3
+no this is a mistake,4
+this was really awesome,3
+i do not think you understood,4
+no that was awful,4
+that was super awesome,3
+thank you it was very beautiful,3
+i like this,3
+thank you this was very good,3
+thank you i really liked it,3
+that is stupid,4
+this was super great,3
+thanks it was super good,3
+what else can you show me,1
+it is really helpful,3
+thank you it was really beautiful,3
+how can anyone think that,4
+this was super awesome,3
+no this was not what i asked for,4
+this is very good,3
+thank you it was super good,3
+it was really beautiful,3
+thanks this is good,3
+no this was a mistake,4
+i would say that was bad,4
+can you show me anything else like,1
+thanks this is really great,3
+i am interested in anything else about,1
+thank you that is really great,3
+this is really awesome,3
+i am looking for anything else about,1
+what can you show me,1
+that is wrong,4
+no this is not good,4
+please go away now,2
+where can i read anything about,1
+thank you it was super helpful,3
+have you heard about,5
+can you give me,1
+i am searching for something else about,1
+what can you give me,1
+i did not like that,4
+greetings how are you,0
+this was really super helpful,3
+where can i find something like,1
+thanks this was really very good,3
+can i see what texts you have,1
+thank you i really like that,3
+thank you that is really very good,3
+what else can i get,1
+that was not what i asked for,4
+what can you tell me something about,1
+thanks this was super good,3
+i am looking for something like,1
+i am searching for something else about,1
+thank you it is really helpful,3
+do you have anything like that,1
+i like it,3
+it was super,3
+thanks i really like this,3
+hey i really liked this,3
+you are seriously mistaken,4
+i am sure you would find it interesting,5
+can you show me any other text like,1
+hello what is up,0
+it was beautiful,3
+this was misleading,4
+thank you it is really great,3
+what can you tell me that is similar to that,1
+bye bye,2
+where can i get something else like,1
+can you link me to,1
+you are mistaken,4
+that is a big mistake,4
+what can you give me anything else about,1
+thanks it is great,3
+thank you that is really awesome,3
+thank you this is super great,3
+no this was bad,4
+this was very helpful,3
+i really liked this,3
+thank you i liked it,3
+i know you would like,5
+hey you,0
+thanks that is very good,3
+no that is not what i want,4
+has anyone told you about,5
+i am looking for anything about,1
+thank you it was really great,3
+what can you give me anything else like,1
+what can you show me something else like,1
+i think i might have a great idea,5
+where can i read something else like,1
+thank you bye,2
+i think that is misleading,4
+good day what is going on,0
+i have a question for you,1
+this is super awesome,3
+do you have something like,1
+what can you tell me anything else about,1
+this was super awesome,3
+i think i might have an idea,5
+thanks that is really helpful,3
+what can you tell me anything else about,1
+howdy there,0
+this was wrong,4
+i have a question regarding something like this,1
+this was really super helpful,3
+what else can i see,1
+ok cheers,2
+can you show me something about,1
+thank you this is good,3
+that is awful,4
+goodbye,2
+that is helpful,3
+may i suggest something,5
+thank you this was helpful,3
+cheers how it is going,0
+i really like that,3
+thank you this is awesome,3
+good evening what is up my friend,0
+greetings how are things,0
+that is awesome,3
+thanks this was really great,3
+may i share a thought with you,5
+it was great,3
+good morning there,0
+thanks a lot,3
+do you think it would be nice to,5
+can you link me to any other blog related to,1
+this is super helpful,3
+i would say that was wrong,4
+cheers how are you,0
+this was super helpful,3
+what else can i read,1
+can you give me anything else like,1
+i may have a proposal for you,5
+hey how are you,0
+are you stupid,4
+i am searching for something else like,1
+that was super helpful,3
+what can you show me that is similar to this,1
+i am searching for blogs like,1
+that is really great,3
+that was not good,4
+what else is there like that,1
+can you tell me anything else like,1
+this was a big mistake,4
+thanks it was very beautiful,3
+what can you show me anything else like,1
+no that is awful,4
+thanks it was good,3
+what can you tell me something else like,1
+i am searching for anything like,1
+hi how are things,0
+no that was not good,4
+i have a question about this,1
+can you give me anything like,1
+can you show me any other blog about,1
+what can you tell me something else about,1
+where can i see something else about,1
+can you link me to something else about,1
+what can you tell me something else about,1
+what else can you tell me,1
+hey i liked it,3
+thank you i like that,3
+thank you this was good,3
+hey you what is going on,0
+can you give me something like,1
+hey there,0
+thanks it is super,3
+what else is there for,1
+that is very helpful,3
+where can i read something else about,1
+good evening,0
+it was really great,3
+can you give me something else like,1
+can i see what blogs you have about,1
+that is very good,3
+what can you tell me something else like,1
+thank you i like this,3
+hi what is up,0
+i think you made a mistake,4
+what can you tell me anything else about,1
+can you show me any blogs,1
+hello you,0
+it is very helpful,3
+this was really very good,3
+no that was not very smart,4
+this was super good,3
+good afternoon what is up,0
+what can you show me that is similar to that,1
+thanks i really liked it,3
+can you link me to any other blog about,1
+what else is there like this,1
+where can i find anything else about,1
+can you tell me anything else about,1
+ok take care,2
+thanks that is really awesome,3
+what else can you give me about,1
+thank you this is really great,3
+thank you it is good,3
+what else do you have,1
+no that was not what i asked for,4
+i am looking for something else about,1
+good day there,0
+this is great,3
+this was really great,3
+i would say that was a big mistake,4
+thank you it was very good,3
 thank you i liked that,3
+howdy how it is going,0
+i am searching for blogs about,1
+thanks this was super great,3
+no this was misleading,4
+hey you my friend,0
+i have an idea,5
+i am searching for anything else like,1
+i have a question regarding something like that,1
+thank you i really like this,3
+what can you tell me anything else like,1
+i am interested in something about,1
+can i see what blogs you have,1
+would you be interested in hearing an idea,5
+do you think i am stupid,4
+that was good,3
+thanks i really liked that,3
+where can i read something like,1
+where can i read something else like,1
+thank you it is super good,3
+you are stupid,4
+what can you tell me that is like that,1
+thank you this is really super helpful,3
+i am interested in anything like,1
+do you have anything similar to that,1
+this is super helpful,3
+no thanks goodbye,2
+hey you what is up,0
+thanks this is very good,3
+what else is there that is similar to this,1
+it is really beautiful,3
+cheers there,0
+hi,0
+thanks it was really great,3
+greetings my friend,0
+where can i get something like,1
+thank you this is very good,3
+thanks it is really great,3
+what can you show me that is like this,1
+i am searching for,1
+you must be really dumb,4
+good afternoon there,0
+that is super awesome,3
+where can i read anything else like,1
+thank you this is really awesome,3
+where can i get something else about,1
+that is good,3
+that was misleading,4
+thanks that is really super helpful,3
+can i see what you have related to,1
+good morning how are you,0
+that was super great,3
+that is super helpful,3
+what can you show me that is like that,1
+what can you tell me anything else like,1
+no that was a big mistake,4
+i am interested in anything else like,1
+i would say that was not good,4
+what can you tell me anything about,1
+thanks i really like that,3
+good day,0
+no thanks,2
+no this was not good,4
+good evening what is up,0
+no this was stupid,4
+no this was awful,4
+good day how it is going,0
+i am interested in anything else like,1
+hi you,0
+can you show me any blog like,1
+this was really great,3
+hi there,0
+can you link me to any blogs about,1
+may i share something with you,5
+i am searching for blogs similar to,1
+can you give me something else about,1
+that was really very good,3
+no that is a mistake,4
+can you link me to any other blog regarding,1
+thanks it is very beautiful,3
+this is really super helpful,3
+cheers what is up,0
+it was really helpful,3
+ok please go away,2
+thanks that is great,3
+can you tell me anything like,1
+what can you tell me something else like,1
+where can i get anything else like,1
+it was helpful,3
+this was bad,4
+i am sure you would like,5
+where can i see anything about,1
+thanks goodbye now,2
+that was wrong,4
+howdy what is going on,0
+i am looking for anything else like,1
+thanks it was super helpful,3
+greetings what is going on,0
+good afternoon how are things,0
+i think i might be able to help you,5
+where can i read anything else about,1
+thanks it was super,3
+hey i liked that,3
+no that is a big mistake,4
+this is super good,3
+it was super helpful,3
+where can i get anything else like,1
+good afternoon what is up my friend,0
+i liked it,3
+thanks that is very helpful,3
+thank you it is beautiful,3
+i am searching for blogs regarding,1
+thank you it is great,3
+thanks this was very helpful,3
+where can i find anything about,1
+hey you how it is going,0
+i have a question regarding this,1
+thanks it was helpful,3
+thank you very much,3
+greetings what is up,0
+thank you this is very helpful,3
+cheers what is going on,0
+hello what is up my friend,0
+this was awesome,3
+i would say that was stupid,4
+ok see you later,2
+see you later,2
+what can you show me something else about,1
+hey what is going on,0
+where can i read something about,1
+good evening how are things,0
+this is very helpful,3
+what can you show me anything about,1
+thank you this was super awesome,3
+thanks this is super good,3
+do you think it would be possible to,5
+thank you that is great,3
+this is super great,3
+can you link me to anything else like,1
+no thank you,2
+hiya what is up my friend,0
+hi what is going on,0
+no that was misleading,4
+would you be interested in hearing a proposal,5
+can you tell me anything else about,1
+can you show me anything else about,1
+thanks this is awesome,3
+it is really very good,3
+where can i find something about,1
+what else is there that is similar,1
+where can i see something else like,1
+thank you i really like it,3
 thank you i really liked that,3
+good afternoon how are you,0
+this was helpful,3
+thank you this was really awesome,3
+i would say that was misleading,4
+can you show me something else about,1
+would you be open for an idea,5
+where can i see anything else like,1
+that is really very good,3
+what else do you have similar,1
+that is really awesome,3
+can you link me to any other blog,1
+this is good,3
+what else is there about,1
+this is a big mistake,4
+that is not good,4
+what can you tell me something like,1
+no that was a mistake,4
+i am looking for something else about,1
+no this was not what i wanted,4
+that is great,3
+can you link me to any blogs,1
+what can you show me anything like,1
+this was really helpful,3
+hey you how are things,0
+it was very beautiful,3
+hiya,0
+i really like this,3
+can you tell me something else about,1
+can you tell me something else like,1
+what can you show me anything else about,1
+good morning how are things,0
+thanks that is really very good,3
+i have a great proposal,5
+this was very good,3
+thanks this is really very good,3
+no that is not very smart,4
+thanks that is really great,3
+thanks i liked it,3
+that was awful,4
+hiya how it is going,0
+thanks this was really super helpful,3
+thanks that is awesome,3
+i really liked it,3
+ok goodbye,2
+where can i find something else like,1
+hey i really liked that,3
+where can i find something else like,1
+no this was a big mistake,4
+you are just too dumb,4
+thanks,3
+can you give me anything else about,1
+that is great,3
+how can anyone believe that,4
+hey what is up,0
+can you show me any other text about,1
+what can you show me anything else like,1
+can i suggest something,5
+that is awesome,3
+thanks it is really very good,3
+what else is there,1
+no this is stupid,4
+hello,0
+where can i find anything else like,1
+what else can you give me,1
+hello what is going on,0
+what can you tell me something else about,1
+good day how are you,0
+i may have a proposal that might interest you,5
+what else can you link me about,1
+have you considered,5
+what else can you show me like this,1
+howdy,0
+this is awful,4
+this is not good,4
+greetings there,0
+this is helpful,3
+can you show me anything like,1
+this was awful,4
+thank you it is really very good,3
+ok talk to you later,2
+what else can i find,1
+hey how it is going,0
+hiya there,0
+this is not what i asked for,4
+that is super great,3
+thank you this is super good,3
+where can i get anything else about,1
+what can you show me that is like this,1
+can you show me any blogs about,1
+ok please go away now,2
+can you link me to anything like,1
+can you give me anything about,1
+i have an awesome suggestion,5
+do you have something like that,1
+thank you this was really super helpful,3
+where can i find something else about,1
+can i see what you have,1
+do you have something similar to this,1
+hello how it is going,0
+that was very helpful,3
+what else can you link me like this,1
+thanks this was good,3
+i think you might be interested in,5
+this was very good,3
+i am searching for something about,1
+would you be interested in hearing a suggestion,5
+would you be interested in listening an idea,5
+have you thought about,5
+thank you it was really helpful,3
+thanks it is good,3
+thanks it was very helpful,3
+hey i liked this,3
+good afternoon,0
+howdy what is up my friend,0
+no this is wrong,4
+this was really very good,3
+that was a mistake,4
+where can i see something like,1
+it was good,3
+no that was not what i wanted,4
+thanks this is super awesome,3
+i have a fantastic proposal,5
+that was helpful,3
+this is really super helpful,3
+where can i see,1
+hi how it is going,0
+where can i find,1
+can you tell me something about,1
+i am searching for something like,1
+no this is not what i asked for,4
+can you tell me,1
+what can you give me anything else about,1
+this was helpful,3
+no this is not very smart,4
+i have a suggestion,5
+where can i get something else like,1
+that is not very smart,4
+this was not good,4
+see you goodbye,2
+no that is not good,4
+thanks this was awesome,3
+i have a question regarding something like,1
+no that was bad,4
+where can i read anything like,1
+thanks it is really helpful,3
+no that is not what i wanted,4
+talk to you tomorrow,2
+can you link me to anything else about,1
+cheers,0
+good morning what is up my friend,0
+that is super awesome,3
