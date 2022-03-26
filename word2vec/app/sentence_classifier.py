@@ -1,9 +1,11 @@
 from .preprocessing.training_data.training_data_builder import load_training_data, load_tokenizer
+import sys
 from os import path
 from keras import Input, Model
 from keras.layers import Conv1D, MaxPool1D
-from keras.layers.core import Dense, Reshape, Flatten
+from keras.layers.core import Dense, Flatten
 from keras.layers.embeddings import Embedding
+from keras.layers.merge import Concatenate
 from codetiming import Timer
 import numpy as np
 import yaml
@@ -18,61 +20,66 @@ def batch(i_list, j_list, out_list, batch_size):
 class SentenceClassifier(object):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, vector_size, vocabulary_size, num_classes):
+    def __init__(self, vector_size, vocabulary_size, word_vectors, num_classes):
         dir_name = path.dirname(__file__)
         self.logger = logging.getLogger(__name__)
         self.model_file = path.join(dir_name, "../data/5_models/sentiment_classifier.h5")
         self.vocabulary_size = vocabulary_size
         self.logger = logging.getLogger(__name__)
 
-        bigram_input = Input((2,))
-        trigram_input = Input((3,))
+        bigram_input = Input((2,), dtype='int32')
+        trigram_input = Input((3,), dtype='int32')
 
         trainable_bigram_embedding = Embedding(
             input_dim=vocabulary_size,
             output_dim=vector_size,
-            embeddings_initializer="glorot_uniform",
+            weights=word_vectors,
             input_length=2
         )(bigram_input)
 
-        untrainable_bigram_embedding = Embedding(
+        bigram_embedding = Embedding(
             input_dim=vocabulary_size,
             output_dim=vector_size,
-            embeddings_initializer="glorot_uniform",
+            weights=word_vectors,
             input_length=2,
             trainable=False
         )(bigram_input)
 
         # Reshape layer to concatenate word vectors to 1D
-        trainable_bigram_flat = Flatten()(trainable_bigram_embedding)
-        untrainable_bigram_flat = Flatten()(untrainable_bigram_embedding)
+        # trainable_bigram_flat = Flatten()(trainable_bigram_embedding)
+        # untrainable_bigram_flat = Flatten()(untrainable_bigram_embedding)
 
         trainable_trigram_embedding = Embedding(
             input_dim=vocabulary_size,
             output_dim=vector_size,
-            embeddings_initializer="glorot_uniform",
+            weights=word_vectors,
             input_length=3
         )(trigram_input)
 
-        untrainable_trigram_embedding = Embedding(
+        trigram_embedding = Embedding(
             input_dim=vocabulary_size,
             output_dim=vector_size,
-            embeddings_initializer="glorot_uniform",
+            weights=word_vectors,
             input_length=3,
             trainable=False,
         )(trigram_input)
 
         # Reshape layer to concatenate word vectors to 1D
-        trainable_trigram_flat = Flatten()(trainable_trigram_embedding)
-        untrainable_trigram_flat = Flatten()(untrainable_trigram_embedding)
+        # trainable_trigram_flat = Flatten()(trainable_trigram_embedding)
+        # untrainable_trigram_flat = Flatten()(untrainable_trigram_embedding)
 
-        bigram_conv = Conv1D(filters=25,  kernel_size=5, activation="relu")([trainable_bigram_flat, untrainable_bigram_flat])
+        bigram_conv = Conv1D(filters=20,  kernel_size=4, activation="relu")(bigram_embedding)
         bigram_maxpool = MaxPool1D()(bigram_conv)
 
-        trigram_conv = Conv1D(filters=25, kernel_size=5, activation="relu")([trainable_trigram_flat, untrainable_trigram_flat])
+        trigram_conv = Conv1D(filters=20, kernel_size=4, activation="relu")(trigram_embedding)
         trigram_maxpool = MaxPool1D()(trigram_conv)
 
-        output = Dense(num_classes, activation="softmax")(bigram_maxpool, trigram_maxpool)
+        bigram_flatten = Flatten()(bigram_maxpool)
+        trigram_flatten = Flatten()(trigram_maxpool)
+
+        concatenate = Concatenate([bigram_flatten, trigram_flatten])
+
+        output = Dense(num_classes, activation="softmax")(concatenate)
         self.model = Model(inputs=[bigram_input, trigram_input], outputs=output)
         # Loss function: categorical cross entropy as we select across many different choices
         self.model.compile(loss="categorical_crossentropy")
@@ -113,23 +120,27 @@ class SentenceClassifier(object):
         self.model.save_weights(self.model_file)
 
 
-
 def main():
     dir_name = path.dirname(__file__)
+    word_vectors_file = sys.argv[1]
     # Real data:
     training_data_file = path.join(
         dir_name, "../data/4_training_data/sentence_classifier/training_data.dat"
     )
-    tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
-    vocabulary_size = len(tokenizer.word_index) + 1
+    # tokenizer = load_tokenizer(path.join(dir_name, "../data/4_training_data/dictionary.dat"))
+    # vocabulary_size = len(tokenizer.word_index) + 1
     config_file = path.join(dir_name, "../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     vector_size = config_dict["vector_size"]
+    word_vectors_tmp = np.load(path.join(dir_name, f"../data/5_models/{word_vectors_file}"))
+    word_vectors = np.reshape(word_vectors_tmp, (len(word_vectors_tmp), vector_size))
+    logging.info(f"Shape of word vectors before reshape: {word_vectors_tmp.shape}")
+    logging.info(f"Shape of word vectors after reshape: {word_vectors.shape}")
     epochs = config_dict["epochs"]
     num_classes = config_dict["sentence_classes"]
-    sentence_class_model = SentenceClassifier(vector_size, vocabulary_size, num_classes)
+    sentence_class_model = SentenceClassifier(vector_size, len(word_vectors_tmp), word_vectors_tmp, num_classes)
     sentence_class_model.train_model(training_data_file, epochs)
 
 

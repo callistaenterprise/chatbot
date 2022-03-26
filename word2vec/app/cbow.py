@@ -29,7 +29,7 @@ class CBOW(object):
         self.logger = logging.getLogger(__name__)
 
         # Neural network to compute word vectors CBOW-style
-        context_words_input = Input(shape=(self.input_size, 1))
+        context_words_input = Input(shape=(self.input_size,), dtype='int32')
         # Embedding layer holds our word vectors while we process them
         context_words_embedding = Embedding(
             input_dim=self.vocab_size,

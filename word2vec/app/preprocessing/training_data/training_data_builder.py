@@ -86,8 +86,8 @@ def main():
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
-    tokenizer_json_file = path.join(dir_name, config_dict["dictionary_json"])
+    tokenizer_file = path.join(dir_name, "../../../", config_dict["dictionary"])
+    tokenizer_json_file = path.join(dir_name, "../../../", config_dict["dictionary_json"])
     training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file, tokenizer_json_file)
     training_data_builder.tokenize()
 

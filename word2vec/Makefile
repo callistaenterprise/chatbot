@@ -8,6 +8,7 @@ clean:
 	rm -r data/4_training_data/cbow/* || true
 	rm -r data/4_training_data/glove/* || true
 	rm -r data/4_training_data/skip_gram/* || true
+	rm -r data/4_training_data/sentence_classifier/* || true
 	rm -r data/5_models/* || true
 	rm data/dictionary* || true
 
@@ -47,8 +48,11 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 train_glove: data/4_training_data/glove/training_data.dat
 	python -m app.glove
 
-train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat
-	python -m app.sentence_classifier
+pretrained_glove: ../glove.6B/glove.6B.100d.txt data/4_training_data/dictionary.json
+	python -m app.pretrained_glove glove.6B.100d.txt
+
+train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/5_models/glove_pretrained.npy
+	python -m app.sentence_classifier glove_pretrained.npy
 
 visualize:
 	python -m app.visualizer glove_embeddings_29.npy

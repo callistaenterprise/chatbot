@@ -57,8 +57,8 @@ def main():
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
     window_size = config_dict["window_size"]
-    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
-    tokenizer_json_file = path.join(dir_name, config_dict["dictionary_json"])
+    tokenizer_file = path.join(dir_name, "../../../", config_dict["dictionary"])
+    tokenizer_json_file = path.join(dir_name, "../../../", config_dict["dictionary_json"])
     skip_gram_training_builder = SkipGramTrainingBuilder(
         source_dir, window_size, tokenizer_file, tokenizer_json_file
     )
