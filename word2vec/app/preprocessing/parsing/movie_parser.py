@@ -14,7 +14,7 @@ class MovieParser(object):
         # List of strings. Each string is a conversation in a movie
         self.conversations = []
         dir_name = path.dirname(__file__)
-        self.movie_scripts = path.join(dir_name, movie_lines)
+        self.movie_scripts = path.join(dir_name, "../../..", movie_lines)
         self.conversation_file = path.join(dir_name, movie_conversations)
 
     def parse_movie_lines(self):

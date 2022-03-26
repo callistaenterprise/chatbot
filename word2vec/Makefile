@@ -37,7 +37,7 @@ prepare_glove: data/3_cleaned
 	python -m app.preprocessing.training_data.glove_training_builder data/3_cleaned
 
 prepare_sentence_class: data/6_chats/chatmessages.txt
-	python -m app.preprocessing.training_data.sentence_classifier_training_builder data/6_chats/chatmessages.txt
+	python -m app.preprocessing.training_data.sentence_classifier_training_builder
 
 train_cbow: data/4_training_data/cbow/training_data.dat
 	python -m app.cbow
@@ -48,11 +48,11 @@ train_skip_gram: data/4_training_data/skip_gram/training_data.dat
 train_glove: data/4_training_data/glove/training_data.dat
 	python -m app.glove
 
-pretrained_glove: ../glove.6B/glove.6B.100d.txt data/4_training_data/dictionary.json
+pretrained_glove: ../glove.6B/glove.6B.100d.txt data/4_training_data/dictionary.dat
 	python -m app.pretrained_glove glove.6B.100d.txt
 
-train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/5_models/glove_pretrained.npy
-	python -m app.sentence_classifier glove_pretrained.npy
+train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/5_models/glove_tokenizer.dat
+	python -m app.sentence_classifier
 
 visualize:
 	python -m app.visualizer glove_embeddings_29.npy

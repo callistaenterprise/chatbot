@@ -1,5 +1,4 @@
 from .training_data_builder import load_tokenizer, save_training_data
-import sys
 from os import path
 import yaml
 import logging
@@ -67,12 +66,12 @@ class SentenceClassifierTrainingBuilder(object):
 
 def main():
     dir_name = path.dirname(__file__)
-    source_file = sys.argv[1]
     config_file = path.join(dir_name, "../../../config.yaml")
     config_dict = None
     with open(config_file) as config:
         config_dict = yaml.load(config, Loader=yaml.Loader)
-    tokenizer_file = path.join(dir_name, config_dict["dictionary"])
+    tokenizer_file = path.join(dir_name, "../../..", config_dict["pretrained_dictionary"])
+    source_file = path.join(dir_name, "../../..", config_dict["chat_messages_file"])
     sentence_class_training_builder = SentenceClassifierTrainingBuilder(source_file, tokenizer_file)
     sentence_class_training_builder.build_sentence_training_data()
 

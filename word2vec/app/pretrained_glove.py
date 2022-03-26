@@ -1,8 +1,9 @@
-from preprocessing.training_data.training_data_builder import load_tokenizer
+from .preprocessing.training_data.training_data_builder import load_tokenizer
 from os import path
 import numpy as np
 import logging
 import yaml
+import pickle
 # from sklearn.metrics.pairwise import euclidean_distances
 # from sklearn.manifold import TSNE
 # import matplotlib.pyplot as plt
@@ -18,7 +19,7 @@ class PretrainedGlove:
             dir_name, "../..", pretrained_vectors_source
         )
         self.model_file = path.join(dir_name, "../data/4_training_data/glove_tokenizer.dat")
-        tokenizer_file = path.join(dir_name, "../", tokenizer_file)
+        tokenizer_file = path.join(dir_name, "..", tokenizer_file)
         self.tokenizer = load_tokenizer(tokenizer_file)
 
     def load_pretrained_glove(self):
@@ -33,13 +34,10 @@ class PretrainedGlove:
                 word_index[word] = index
                 index += 1
         self.logger.info(f"Parsed {len(glove_model)} pretrained word vectors")
-
-        if not path.exists(self.model_file):
-            np.save(self.model_file, glove_model)
-
-    def update_vocabulary(self, new_word_index_dict):
-        self.tokenizer.word_index = new_word_index_dict
-        self.tokenizer.index_word = {value: key for key, value in new_word_index_dict.items()}
+        self.tokenizer.word_index = word_index
+        self.tokenizer.index_word = {value: key for key, value in word_index.items()}
+        with open(self.model_file, "wb") as f:
+            pickle.dump(self.tokenizer, f)
 
 
 def main():
