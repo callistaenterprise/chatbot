@@ -10,7 +10,7 @@ class BlogParser(object):
     def __init__(self, blog_dir, dry_run=False):
         dir_name = path.dirname(__file__)
         self.logger = logging.getLogger(__name__)
-        self.blog_directory = path.join(dir_name, blog_dir)
+        self.blog_directory = path.join(dir_name, "../../../", blog_dir)
         self.dry_run = dry_run
 
     def _tag_remover(self, line):

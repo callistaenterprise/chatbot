@@ -51,7 +51,7 @@ train_glove: data/4_training_data/glove/training_data.dat
 pretrained_glove: ../glove.6B/glove.6B.100d.txt data/4_training_data/dictionary.dat
 	python -m app.pretrained_glove glove.6B.100d.txt
 
-train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/5_models/glove_tokenizer.dat
+train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/4_training_data/glove_vectors.npy
 	python -m app.sentence_classifier
 
 visualize:

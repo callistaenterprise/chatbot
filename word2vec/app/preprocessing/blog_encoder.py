@@ -3,7 +3,7 @@ import h5py
 from os import path, listdir
 import logging
 from app.preprocessing.cleaning.data_cleaner import DataCleaner
-
+from app.preprocessing.parsing.blog_parser import get_blog_as_string
 
 def load_embeddings(embeddings_file):
     embeddings = dict()
@@ -19,7 +19,7 @@ def load_embeddings(embeddings_file):
 class BlogEncoder(object):
     def __init__(self, blog_dir, target_dir, word_embeddings_file, stop_words):
         dir_name = path.dirname(__file__)
-        self.blog_directory = path.join(dir_name, blog_dir)
+        self.blog_directory = path.join(dir_name, "../../../", blog_dir)
         self.target_directory = path.join(dir_name, target_dir)
         self.data_cleaner = DataCleaner(stop_words)
         self.word_embeddings = load_embeddings(word_embeddings_file)
