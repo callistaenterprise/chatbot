@@ -46,7 +46,9 @@ class SentenceClassifier(object):
         )(bigram_input)
 
         combined_bigram = Concatenate(axis=1)([trainable_bigram_embedding, untrainable_bigram_embedding])
-        combined_bigram_flat = Flatten()(combined_bigram)
+        self.logger.info(f"Shape of combined bigram: {combined_bigram.shape}")
+        # combined_bigram_flat = Flatten()(combined_bigram)
+        # self.logger.info(f"Shape of combined bigram, flat: {combined_bigram_flat.shape}")
         # Reshape layer to concatenate word vectors to 1D
         # trainable_bigram_flat = Flatten()(trainable_bigram_embedding)
         # untrainable_bigram_flat = Flatten()(untrainable_bigram_embedding)
@@ -71,13 +73,18 @@ class SentenceClassifier(object):
         # untrainable_trigram_flat = Flatten()(untrainable_trigram_embedding)
 
         combined_trigram = Concatenate(axis=1)([trainable_trigram_embedding, untrainable_trigram_embedding])
-        combined_trigram_flat = Flatten()(combined_trigram)
+        self.logger.info(f"Shape of combined trigram: {combined_trigram.shape}")
+        # combined_trigram_flat = Flatten()(combined_trigram)
+        # self.logger.info(f"Shape of combined trigram, flat: {combined_trigram_flat.shape}")
+        # bigram_conv = Conv1D(filters=20,  kernel_size=4, activation="relu")(combined_bigram_flat)
+        bigram_conv = Conv1D(filters=20, kernel_size=4, activation="relu")(combined_bigram)
+        self.logger.info(f"Shape of bigram conv: {bigram_conv.shape}")
+        bigram_maxpool = MaxPool1D(pool_size=2, padding='same')(bigram_conv)
 
-        bigram_conv = Conv1D(filters=20,  kernel_size=4, activation="relu")(combined_bigram_flat)
-        bigram_maxpool = MaxPool1D()(bigram_conv)
-
-        trigram_conv = Conv1D(filters=20, kernel_size=4, activation="relu")(combined_trigram_flat)
-        trigram_maxpool = MaxPool1D()(trigram_conv)
+        # trigram_conv = Conv1D(filters=20, kernel_size=4, activation="relu")(combined_trigram_flat)
+        trigram_conv = Conv1D(filters=20, kernel_size=4, activation="relu")(combined_trigram)
+        self.logger.info(f"Shape of trigram conv: {trigram_conv.shape}")
+        trigram_maxpool = MaxPool1D(pool_size=2, padding='same')(trigram_conv)
 
         bigram_flatten = Flatten()(bigram_maxpool)
         trigram_flatten = Flatten()(trigram_maxpool)

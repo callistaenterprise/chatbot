@@ -14,6 +14,7 @@ class CbowTrainingBuilderTest(unittest.TestCase):
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
             tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
+            tokenizer_json=None,
             dry_run=True,
         )
         super(CbowTrainingBuilder, self.training_data_builder).tokenize()

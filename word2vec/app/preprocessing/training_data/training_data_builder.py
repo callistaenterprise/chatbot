@@ -34,7 +34,7 @@ def load_tokenizer(tokenizer_file):
 class TrainingDataBuilder(object):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, tokenizer_file, tokenizer_json_file):
+    def __init__(self, source_dir, tokenizer_file):
         self.logger = logging.getLogger(__name__)
         self.cleaned_files = cleaned_files(source_dir)
         self.logger.debug(f"source files for training: {self.cleaned_files}")
@@ -43,7 +43,6 @@ class TrainingDataBuilder(object):
         else:
             self.tokenizer = Tokenizer(oov_token="UNK")
         self.tokenizer_file = tokenizer_file
-        # self.tokenizer_json_file = tokenizer_json_file
 
     def training_line_generator(self):
         for clean_file in self.cleaned_files:

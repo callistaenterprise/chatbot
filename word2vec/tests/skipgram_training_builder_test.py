@@ -16,9 +16,10 @@ class SkipgramTrainingBuilderTest(unittest.TestCase):
             source_dir=path.join(dir_name, "test_data"),
             window_size=2,
             tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
+            tokenizer_json=None,
             dry_run=True,
         )
         super(SkipGramTrainingBuilder, self.training_data_builder).tokenize()
         vocabulary_size, X_y = self.training_data_builder.build_sg_training_data()
         self.logger.info(f"Skip grams: {X_y}")
-        self.assertEqual(88, vocabulary_size)
+        self.assertEqual(89, vocabulary_size)

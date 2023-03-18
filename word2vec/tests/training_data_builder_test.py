@@ -13,7 +13,8 @@ class TrainingDataBuilderTest(unittest.TestCase):
         self.training_data_builder = TrainingDataBuilder(
             source_dir=path.join(dir_name, "test_data"),
             tokenizer_file=path.join(dir_name, "test_data/training/dictionary.dat"),
+            tokenizer_json_file=None
         )
         self.training_data_builder.tokenize()
         self.logger.info(f"Training data: {self.training_data_builder.vocabulary()}")
-        self.assertEqual(88, self.training_data_builder.vocabulary_size())
+        self.assertEqual(89, self.training_data_builder.vocabulary_size())

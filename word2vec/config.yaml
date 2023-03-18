@@ -13,4 +13,4 @@ chat_messages_file: data/6_chats/chatmessages.txt
 stop_words: stop_words.txt
 epochs: 10
 sentence_classes: 6
-paragraph_length: 80
+paragraph_length: 100

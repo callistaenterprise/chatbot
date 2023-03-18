@@ -81,6 +81,8 @@ class DataCleaner(object):
         a_line = re.sub("’s", " is", a_line)  # should be last formatting line!
         # we are not interested in numbers, only words
         a_line = re.sub(r"[-+]?[0-9]+[,0-9]*(\.[0-9]+)?", "", a_line)
+        # we are not interested in urls
+        a_line = re.sub(r"http(s)?:\/\/([\.\-a-z]+)", "", a_line)
         # we are not interested in hyphens, unless they are binding together words
         a_line = re.sub(r"[\s][-]+[\s]+", " ", a_line)  # space, hyphen(s), space
         a_line = re.sub(

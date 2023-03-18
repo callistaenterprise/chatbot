@@ -18,10 +18,11 @@ class BlogClassifier(object):
         self.tokenizer = load_tokenizer(tokenizer_file=tokenizer)
         self.paragraph_length = paragraph_length
         stop_words_file = path.join(self.dir_name, "blog_stop_words.txt")
-        with open(stop_words_file, "r") as f:
-            self.stop_words = [word for line in f for word in line.split()]
+        # with open(stop_words_file, "r") as f:
+        #     self.stop_words = [word for line in f for word in line.split()]
 
     def build_blog_vectors(self):
+
         pass
 
 
@@ -35,6 +36,9 @@ def main():
         config_dict = yaml.load(config, Loader=yaml.Loader)
     paragraph_length = config_dict["paragraph_length"]
     tokenizer_file = path.join(dir_name, config_dict["dictionary"])
+    classifier = BlogClassifier(source_dir, tokenizer_file, paragraph_length)
+    classifier.build_blog_vectors()
+
 
 if __name__ == "__main__":
     main()
