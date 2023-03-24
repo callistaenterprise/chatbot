@@ -1,7 +1,6 @@
 from .training_data_builder import TrainingDataBuilder, load_tokenizer, save_training_data
 import sys
 import numpy as np
-from itertools import chain
 from os import path
 import json
 import yaml
