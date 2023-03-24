@@ -9,8 +9,8 @@ import logging
 class SkipGramTrainingBuilder(TrainingDataBuilder):
     logging.basicConfig(level=logging.INFO)
 
-    def __init__(self, source_dir, window_size, tokenizer_file, tokenizer_json, dry_run=False):
-        super().__init__(source_dir, tokenizer_file, tokenizer_json)
+    def __init__(self, source_dir, window_size, tokenizer_file, dry_run=False):
+        super().__init__(source_dir, tokenizer_file)
         dir_name = path.dirname(__file__)
         self.dry_run = dry_run
         self.window_size = window_size

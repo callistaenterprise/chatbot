@@ -3,7 +3,6 @@ import sys
 import os
 from os import path
 import yaml
-import json
 import logging
 from keras.preprocessing.text import Tokenizer
 
@@ -87,7 +86,7 @@ def main():
         config_dict = yaml.load(config, Loader=yaml.Loader)
     tokenizer_file = path.join(dir_name, "../../../", config_dict["dictionary"])
     # tokenizer_json_file = path.join(dir_name, "../../../", config_dict["dictionary_json"])
-    training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file, None)
+    training_data_builder = TrainingDataBuilder(source_dir, tokenizer_file)
     training_data_builder.tokenize()
 
 
