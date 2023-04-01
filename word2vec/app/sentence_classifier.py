@@ -3,7 +3,7 @@ from os import path
 from keras import Input, Model
 from keras.layers import Conv1D, MaxPool1D
 from keras.layers.core import Dense, Flatten
-from keras.layers.embeddings import Embedding
+from keras.layers.core.embedding import Embedding
 from keras.layers.merge import Concatenate
 from codetiming import Timer
 import numpy as np

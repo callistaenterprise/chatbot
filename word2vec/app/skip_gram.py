@@ -3,8 +3,7 @@ from os import path
 from keras import Input, Model
 from keras.layers import Dot
 from keras.layers.core import Dense, Reshape
-from keras.layers.embeddings import Embedding
-from tensorflow.keras.utils import plot_model
+from keras.layers.core.embedding import Embedding
 from codetiming import Timer
 import logging
 import yaml
@@ -62,8 +61,6 @@ class Skipgram(object):
         # Loss function is binary crossentropy as we only determine if real or fake context word
         self.model.compile(loss="binary_crossentropy")
         self.model.summary(print_fn=self.logger.info)
-        # plot_model(model=self.model, to_file="Skip-gram model.png", show_shapes=True)
-        # Preload word vectors if some training has already been done
         if path.exists(self.model_file):
             self.model.load_weights(self.model_file)
 

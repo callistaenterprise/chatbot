@@ -57,11 +57,12 @@ pretrained_glove: ../glove.6B/glove.6B.100d.txt data/4_training_data/dictionary.
 train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat data/4_training_data/glove_vectors.npy
 	python -m app.sentence_classifier
 
+train_blog_classifier: data/4_training_data/doc_classifier/training_data.dat
+	python -m app.blog_classifier
+
 visualize:
 	python -m app.visualizer glove_embeddings_29.npy
 
-build_blog_classifier: data/3_cleaned/blogs
-	python -m app.blog_classifier data/3_cleaned/blogs
 
 parser_test: tests/test_data/raw/unparsed.txt
 	python -m unittest tests/blog_parser_test.py
@@ -72,8 +73,8 @@ cleaner_test: tests/test_data/parsed/uncleaned.txt
 cbow_test: tests
 	python -m unittest tests/cbow_training_builder_test.py
 
-sentence_class_test: tests
-	python -m unittest tests/sentence_classifier_train_test.py
+blog_class_test: tests
+	python -m unittest tests/blog_classifier_test.py
 
 test: tests
 	python -m unittest discover -s tests -p '*_test.py'

@@ -5,9 +5,8 @@ from keras import Input, Model
 from keras.backend import mean
 from keras.layers import Lambda
 from keras.layers.core import Dense, Reshape
-from keras.layers.embeddings import Embedding
+from keras.layers.core.embedding import Embedding
 from keras.utils import np_utils
-from tensorflow.keras.utils import plot_model
 import numpy as np
 from codetiming import Timer
 import logging
@@ -46,7 +45,6 @@ class CBOW(object):
         # Loss function: categorical cross entropy as we select across many different choices
         self.model.compile(loss="categorical_crossentropy")
         self.model.summary(print_fn=self.logger.info)
-        # plot_model(model=self.model, to_file="CBOW model.png", show_shapes=True)
         # Preload word vectors if some training has already been done
         if path.exists(self.model_file):
             self.weights = self.model.load_weights(self.model_file)
