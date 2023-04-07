@@ -1,7 +1,7 @@
 from .training_data_builder import TrainingDataBuilder, save_training_data
 import sys
 import numpy as np
-from itertools import *
+from itertools import chain
 from os import path
 import yaml
 import logging

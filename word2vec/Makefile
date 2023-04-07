@@ -36,8 +36,8 @@ prepare_skip_gram: data/3_cleaned
 prepare_glove: data/3_cleaned
 	python -m app.preprocessing.training_data.glove_training_builder data/3_cleaned
 
-prepare_doc_class: data/3_cleaned/blogs
-	python -m app.preprocessing.training_data.doc_classifier_training_builder data/3_cleaned/blogs
+prepare_doc_class: data/2_parsed/blogs
+	python -m app.preprocessing.training_data.pvdm_classifier_training_builder data/2_parsed/blogs
 
 prepare_sentence_class: data/1_raw/chatmessages/chatmessages.txt
 	python -m app.preprocessing.training_data.sentence_classifier_training_builder

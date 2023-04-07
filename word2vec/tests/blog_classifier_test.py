@@ -1,7 +1,7 @@
 import unittest
 import logging
 from os import path
-from app.blog_classifier import batch
+from app.pvdm_classifier import batch
 
 
 class BlogClassifierTest(unittest.TestCase):
