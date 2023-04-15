@@ -11,6 +11,5 @@ pretrained_embeddings: glove.6B/glove.6B.100d.txt
 word_vectors: data/4_training_data/glove_vectors.npy
 chat_messages_file: data/6_chats/chatmessages.txt
 stop_words: stop_words.txt
-epochs: 10
+epochs: 20
 sentence_classes: 6
-paragraph_length: 100

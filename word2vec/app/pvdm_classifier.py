@@ -106,7 +106,7 @@ def main():
     word_vectors = np.array(np.load(path.join(dir_name, "../", word_vectors_file), allow_pickle=True))
     X_y = load_training_data(training_data_file)
     blog_classifier = BlogClassifier(vector_size=vector_size, vocabulary_size=len(word_vectors),
-                                     window_size=window_size, word_vectors=word_vectors, num_paragraphs=1904)
+                                     window_size=window_size, word_vectors=word_vectors, num_paragraphs=5186)
     blog_classifier.train_model(X_y, epochs)
 
 

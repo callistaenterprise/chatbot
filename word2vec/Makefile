@@ -58,7 +58,7 @@ train_sentence_class: data/4_training_data/sentence_classifier/training_data.dat
 	python -m app.sentence_classifier
 
 train_blog_classifier: data/4_training_data/doc_classifier/training_data.dat
-	python -m app.blog_classifier
+	python -m app.pvdm_classifier
 
 visualize:
 	python -m app.visualizer glove_embeddings_29.npy
